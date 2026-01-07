@@ -171,6 +171,8 @@ La población está particionada en grupos disjuntos homogéneos de acuerdo a al
 
 *Comentario:* Primero divides la población en grupos similares (por edad, género, nivel de ingresos, etc.), luego tomas una muestra aleatoria de cada grupo. Esto asegura que todos los grupos importantes estén representados en tu muestra.
 
+![](images/clipboard-1298404250.jpeg)
+
 #### Muestreo por conglomerados:
 
 La población está particionada en conglomerados disjuntos, similares entre sí. Primero se toma una muestra aleatoria simple de los conglomerados y luego se toma una muestra aleatoria simple de cada conglomerado seleccionado.
