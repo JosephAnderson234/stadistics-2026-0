@@ -1,0 +1,182 @@
+---
+title: "CONCEPTOS_DE_ESTADÍSTICA_1"
+author: "Orlando Galarza"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: flatly        
+    highlight-style: tango
+    code-fold: false
+    code-tools: false
+    df-print: paged
+    smooth-scroll: true
+    link-external-newwindow: true
+    embed-resources: true
+editor: visual
+---
+
+## Sesión lunes 05/01
+
+![](images/clipboard-1304366393.png){fig-alt="presentación del curso" width="547"}
+
+# CONCEPTOS BÁSICOS DE ESTADÍSTICA 1
+
+Es la ciencia q tiene por objeto desarrollar un conjunto de métodos, técnicas y procedimientos para
+
+-   Recopilar datos
+
+-   Organizar datos
+
+-   Presentar datos
+
+-   Analizar los datos
+
+-   Inferir a partir de los datos
+
+![](images/clipboard-3703881015.png){width="337"}
+
+## Definiciones:
+
+1.  Datos: medidas u observaciones de interés.
+2.  Unidad muestral: elemento o individuo de la muestra. (A quien o a que se selecciona)
+3.  Variable: característica de interés de un elemento. Puede ser:
+
+*`Numérica (cuantitativa):`* el valor de la variable es un número.
+
+-   Continua: la variable puede tomar cualquier valor en un intervalo. (generalmente es con unidades)
+
+-   Discreta: la variable puede tomar una cantidad numerable de valores numéricos diferentes. (generalmente son enteros)
+
+*`Categórica (cualitativa):`* el valor de la variable no es un número.
+
+-   Ordinal: valores discretos que tienen un orden claro; excelente, bueno, mediocre, malo.
+
+-   Nominal: valores discretos sin un orden específico; blanco, negro, rojo, verde, azul.
+
+4.  Tabla o matriz de datos: Aquí las unidades muestrales se dan en filas y las variables corresponden a las columnas.
+5.  Población: conjunto de todos los individuos o elementos de interés.
+6.  Muestra: subconjunto de la población, idealmente se espera que la muestra sea representativa de la población.
+7.  Censo: cuando se entrevista a toda la población; típicamente es muy caro, en algún sentido, trabajar con un censo.
+8.  Encuesta: Es cuando la información que se obtiene proviene de una parte de la población (muestra).
+
+## Ejemplos
+
+**Ejemplo 1:**
+
+| VARIABLES                                | TIPO              |
+|------------------------------------------|-------------------|
+| Cantidad de facturas por pagar           | cuantit. discreta |
+| Satisfacción de una película             | cualitat. ordinal |
+| Tiempo empleado en un examen             | cuantit. continuo |
+| Peso de recién nacidos                   | cuantit. continuo |
+| Mejor película                           | cualitat. nominal |
+| Cantidad de veces que llevas estadística | cuantit. discreta |
+| Sexo del recién nacido                   | cualitat. nominal |
+
+**EJEMPLO 2:**
+
+Se desea hacer un estudio dirigido a los universitarios de UTEC, acerca de su opinión sobre la calidad del menú que se da en el comedor. Para esto se ha decidido seleccionar 200 universitarios.
+
+Indique, la población de interés, la muestra y la unidad muestral. Además indique alguna variable y su tipo.
+
+Solución:
+
+Población: Todos los universitarios de Utec.
+
+muestra: los 200 universitarios elegidos de Utec
+
+unidad: Cada universitario de Utec
+
+Variable: Calidad del menu
+
+tipo de variable: cualitativa ordinal
+
+**EJEMPLO 3:** En el mes de diciembre de 2025, se ha encuestado a 100 usuarios de Hiraoka de Miraflores, que han adquirido el software de antivirus Panda 2025. Se les preguntará acerca del número de licencias que adquirieron, la categoría del Software, duración de la licencia y el costo.
+
+Indique población, muestra, unidad muestral, variable, tipo.
+
+Solución:
+
+Población: Todos los clientes de Hiraoka miraflores de diciembre 2025, que han adquirido antivirus Panda 2025.
+
+muestra: los 100 clientes de mi población
+
+unidad: cada cliente de Hiraoka Miraflores que adquirió antivirus Panda en diciembre de 2025.
+
+variables:
+
+1\) Número de licencias compradas: cuantitativa discreta.
+
+2\) Categoría del antivirus: cualitativa nominal.
+
+3\) Duración de la licencia: cuantitativa discreta
+
+4\) Costo: cuantitativa discreta.
+
+&&&&&&&&&&&&&&&&&
+
+**hasta aqui por hoy lunes.**
+
+&&&&&&&&&&&&&&&&&
+
+# MUESTREO
+
+## Concepto:
+
+Es la técnica o procedimiento que se usa para seleccionar una muestra.
+
+Una muestra debe ser
+
+-   aleatoria, random.randit()
+
+-   representativa, debe ser una parte que contiene una distribuición de datos de la población
+
+-   tamaño adecuado, ni tan grande ni tan chico xd
+
+## Tipos de muestreo:
+
+### Muestreo no probabilístico:
+
+La representatividad depende de cosas difíciles de controlar.
+
+*Comentario*: No se selecciona la muestra de manera aleatoria o científica, sino según criterios subjetivos o de conveniencia. Esto puede introducir sesgos significativos que afecten la representatividad de la muestra y la validez de los resultados.
+
+#### Muestreo por conveniencia:
+
+Se toman en base a los datos que se tienen, por su facilidad de acceso o por alguna ventaja para la muestra. Por lo general con esto se obtienen hábitos, opiniones y puntos de vista, de manera más simple.
+
+*Comentario:* Es el más fácil de hacer porque usas lo que tienes a mano, pero puede no representar bien a toda la población. Por ejemplo, encuestar solo a tus amigos sobre un producto.
+
+#### Muestreo por juicio:
+
+Un experto dictamina que elementos de la población son seleccionados para la muestra, la representatividad de la muestra depende del juicio del experto.
+
+*Comentario:* Un especialista elige quiénes entran en la muestra según su experiencia. Es útil cuando necesitas personas con características específicas, pero depende mucho de qué tan buena sea la decisión del experto.
+
+### Muestreo Probabilístico:
+
+La representatividad depende del azar, el tamaño de la muestra y las suposiciones de estructura.
+
+#### Muestreo aleatorio simple (MAS):
+
+se seleccionan al azar los elementos de la población que participan en la muestra. Todas las muestras posibles de un mismo tamaño deben tener la misma probabilidad.
+
+*Comentario:* Es como un sorteo justo donde todos tienen las mismas posibilidades de ser elegidos. Garantiza que la muestra sea imparcial, aunque necesitas tener acceso a toda la población.
+
+#### Muestreo estratificado:
+
+La población está particionada en grupos disjuntos homogéneos de acuerdo a algunas características. Se hace muestreo aleatorio simple en cada estrato, el número de elementos a tomar en cada estrato es, frecuentemente, proporcional al tamaño del estrato.
+
+*Comentario:* Primero divides la población en grupos similares (por edad, género, nivel de ingresos, etc.), luego tomas una muestra aleatoria de cada grupo. Esto asegura que todos los grupos importantes estén representados en tu muestra.
+
+#### Muestreo por conglomerados:
+
+La población está particionada en conglomerados disjuntos, similares entre sí. Primero se toma una muestra aleatoria simple de los conglomerados y luego se toma una muestra aleatoria simple de cada conglomerado seleccionado.
+
+*Comentario:* Divides la población en grupos naturales (por ejemplo, escuelas, ciudades o empresas), seleccionas algunos grupos al azar y luego encuestas a todos o a una muestra dentro de esos grupos. Es útil cuando la población está geográficamente dispersa.
+
+### Sesgo
+
+El sesgo es un peso desproporcionado a favor o en contra de una idea o cosa, generalmente de una manera cerrada, perjudicial o injusta. Las personas pueden desarrollar sesgos a favor o en contra de un individuo, un grupo o una creencia. En ciencia e ingeniería, un sesgo es un error sistemático. El sesgo estadístico resulta de un muestreo injusto de una población, o de un proceso de estimación que no da resultados precisos en promedio
