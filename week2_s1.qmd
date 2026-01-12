@@ -1,0 +1,135 @@
+---
+title: "week2_s1"
+format: html
+editor: visual
+---
+
+## Here to load libraries
+
+```{r}
+
+```
+
+## Some notes
+
+### Mediana -\> mean
+
+Para el promedio se usa mean( here the array o list)
+
+```{r}
+x <- c(2, 4, 5, 7, 9, 10)
+y <- mean(x)
+y
+```
+
+Mediana -\> median
+
+```{r}
+
+a <- c(1, 2, 5, 6)
+median(a)
+
+#findMediam <- function(vector) {
+#  return(median(vector))
+#}
+
+
+
+```
+
+### Use of the median
+
+Imagine if this is my notes of Q1
+
+```{r}
+v <- c(4,6,7, 45, 200, 1 , 2, 5, 8,9,14,16)
+median(v)
+
+```
+
+Conclusiones:
+
+El 50% de las menores notas tiene como nota máxima: 8
+
+El 50% de las mayores notas tienen como nota mínima 8
+
+### Resumen básico -\>Summary
+
+```{r}
+summary(v)
+```
+
+1st qu. -\> Prime cuartil
+
+3st qu. -\> Tercer cuartil
+
+### Table
+
+```{r}
+table(v)
+```
+
+### Quantiles
+
+```{r}
+quantile(v,0.1, na.rm=T)
+```
+
+| type | Método                            |
+|------|-----------------------------------|
+| 1    | Cuantil empírico (sin interpolar) |
+| 2    | Promedio de valores cercanos      |
+| 3    | Mediana de posiciones             |
+| 7    | Interpolación lineal (default)    |
+| 8    | Aproximación con corrección       |
+
+#### Caso de uso
+
+En el conjunto x, tenemos sus notas. Deade que nota, este alumno ingresaría a formar parte del quinto superior.
+
+```{r}
+x <- c(10, 14, 15, 19, 20, 18, 10, 14)
+```
+
+Sol:
+
+```{r}
+quantile(x, 0.8, na.rm=(T))
+```
+
+```{bash}
+params -> X, prop, na.rm 
+
+
+        X values
+--------------------------            0 < prop < 1
+                |
+               prop
+              marker
+```
+
+### Another topics
+
+```{r}
+
+```
+
+### Reading files
+
+```{r}
+fam <- read.csv("famosos.csv")
+fam
+```
+
+#### Appling 
+
+```{r}
+quantile(fam$Actividad, 0.5, type=3, na.rm=T)
+quantile(fam$Personaje, 0.8, type=3, na.rm=T)
+```
+
+```{r}
+vv <- c("b", "a", "d", "x", "y")
+quantile(vv, 0.5, type=3) # mediana
+quantile(vv, 0.9, type=3) # valor igual al 90% desde la izquierda
+```

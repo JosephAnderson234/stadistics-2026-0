@@ -175,10 +175,75 @@ La población está particionada en grupos disjuntos homogéneos de acuerdo a al
 
 #### Muestreo por conglomerados:
 
+También llamado inverso del estratificado.
+
 La población está particionada en conglomerados disjuntos, similares entre sí. Primero se toma una muestra aleatoria simple de los conglomerados y luego se toma una muestra aleatoria simple de cada conglomerado seleccionado.
 
 *Comentario:* Divides la población en grupos naturales (por ejemplo, escuelas, ciudades o empresas), seleccionas algunos grupos al azar y luego encuestas a todos o a una muestra dentro de esos grupos. Es útil cuando la población está geográficamente dispersa.
 
+Se divide en conglomerados,\
+En un conglomerado hay muchos datos heterogeneos
+
+Pero compra entre conglomerados, tienden a ser homogeneos
+
 ### Sesgo
 
 El sesgo es un peso desproporcionado a favor o en contra de una idea o cosa, generalmente de una manera cerrada, perjudicial o injusta. Las personas pueden desarrollar sesgos a favor o en contra de un individuo, un grupo o una creencia. En ciencia e ingeniería, un sesgo es un error sistemático. El sesgo estadístico resulta de un muestreo injusto de una población, o de un proceso de estimación que no da resultados precisos en promedio
+
+# Codes of R to use in Rstudio
+
+```{r}
+#install.packages("readr") done
+#install.packages("plyr") done 
+#install.packages("dplyr") done
+#install.packages("tidyr") done
+#install.packages("ggplot2") done
+```
+
+```{r}
+#use library
+library(readr)
+```
+
+## Managment of the links
+
+Just use \< \> tags, and write the link in the middle of that
+
+<https://google.com>
+
+<https://depor.com>
+
+<http://localhost:3000>
+
+<https://www.starbucks.pe/>
+
+## Custom name of links
+
+The formal format is \[ name of that\] (link that will be able when you click the custom name)
+
+[Uteccino](https://utec.edu.pe){.uri}
+
+## Use of titles
+
+Is the same as markdown format, depends on the number of \#
+
+and the clasic use of the \* and \*\*
+
+\*\* \_\_\_\_ \*\* -\> indicates **negrita**
+
+\*\_\_\_ \* -\> indicates *cursive*
+
+| Correo | Contraseña \| | username |
+|--------|---------------|----------|
+| a\@b.c | test          |          |
+
+```{r}
+
+X<- 5 #valor iniciar de x en 5
+Y<- 2*X+ 5 + (X*3)
+
+"El valor de X es: "
+X
+"El valor de Y es: "
+Y
+```
