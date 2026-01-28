@@ -1,0 +1,364 @@
+---
+title: "1QSOL"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+**"SEMINUEVOS CARS"** es una empresa peruana dedicada a la venta de vehículos seminuevos en buen estado y con una buena garantía de servicio postventa. Para todas sus ventas realizadas, ellos promocionan un Precio Real del vehículo y siempre aplican un descuento y así obtienen el Precio de Venta. Ofrecen vehículos con precios en dólares y otros en soles. Se puede observar en la data el valor del Tipo de Cambio a soles, para cada venta. La especialidad de la empresa es vender vehículos de la marca Toyota, ofreciendo sus diversos Modelos y una gran variedad de Colores.
+
+La empresa ofrece diversas modalidades de ventas a sus clientes, los cuales son personas Naturales y también Jurídicas.
+
+En la data *Seminuevos.csv* se encuentra la información de los vehículos vendidos por la empresa.
+
+```{r}
+DF<-read_csv("Seminuevos.csv")
+DF
+```
+
+**PROBLEMA 1:**
+
+¿Cuál es la cantidad de celdas que tienen alguna respuesta?
+
+solución:
+
+**primera forma:**
+
+me están pidiendo celdas no vacias.
+
+Recuerdo que la cantidad de celdas vacias (NA) ==\>Contando NAs: `sum(is.na(DF))`
+
+```{r}
+sum(is.na(DF))
+```
+
+Cantidad de celdas no vacías= Total de celdas - cantidad de NAs =967\*13-68=12503.
+
+```{r}
+967*13-68
+```
+
+**Segunda forma:**
+
+Cantidad de celdas no vacías ==\> `sum(!is.na(DF))`
+
+```{r}
+sum(!is.na(DF))  # cuenta celdas no vacías del DF
+```
+
+Respuesta: **12503 celdas no vacías (respondidas).**
+
+**PROBLEMA 2:**
+
+¿Cual es la cantidad de casos incompletos?
+
+Solución:
+
+Se llama CASO a cada fila. También se llama OBSERVACION o UNIDAD MUESTRAL
+
+Caso Completo ==\> Cuando toda la fila esta respondida. (No hay NA en la fila)
+
+Caso incompleto ==\> Cuando en la fila existe al menos un NA.
+
+Primera forma:
+
+```{r}
+sum(complete.cases(DF))  # cuenta la cantidad de filas completas (sin NA)
+```
+
+Cantidad de filas incompletas= 967 -900=67.
+
+Segunda forma:
+
+```{r}
+sum(!complete.cases(DF)) # cuenta la cantidad de filas incompletas (con algún NA)
+```
+
+Respuesta: **67.**
+
+**PROBLEMA 3:**
+
+Indique la variable que posee mas Datos Faltantes.
+
+**Solución**:
+
+Datos Faltantes = NA
+
+Cada variable es una columna.
+
+**Primera forma:**
+
+```{r}
+apply(is.na(DF), 2, sum) 
+# apply con el (2) opera por columnas.
+# apply con el (1) opera por filas
+# aqui se va a calcular mediante SUM , la suma de los NA es decir cantidad de NA.
+```
+
+Respuesta: **Estado Civil**
+
+**SEGUNDA FORMA:**
+
+También se puede hacer así, pero es mas laborioso:
+
+```{r}
+sum(is.na(DF$Modelo))
+sum(is.na(DF$Color))
+sum(is.na(DF$`Año Modelo`))
+sum(is.na(DF$`Modalidad de Venta`))
+sum(is.na(DF$Moneda))
+sum(is.na(DF$`Tipo Cliente`))
+sum(is.na(DF$Genero))
+sum(is.na(DF$`Estado Civil`))
+sum(is.na(DF$`Precio Real`))
+sum(is.na(DF$`PRECIO DE VENTA`))
+sum(is.na(DF$`Tipo Cambio (a soles)`))
+sum(is.na(DF$`Kilometraje (x10 mil km)`))
+sum(is.na(DF$Siniestros))
+```
+
+Respuesta: Estado civil.
+
+**PROBLEMA 4:**
+
+Indique la cantidad de colores distintos de los vehículos, que la empresa ha vendido.
+
+Solución:
+
+**Primera forma:**
+
+Se desea trabajar con la columna COLORES y de ella , encontrar la cantidad de colores distintos.
+
+```{r}
+unique(DF$Color)  # unique cuenta la cantidad de respuestas distintas. 
+```
+
+Respuesta: **30 colores distintos.**
+
+**Segunda forma:**
+
+```{r}
+table(DF$Color, useNA = "always")
+```
+
+Hay 30 colores distintos.
+
+**PROBLEMA 5:**
+
+¿Cuál es el color mas frecuente de los vehículos que compran las mujeres?
+
+Solución:
+
+**Primera forma:**
+
+Hacemos una tabla cruzada:
+
+```{r}
+table(DF$Color, DF$Genero, useNA = "always")
+```
+
+Respuesta: El color de moda de los vehículos comprados por mujeres es **Plata Metálico.**
+
+**Segunda forma:**
+
+Primero filtro a todas las mujeres.
+
+```{r}
+names(DF)  #para ver los nombres de las columnas
+```
+
+```{r}
+unique(DF$Genero)  # para ver como se escriben las respuestas de esta columna
+```
+
+```{r}
+DFfem<-filter(DF, Genero == "Femenino"  )
+DFfem
+```
+
+Ahora hallo el color mas frecuente:
+
+```{r}
+table(DFfem$Color)
+```
+
+color mas frecuente: **Plata metálico.**
+
+**PROBLEMA 6:**
+
+¿Cuál sería el **precio de venta** mínimo del quinto superior de los vehículos que se han vendido en dólares?
+
+**SOLUCIÓN:**
+
+Primero el nombre de la columna:
+
+```{r}
+names(DF)
+```
+
+Segundo: voy al tipo de moneda para ver como se escribio la moneda:
+
+```{r}
+unique(DF$Moneda)
+```
+
+Ahora voy a escoger solo las ventas en dólares
+
+```{r}
+dólares<- filter(DF, Moneda=="US $")
+dólares
+```
+
+Ahora hallamos el mínimo del quinto superior: quantil 0.80
+
+minimo— - - - - - 80% - - - - - - - **V** – - - - - 20% - - - - -máximo
+
+```{r}
+quantile(dólares$`PRECIO DE VENTA`, 0.80, na.rm=T )
+```
+
+Respuesta: el precio mínimo de venta del 20% superior es **32848 dólares**.
+
+**PROBLEMA 7:**
+
+Calcule el coeficiente de variación, del descuento que se ha hecho a los vehículos que fueron vendidos **en soles.**
+
+**SOLUCIÓN:**
+
+```{r}
+unique(DF$Moneda)
+```
+
+Descuento= Precio Real - Precio de Venta
+
+Filtro a todos los vehículos vendidos en soles,
+
+```{r}
+Soles<- filter(DF, Moneda == "S/.")
+Soles
+```
+
+ahora hallemos el descuento:
+
+```{r}
+names(DF)  # para ver como se escriben las columnas
+```
+
+```{r}
+descuento<-Soles$`Precio Real`-Soles$`PRECIO DE VENTA`
+descuento
+```
+
+Recordar que
+
+$$
+\text{Coeficiente de variación=}\frac{Desviación}{media}
+$$
+
+La desviación y media:
+
+```{r}
+S<-sd(descuento)
+S
+M<-mean(descuento)
+M
+CV<- S/M
+round(CV,2)
+```
+
+Respuesta: 0.56 es el coeficente de variación.
+
+**PROBLEMA 8:**
+
+Todos los propietarios anteriores de los vehículos que vende la empresa, han tenido sus autos con un Seguro Especial de Toyota (SET) según el cual, han hecho un único pago de 500 dólares para la afiliación al SET y luego, por cada siniestro han debido pagar a la compañía de seguros 200 dólares.
+
+Calcule el pago promedio al SET de los vehículos que con seguridad tienen **un kilometraje superior a 50000** km y que hayan registrado sus siniestros.
+
+**SOLUCIÓN:**
+
+Primero veamos el nombre exacto de la columna **kilometraje**
+
+```{r}
+names(DF)
+```
+
+Ahora filtramos a los vehículos con mas de 5(x10 mil Km)
+
+```{r}
+Km5<-filter(DF, `Kilometraje (x10 mil km)`> 5 )
+Km5
+```
+
+Ahora determinamos la ecuación del pago al **SET**:
+
+Sea *X: número de Siniestros.*
+
+*Y: pago al SET*
+
+*Y=500+200\*X*
+
+Hallamos el promedio de siniestros:
+
+```{r}
+
+X<-mean(Km5$Siniestros, na.rm=TRUE)  # esto es lo correcto.
+X
+```
+
+Luego:
+
+Recordar:
+
+$$
+\overline{aX+b} = a(\overline{X})+b
+$$
+
+Entonces:
+
+$$
+\overline{200X+500}=200(\overline{X})+500= 200(2.740088)+500=1048.02
+$$
+
+Otra forma de hacer este último cálculo:
+
+```{r}
+MY<-200*X+500
+MY
+```
+
+El pago promedio es 1048.02 dólares.
+
+**FIN.**
+
+**NOTA: 20**

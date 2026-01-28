@@ -117,11 +117,11 @@ params -> X, prop, na.rm
 ### Reading files
 
 ```{r}
-fam <- read.csv("famosos.csv")
+fam <- read_csv("famosos.csv")
 fam
 ```
 
-#### Appling 
+#### Appling
 
 ```{r}
 quantile(fam$Actividad, 0.5, type=3, na.rm=T)
@@ -133,3 +133,17 @@ vv <- c("b", "a", "d", "x", "y")
 quantile(vv, 0.5, type=3) # mediana
 quantile(vv, 0.9, type=3) # valor igual al 90% desde la izquierda
 ```
+
+Estatura promedio de los famosos
+
+```{r}
+mean(fam$Estatura)
+```
+
+```{r}
+table(fam$Edad, useNA = "always")
+```
+
+### LateX
+
+Al igual que en Markdown, el uso de latex es compartido, con los mismo formatos dentro de la misma.

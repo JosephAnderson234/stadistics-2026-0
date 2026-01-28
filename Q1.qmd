@@ -1,0 +1,152 @@
+---
+title: "quizz1"
+format: html
+editor: visual
+---
+
+## Quiz 1
+
+Loading utils:
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+```
+
+## Pregunta 1
+
+```{r}
+DF <- read_csv("autosseminuevos.csv")
+
+```
+
+Como vemos:
+
+La cantidad de celdas vacías es:
+
+```{r}
+sum(is.na(DF)) # esto es la cantidad de celdas vacias
+```
+
+Y la cantidad de observaciones incompletas es:
+
+```{r}
+sum(!complete.cases(DF)) # cantidad de observaciones incompletas
+```
+
+Por lo tanto se tomarán la 30va parte de celdas no vacías:\
+
+```{r}
+total<-967*14
+numberNA <- sum(is.na(DF))
+
+celdasNoVvacias <- total - numberNA
+celdasNoVvacias
+```
+
+Por lo tanto se tomarán:\
+
+```{r}
+celdasNoVvacias/30
+```
+
+Y como se toma una muestra base para poder basar en toda la población es:\
+**Rpta:** inferencial con una muestra de 499.
+
+## Pregunta 2
+
+Obtenemos información con summary
+
+```{r}
+summary(DF$`Kilometraje (x10 mil km)`)
+```
+
+Calculamos el RI y RT
+
+```{r}
+RI <- 10 - 5
+RT <- 15 - 0
+```
+
+Y con esto calculamos la fracción de dispersión:
+
+```{r}
+RI/RT
+```
+
+Y este entra en el intervalo de de dispersión moderada:\
+**Rpta:** 0.33.. y es de dispersión moderada (media)
+
+## Pregunta 3
+
+Filtramos:
+
+```{r}
+DF_completed <- filter(DF, complete.cases(DF))
+table(DF_completed$Color)
+```
+
+Y vemos que la moda es con Blanco
+
+## Pregunta 4:
+
+```{r}
+#DF
+unique(DF$Mes)
+unique(DF$`Tipo Cliente`)
+```
+
+Vemos que hay 2 valores para Noviembre,
+
+```{r}
+DFT <- filter(DF, (Mes == "Noviembre" | Mes == "Nobiemvre"), (`Tipo Cliente`=="NAT"))
+DFT
+```
+
+**Rpta:** Se tienen 56 autos vendidos así
+
+## Pregunta 5
+
+```{r}
+DF_febre <- filter(DF, (Mes == "Febrero" | Mes == "Febreo"))
+apply(is.na(DF_febre), 2, sum) 
+```
+
+**Rpta:** Según la data, vemos que la mayor cantidad de NA's es 6
+
+## Pregunta 6:
+
+```{r}
+
+DF_girls <- filter(DF, Genero == "Femenino")
+quantile(DF_girls$`Kilometraje (x10 mil km)`, 0.8, na.rm = TRUE)
+```
+
+**Rpta:** Ahora Vemos que es 110000 km.
+
+## Pregunta 7:
+
+```{r}
+unique(DF$Moneda)
+
+DF_dol <- filter(DF, Moneda=="US $")
+DF_sol <- filter(DF, Moneda=="S/.")
+
+
+dol_cv <- sd(DF_dol$`PRECIO DE VENTA`)/mean(DF_dol$`PRECIO DE VENTA`)
+dol_cv
+sol_cv <- sd(DF_sol$`PRECIO DE VENTA`)/mean(DF_sol$`PRECIO DE VENTA`)
+sol_cv
+```
+
+## Pregunta 8:
+
+```{r}
+Km6<-filter(DF, `Kilometraje (x10 mil km)`> 6 )
+
+```

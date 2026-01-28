@@ -1,0 +1,86 @@
+---
+title: "week2_s1.1"
+format: html
+editor: visual
+---
+
+```{r}
+install.packages("readr") #done
+#install.packages("plyr") done 
+#install.packages("dplyr") done
+#install.packages("tidyr") done
+#install.packages("ggplot2") done
+```
+
+```{r}
+library(readr)
+```
+
+## Lectura de la data cafe
+
+```{r}
+cafe <- read_csv("DATACAFE.csv")
+cafe
+```
+
+```{r}
+fam <- read_csv("famosos.csv")
+fam
+```
+
+### Conteo de NA's
+
+Forma 1, usar sum de booleanos
+
+```{r}
+#is.na(fam) tabla de valores booleanos de NA's
+
+sum(is.na(fam))
+```
+
+Forma 2, table de los booleanos
+
+```{r}
+table(is.na(fam))
+```
+
+### Contando Na por variable
+
+```{r}
+sum(is.na(fam$Actividad))
+sum(is.na(fam$Personaje))
+sum(is.na(fam$Edad))
+sum(is.na(fam$Estatura))
+sum(is.na(fam$Género))
+```
+
+## Usando datos diversos (semana 1 task)
+
+```{r}
+info <- read_csv("datos_diversos.csv")
+info
+```
+
+### Conteo de NA's
+
+```{r}
+sum(is.na(info))
+```
+
+#### Cantidad de datos respondidos
+
+```{r}
+dim(info)
+```
+
+Esto indica 2950 filas(alumnos) con 23 columnas (variables)
+
+```{r}
+2950*23
+```
+
+Esto indica 67850
+
+Pero para calcular celdas respondidas (sin NA's)
+
+Celdas totales = Celdas respondidas + Celdas NA's

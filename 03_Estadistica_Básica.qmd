@@ -1,0 +1,978 @@
+---
+title: "03_Estadística_Básica"
+author: "Orlando Galarza"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: flatly        
+    highlight-style: tango
+    code-fold: false
+    code-tools: false
+    df-print: paged
+    smooth-scroll: true
+    link-external-newwindow: true
+    embed-resources: true
+editor: visual
+---
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+install.packages("readr")
+```
+
+\####################
+
+Lectura de la data de CAFE:
+
+```{r}
+cafecafe<-read_csv("CAFECITO.csv")
+cafecafe
+```
+
+```{r}
+head(cafecafe)
+tail(cafecafe)
+```
+
+\###################
+
+## CONTEO DE NAs
+
+### Ver los NA de un data.frame
+
+```{r}
+fam<-read_csv("famosos.xlsx - Hoja1 (3).csv")
+fam
+```
+
+`is.na`
+
+```{r}
+ is.na(fam) # se obtiene asi un nuevo data frame pero con TRUE y FALSE
+```
+
+Tener en cuenta que R considera que: FALSE=0; TRUE=1.
+
+**Contando los NA**
+
+PRIMERA FORMA:
+
+```{r}
+table(is.na(fam))
+```
+
+Hay 6 NA
+
+Segunda forma:
+
+**Cantidad de NA en un data.frame**
+
+`sum(is.na())`
+
+```{r}
+sum(is.na(fam))  # cuenta la cantidad de NA del data frame
+```
+
+Contando NA por variable:
+
+```{r}
+sum(is.na(fam$Actividad))
+sum(is.na(fam$Personaje))
+sum(is.na(fam$Edad))
+sum(is.na(fam$Estatura))
+sum(is.na(fam$Género))
+```
+
+La variable Género posee tres NAs.
+
+Actividad tiene dos NA.
+
+Edad tiene un NA
+
+**De Datos Diversos**
+
+```{r}
+DD<-read_csv("Datos Diversos - Sheet1 (27).csv")
+DD
+```
+
+En este data frame se tiene 2950\*23=67850 celdas ( entre llenas y vacias(NA))
+
+veamos
+
+```{r}
+is.na(DD)
+```
+
+```{r}
+sum(is.na(DD))  # se halla la cantidad de NA
+```
+
+Hay *21059 NAs* en DD.
+
+**Cantidad de datos respondidos:**
+
+67850 - 21059=46791
+
+```{r}
+dim(DD)  # dimension
+```
+
+Hay 2909 filas (alumnos) y 23 columnas (variables)==\> Cantidad de celdas=67850 celdas.
+
+**Cant. de celdas respondidas = Cant. celdas totales - cant. de NAs**
+
+Cant. de celdas respondidas = 67850 -21059=46791
+
+NAs por columnas:
+
+```{r}
+sum(is.na(DD$Período)) 
+sum(is.na(DD$Sección))
+sum(is.na(DD$Ciclo))
+sum(is.na(DD$Edad)) 
+sum(is.na(DD$`Estatura (cm)`))
+```
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+```{r}
+sum(!is.na(DD))  # halla la cantidad de celdas que no tienen NA
+```
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**Base de datos prefijadas:**
+
+```{r}
+data()  #  Entre parentesis no se coloca nada
+```
+
+ejemplos tomar bases: women y cars
+
+Women:
+
+```{r}
+women
+```
+
+Aquí se tiene 15 filas. Cada fila se llama también: Observaciones o Casos y representan al número de encuestados.
+
+El número de variables es 2 (# de columnas)
+
+El número total de datos: 15x2=30 datos.
+
+Ahora CARS:
+
+```{r}
+cars
+```
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**HASTA AQUI EN LUNES 12**
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Podemos formar una primera ***tabla de frecuencias*** : table (para variables cualitativas o cuantitativas discretas con pocos valores distintos)
+
+```{r}
+table(fam$Actividad, useNA = "always")  
+# fam es el archivo subido de famosos, que se mostró en una clase anterior.
+
+```
+
+Moda: **Canto** ==\> frecuencia modal =8 ==\> hay 8 famosos que son cantantes.
+
+Frecuencias absolutas (fi): Es la cantidad de observaciones para cada dato distinto de la variable.
+
+Fecuencias relativas (hi): Es la proporción de observaciones para cada dato distinto de la variable.
+
+$$
+h_{i}=\frac{f_{i}}{n}\\
+h_{i}\text{%}=\frac{f_{i}}{n}*100\text{%}
+$$
+
+Creamos una tabla estadística para variable cualitativa
+
+**Tabla de frecuencias para variable cualitativa:**
+
+llenemos la tabla de frecuencias con todos los personajes famosos de la DATA.
+
+| Actividad  | frecuencia absoluta | frecuencia relativa | frecuencia porcentual |
+|-----------------|------------------|------------------|--------------------|
+| Ajedréz    | 1                   | 1/27                | (100/27)%             |
+| Atleta     | 3                   | 3/27                | (3/27)%               |
+| Baile      | 2                   | 2/27                | (2/27)%               |
+| Canto      | 8                   | 8/27=0.296          | (8/27)%=29.6%         |
+| Futbolista | 6                   | 6/27                | (6/27)%               |
+| No canta   | 2                   | 2/27                | (2/27)%               |
+| Tecnología | 3                   | 3/27                | (3/27)%               |
+| NA         | 2                   | 2/27                | (2/27)%               |
+| Total:     | n=27                | 1                   | 100%                  |
+
+$Total= n=\sum(f_{i})=27$
+
+$\text{suma de hi}=\sum(h_{i})=1$
+
+Nota: Si en el texto no especifican acerca de a quienes debo formar la tabla, se considera : A TODOS.
+
+Pero si nos dicen que la tabla es solo para aquellos que han colocado su actividad entonces , ya no se considera los NA.
+
+**Interpretaciones:**
+
+$f_3=2 : \text{Existen dos famosos que practican Baile.}$
+
+$f_5=6 : \text{Existen seis famosos que practican fútbol.}$
+
+$h_4=0.296 = 29.6  \text{% :  El 29.6% de los famosos practican Canto.}$
+
+**Tabla estadística para variable cuantitativa continua o discreta con muchos valores distintos:**
+
+Recomendable usar Histograma.
+
+```{r}
+hist(fam$Estatura)
+# Estatura es variable Cuantitativa Continua.
+```
+
+Se observa que el histograma se inicia en *155cms* y termina en *195 cms*.
+
+```{r}
+summary(fam$Estatura)
+```
+
+Nota: no necesariamente van a coincidir los extremos del Histograma, con los extremos dados en SUMMARY. Aquí si coincidieron.
+
+ahora las frecuencias
+
+```{r}
+hist(fam$Estatura, labels = TRUE) 
+# aparecerá en el gráfico sus frecuencias.
+```
+
+Formamos la tabla de intervalos para Estatura:
+
+| Estaturas en cms. | Marca de clase(xi) | fi: frecuencia absoluta. | hi=fi/n | Fi: Frecuencia absoluta acumulada | Hi: Frecuencia relativa acumulada |
+|------------|------------|------------|------------|------------|------------|
+| \[155 a 160\> | 157,5=x1 | 1 | 1/27= | 1=F1 | 1/27= |
+| \[160 a 165\> | 162,5=x2 | 4 | 4/27= | 5=F2 | 5/27= |
+| \[165 a 170\> | 167,5=x3 | 2 | 2/27= | 7=F3 | 7/27= |
+| \[170 a 175\> | 172,5=x4 | 9 | 9/27= | 16=F4 | 16/27= |
+| \[175 a 180\> | 177,5=x5 | 6 | 6/27= | 22 | 22/27= |
+| \[180 a 185\> | 182,5=x6 | 1 | 1/27= | 23 | 23/27= |
+| \[185 a 190\> | 187,5=x7 | 2 | 2/27= | 25 | 25/27= |
+| \[190 a 195\] | 192,5=x8 | 2 | 2/27= | 27 | 27/27= 1 |
+
+$Total= n=\sum(f_{i})=27$
+
+Marca de clase: es solo el punto medio de cada intervalo: $\text{marca de clase:} X_{i}=\frac{Der+Izq}{2}$
+
+Interpretaciones:
+
+F3=7: hay 7 famosos que tienen estaturas desde 155 cms hasta menos de 170cms.
+
+H4=0.60: El 60% de los famosos tienen estaturas que va desde 155 cms hasta menos de 175 cms.
+
+NOTA: **En todos los intervalos se considera** : cerrado en la izquierda y abierto en la derecha, a excepción del ultimo intervalo que es cerrado en ambos lados.
+
+Cambio del número de intervalos:
+
+Se usa `breaks` para cambiar el número de intervalos:
+
+```{r}
+hist(fam$Estatura, labels = TRUE, breaks = 5)
+# con breaks se cambia la cantidad de intervalos. A veces no lo cambia.
+```
+
+**PARA VER EL TIPO DE VARIABLE QUE SE TIENE DESDE UN DATA FRAME:**
+
+***glimpse** se usa para tener una idea del tipo de variable*
+
+```{r}
+glimpse(fam)
+# PARA VER EL TIPO DE VARIABLE EN EL DATA FRAME
+```
+
+Aquí todo está correcto.
+
+También se puede ver el tipo de variable, pero columna por columna, usando Class:
+
+```{r}
+class(fam$Actividad)
+class(fam$Edad)
+```
+
+También se puede usar: *str (para todo el DF)*
+
+```{r}
+str(fam)
+summary(fam)
+```
+
+Para detectar **e*l tipo de variable*** de cada columna se usa:
+
+*`glimpse, class, str.`*
+
+&&&&&&&&&&&&&&
+
+**Cálculos con R:**
+
+**NA EN UN DATA.FRAME**
+
+Seguimos trabajando con ABC
+
+Contando los NA
+
+```{r}
+is.na(fam)
+table(is.na(fam))
+```
+
+Hay 129 datos que no son NA, es decir que son datos completos.
+
+Hay 6 datos incompletos (NA), del cual no se tiene información.
+
+**Otra forma, mas adecuada:**
+
+Cantidad de NA en un data.frame
+
+```{r}
+sum(is.na(fam))  # cuenta la cantidad de NA del data frame
+```
+
+Hay 6 NA en Famosos
+
+&&&&&&& **Función apply**
+
+Aplica una función, para columnas o para filas
+
+***`apply(la matriz, 1 o 2, la función que quieres calcular)`***
+
+*1: para el cálculo por filas*
+
+*2: para el cálculo por columnas*
+
+Recordemos primero que mediante:
+
+```{r}
+MF<-is.na(fam)  # Con esto obtengo una matriz con F y T
+MF  # Matriz de Famosos
+```
+
+Por ello, luego de tener la matriz anterior Ya se puede aplicar ***Apply***:
+
+```{r}
+apply(MF, 2, sum)  # 2: por columnas ==> la suma
+```
+
+*En Actividad hay dos NA*
+
+*En Personaje, no hay NA*
+
+*En Edad hay un NA*
+
+*En Estatura no hay NA*
+
+*En género hay 3 NA.*
+
+```         
+```
+
+También se puede , por fila:
+
+```{r}
+apply(MF, 1, sum)  # 1: por filas ==> la suma
+```
+
+Lo que significa que el 13 avo y 17 avo famosos tienen cada uno 2 NAs.
+
+Los famosos 26 y 27 tienen cada uno, un NA.
+
+&&&&&&&&&&&&&&&&&&&&&
+
+además, por columnas: Hallo el promedio de NA
+
+```{r}
+apply(MF, 2, mean)
+```
+
+mediana por fila:
+
+```{r}
+apply(fam, 1, median)
+```
+
+&&&&&&&&&&&&&&&&&&
+
+**RESUMEN:**
+
+*`is.na(...)`*==\> Convierte a la matriz de datos en otra matriz llena de T o F. (T= hay NA. F= No hay NA).
+
+*`sum(is.na(...))`*==\>Calcula el total de NA.
+
+*`na.rm=T`*==\> Con esto se puede calcular la media o mediana, cuando hay NAs. Ignora los NA.
+
+*`useNA="always"`*==\> Al usar table, cuenta también a todos los NA.
+
+*`glimpse:`* Para saber el tipo de variable de cada columna.
+
+*`dim:`* calcula el número de filas y el número de columnas de la data
+
+*`summary:`* Es un resumen de diversas fórmulas estadísticas.
+
+*`quantile:` Calcula cualquier porcentaje.*
+
+### LIMPIEZA DE DATOS
+
+Cuando usamos *`glimpse`* se detecta que columnas estan mal definidas.
+
+Generalmente los data frame contienen respuestas o variables inapropiadas.
+
+usaremos DD
+
+```{r}
+DD<-read_csv("Datos Diversos - Sheet1 (27).csv")
+DD
+```
+
+```{r}
+dim(DD)
+```
+
+Se tiene 2950 filas y 23 columnas.
+
+Número de celdas =2950\*23=67850 celdas.
+
+iniciamos la limpieza de datos, revisando si los tipos de variables son o no, correctos.
+
+# 1) Determinar el tipo correcto de variable:
+
+```{r}
+glimpse(DD)
+```
+
+Aquí en DD, el peso es Char,
+
+No se podria hallar el peso promedio, porque esta declarado como Char:
+
+```{r}
+mean(DD$`Peso (kg)`, na.rm=T)
+```
+
+R no halla la media de pesos porque aquí esta definido aquí como cualitativo.
+
+También **estan fallados:**
+
+Ciclo
+
+Edad
+
+Peso
+
+Tiempo de reacción
+
+Talla de zapatos
+
+**Ahora corregiremos los tipos de variable.**
+
+Se puede convertir la columna de un data frame de cualitativo a numérico. Así:
+
+`df$a <- as.numeric(df$a)`
+
+Se puede convertir la columna de un data frame de numérico a cualitativo. Así:
+
+`df$a <- as.character(df$a)`
+
+**SUGERENCIA:**
+
+Primero cambiamos de nombre al data frame original
+
+```{r}
+DDP <-DD # Datos Diversos de Prueba.
+DDP  # DDP es el nombre de una copia de toda la data.
+```
+
+**Ciclo** lo convierto de numérico a cualitativo (character)
+
+```{r}
+DDP$Ciclo<- as.character(DDP$Ciclo)
+DDP
+```
+
+**Edad** convierto de cualitativo a numérico:
+
+```{r}
+DDP$Edad <- as.numeric(DDP$Edad) 
+DDP
+```
+
+Peso a numérico:
+
+```{r}
+DDP$`Peso (kg)`<- as.numeric(DDP$`Peso (kg)`) 
+DDP
+
+```
+
+Tiempo a numérico
+
+```{r}
+DDP$`Tiempo de reacción`<- as.numeric(DDP$`Tiempo de reacción`) 
+DDP
+```
+
+Talla de zapatos a numérico:
+
+```{r}
+DDP$`Talla de zapato`<- as.numeric(DDP$`Talla de zapato`) 
+DDP
+```
+
+Revisando todo:
+
+```{r}
+str(DDP)
+
+```
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+**NOTA:** (esto no usar por el momento):2)
+
+Convirtiendo el DF q contiene a Peso, en un factor.
+
+`` DFP$`Peso (kg)` <- as.factor(DFP$Peso (kg)) # DFP ``
+
+`` DFP$`Peso (kg)` <- as.numeric(DFP$Peso (kg)) # DFP ``
+
+`str(DFP)`
+
+%%%%%%%%%%%%%%%%%%%%%
+
+Nota: Cuando aparezca la alerta de coerción:
+
+se debe colocar el parámetro na.rm = TRUE, en el as. numeric
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+## **2) Cambio de nombres de columna**
+
+```{r}
+glimpse(DDP)
+```
+
+O tambien:
+
+Para hacer la lectura de los nombres de el data frame se usa : `names(...)`
+
+```{r}
+names(DDP) # muestra todos los nombres de las columnas
+```
+
+Para cambiar de nombres se usa : `rename` (renombra las columnas deseadas)
+
+```{r}
+DDP<- rename(DDP, Estatura_cm = "Estatura (cm)" , Peso_Kg= "Peso (kg)")
+DDP   #preferible dejarlo como DDP
+```
+
+Ahora cambiemos.
+
+```{r}
+DDP<- rename(DDP, Deporte = "Hace deporte", Zodiaco = "Signo del zodiaco" ) 
+DDP
+
+
+```
+
+Recordar, con `names(DDP)` se observará los nombres originales en el DDP
+
+`rename( )` permite cambiar el nombre de la columna.
+
+nota:
+
+Tener presente lo siguiente:
+
+**DATA FRAME:** base de datos
+
+**VARIABLE:** cada columna (vertical)
+
+**OBSERVACIONES o casos:** cada fila (horizontal)
+
+**DATOS:** cada casilla o celda, de la base de datos
+
+**DATO FALTANTE:** es una celda que no ha sido respondida ==\> **NA**
+
+Conteo de NAs:
+
+`is.na( )` -\> este comando detecta la ubicación de los datos incompletos.
+
+is.na genera una base de datos pero con 2 posibles respuestas: TRUE o FALSE.
+
+TRUE: ahí hay NA.
+
+FALSE: ahí no hay NA.
+
+```{r}
+is.na(DDP$Peso_Kg)
+```
+
+La cantidad de celdas vacías será:
+
+```{r}
+sum(is.na(DDP$Peso_Kg))
+```
+
+Hay 169 celdas vacias (NA) en Peso_kg.
+
+Nota:
+
+`!is.na()` -\> es la negación de is.na, es decir ==\> TRUE: no hay NA, FALSE: hay NA.
+
+`sum(!is.na())` ==\> suma y cuenta el total de datos completos (q no tienen NA). (celdas completas o no vacías)
+
+```{r}
+sum(!is.na(DDP$Peso_Kg)) # cuenta celdas no vacías.
+```
+
+Hay 2780 celdas no vacías en la columna Peso_Kg. Es decir 2780 celdas sin NA
+
+Notar lo siguiente:
+
+Para una columna:
+
+`sum(is.na(Columna)) + sum(!is.na(Columna)) = Cantidad total de filas de esa columna.`
+
+(cant de celdas vacías) + (cant de celdas no vacías) = Cant total de filas o celdas de esa columna.
+
+También se puede contar el total de celdas vacías del DF:
+
+```{r}
+sum(is.na(DDP))
+```
+
+La cantidad total de NAs es 21087 en toda la matriz.
+
+```{r}
+sum(!is.na(DDP))
+```
+
+Hay 46763 celdas no vacías.
+
+`sum(is.na(DF))+sum(!is.na(DF))= total de celdas(DF) =#filas * # columnas`
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## **Casos completos / incompletos**
+
+CASOS = OBSERVACIONES = FILAS=Cantidad de encuestados=Información de una unidad muestral
+
+**Un caso completo** o **fila completa,** hace referencia a una observación o fila , con todas las celdas llenas; es decir el individuo ha respondido a todas las variables.
+
+Caso completo = Fila llena . no tiene NA (TRUE)
+
+Caso incompleto= Fila con algun vacío. Tiene NA (FALSE)
+
+Se obtiene mediante:
+
+```{r}
+complete.cases(DDP)
+```
+
+La cantidad de filas completas será
+
+```{r}
+sum(complete.cases(DDP)) # halla la cantidad de filas completas o llenas (sin NA)
+```
+
+Hay CERO filas completas es decir se tiene todas las filas incompletas.
+
+La cantidad de casos completos en este DF es CERO. Es decir todas las filas tienen algún vacío (NA)
+
+Hay CERO filas completas, es decir todas las filas están incompletas.
+
+`sum(complete.cases(DF))` ==\> casos o **filas completos**
+
+`sum(!complete.cases(DF))`==\> casos o **filas incompletos**
+
+```{r}
+sum(!complete.cases(DDP))
+```
+
+Hay 2950 filas que tienen algún vacío o que son incompletas.
+
+**RECORDAR:**
+
+### Diferencia entre los comandos is.na() y complete.cases()
+
+is.na identifica las **casillas vacías** en todo el dataframe.Para saber la cantidad total de datos faltantes, se puede usar el comando sum(is.na()).
+
+complete.cases() verifica la cantidad de **casos completos**, es decir verifica que en cada observación (filas) no haya casillas vacías, también se puede utilizar sum(complete.cases()).
+
+En ambos comandos es posible obtener su opuesto, para ello se antepone la exclamación antes del comando; por ejemplo: sum(!complete.cases) o (sum(!is.na())), son: la suma de **casos incompletos** y la suma de **casillas completas** o **datos completos** respectivamente.
+
+========================================================
+
+Hasta aqui ya se tiene:
+
+la media, mediana, moda, cuartiles, cuantiles ==\> Descriptores de posición.
+
+========================================================
+
+**DESCRIPTORES DE DISPERSIÓN:**
+
+**Rango total, rango intercuartilico, varianza, desviación estándar y coeficiente de variación.**
+
+¿Dispersión?
+
+Es una forma de medir la separación o distanciamiento de los datos. Solo datos numéricos.
+
+Datos "apretados" o "muy juntos" o muy aglomerados==\> poca dispersión.
+
+Datos "separados" o "no tan juntos" o muy esparcidos ==\> mayor dispersión.
+
+En un Quiz, que significa tener **baja dispersión:** Las notas estan muy aglomeradas o próximas.
+
+que significa tener **mayor dispersión en el Quiz:** las notas están muy distanciadas.
+
+Baja dispersión: notas muy parejas (próximas)
+
+Mayor dispersión: notas muy espaciadas (alejadas).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+**Dispersión** = grado de separación que hay entre los datos
+
+Ejemplo
+
+Notas en seccion 1.0 ==\> 02, 03, 07, 14, 15, 17, **20** ==\> están separados desde 2 a 20 : 18 de separación ==\> mayor dispersión.
+
+Notas en sección 2.0==\> 06, 06, 06, 10, 12, 15, 16 ==\> están separados desde 6 a 16: 10 de separación ==\> menor dispersión.
+
+Generalmente se prefieren los conjuntos con menos dispersión porque se obtienen mejores conclusiones.
+
+Fórmulas para el cálculo de la dispersión:
+
+1\) **RANGO TOTAL** = **Máximo - mínimo**
+
+RT(sec 1.0)= 20 - 2 = 18
+
+RT(sec 2.0) = 16 - 6 = 10
+
+La que tiene mayor rango total , tiene mas dispersión ==\> sus notas son mas variables y usualmente , esto no es bueno. Cuando hay mayor dispersión se le llama heterogéneo.
+
+Si hay poca dispersión : homogéneo. generalmente los conjuntos con menor dispersión son los preferidos, para sacar mejores conclusiones.
+
+El rango total solo se fija en los extremos y a veces, esto no es bueno.
+
+2\) **RANGO INTERCUARTÍLICO = RI = Q3 - Q1**
+
+El rango total y el rango intercuartílico se calcula con R:
+
+```{r}
+SEC1<-c(02, 03, 07, 14, 15, 17, 20 ) # sección 1 
+SEC2<-c(06, 06, 06, 10, 12, 15, 16) # sección 2
+summary(SEC1)
+summary(SEC2)
+```
+
+**RI**(SEC 1)=16 - 5= 11 (mayor dispersión según el RI)
+
+**RI**(SEC 2)=13.5 - 6 = 7.5 (menor dispersión según el RI)
+
+Se deduce mejores conclusiones de Teoría 4.2, pues tiene menor RT y menor RI ==\> Tiene menor dispersión.
+
+```{r}
+summary(DDP$Edad)
+```
+
+RT(EDAD)= max - min= 55-15= 40 años.
+
+RI(EDAD)=20-18=2
+
+Conclusión : En edad, los datos estan muy bien aglomerados , entre los cuartiles 1 y 3.
+
+3\) **VARIANZA**: Esta si analiza a cada uno de los datos, calculando los cuadrados de sus diferencias respecto al promedio y luego halla el promedio de estas diferencias.
+
+```{r}
+var(DDP$Edad, na.rm=T)
+round(var(DDP$Edad, na.rm=T),2)
+```
+
+La varianza de las edades es 6.37 años\^2
+
+Entre dos grupos similares (con igual unidad) , aquella que tenga menor varianza tendrá menor variabilidad.
+
+Sin embargo, como las unidades salen al cuadrado, cada varianza no es posible interpretarla.
+
+**4) DESVIACIÓN ESTÁNDAR**
+
+Es solo la raíz cuadrada de la varianza.
+
+$$
+S= \sqrt{V(X)}
+$$
+
+La desviación estándar te da las unidades originales.
+
+```{r}
+sd(DDP$Edad, na.rm=T)
+round(sd(DDP$Edad, na.rm=T),2)
+```
+
+La desviación estándar de las edades es 2.56 años.
+
+Para tener una mejor idea de que halla la desviación estándar, calculemos su media:
+
+```{r}
+round(mean(DDP$Edad, na.rm=T),2)
+```
+
+la media es 19.4 años
+
+La edad promedio de los estudiantes en Utec, de Estadística 1 es 19.4 años.
+
+min----------------------------media = 19.40 años ------------------------------------------- max
+
+......................................\|\<-----S=2.56\_\_\_\_\_\_\_\_\_\_ \|\| \_\_\_\_\_\_\_\_\_\_\_\_\_S=2.56\_\_\_\_\_\_\_\_\>\|...........................................
+
+Se ha obtenido un intervalo \< 16.84; 21.96 \> donde estará metido **la mayor cantidad de los datos**.
+
+Entre dos conjuntos con datos similares (igual unidad) tiene menor dispersión, aquel con menor desviación.
+
+5\) **COEFICIENTE DE VARIACIÓN**
+
+$$
+CV(X)=\frac{S}{\overline{X}}.100\text{%}
+$$
+
+Sin porcentaje:
+
+$$
+CV(X)=\frac{S}{\overline{X}}.
+$$Por lo general se usa para medir la variabilidad entre dos variables que pueden tener diferentes unidades o diferente forma de medir.
+
+El Coeficiente de variación, no tiene unidades.
+
+**NOTA:**
+
+-   SI CV \<= 30% ==\> **los datos son homogéneos** o que la dispersión es baja (*conviene tomar **la media** como medida de tendencia central*)
+
+-   Si 30% \< CV \<= 60% ==\> **los datos tienen dispersión media.**
+
+-   Si CV \> 60% ==\> **La dispersión es alta.** (*conviene usar **la mediana** como medida de tendencia central*)
+
+NOTA: Entre dos conjuntos de datos, aquel que tenga menor CV, tendrá menor dispersión relativa.
+
+Ejemplo:
+
+Sean las notas de Estadística: Media = 14, Desviación = 4
+
+Sean las Notas de Ingles: Media = 80 , Desviación = 12
+
+¿que curso tiene menor dispersión?
+
+Solución:
+
+Estadística se mide de 0 a 20. En cambio Inglés se mide de 0 a 100.
+
+Cuando las escalas de medida son diferentes o las unidades son distintas, debe usarse el Coeficiente de Variación.
+
+Aquí se usa el CV
+
+$$
+CV(Estadística)= \frac{S}{\overline{X}}*100 \text{%}=\frac{4}{14}*100\text{%}=28.57\text{%}
+$$
+
+$$
+CV(Inglés)= \frac{S}{\overline{X}}*100 \text{%}=\frac{12}{80}*100\text{%}=15\text{%}
+$$
+
+Ambos son homogéneos.
+
+Inglés tiene menor dispersión relativa. o también: Inglés tiene notas mas homogéneas que estadística.
+
+Quien tiene mayor CV será aquel con mayor dispersión relativa o también será mas heterogéneo, aquí es Estadística.
+
+El CV se usa cuando las mediciones tienen una escala absoluta (CERO absoluto)
+
+**NOTA:**
+
+Para una variable X ==\> Si su CV es menor o igual de 30% se dirá que es homogéneo o con dispersión baja.
+
+**PROPIEDADES:**
+
+$$
+\overline{(ax+b)}=a.\overline{x}+b
+$$
+
+$$
+V(ax+b)= a^2.V(x)
+$$
+
+$$
+s(ax+b)=|a|.s(x) 
+$$
+
+**Problema:**
+
+En el Quiz 1 de una sección la nota promedio fue 08, siendo su desviación 2. El profesor decide aumentarle el 40% a cada nota y ademas restarle un punto. ¿Cuál es el nuevo CV?
+
+Solución:
+
+X: nota original
+
+$$
+\overline{X}=8; S(X)=2
+$$
+
+Y: nota modificada
+
+$$
+Y=X+0.4X-1 \rightarrow Y=1.4X-1
+$$
+
+$$
+\overline{Y}=\overline{(1.4X-1)}=1.4(\overline{X})-1=1.4(8)-1=10.2
+$$
+
+$$
+S(Y)=S(1.4X-1)=1.4S(X)=2.8
+$$
+
+$$
+CV(Y)=\frac{S(Y)}{\overline{Y}}\text{.100%}=\frac{2.8}{10.2}\text{.100%}=27.45\text{%}
+$$
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Se tienen dos grupos de fórmulas:
+
+1)  Descriptores de posición: La media, mediana, moda, quartiles, quantiles, max, min.
+
+2)  Descriptores de dispersión: El Rango total, Rango Intercuartílico, varianza, desviación estándar y coeficiente de variación.
+
+FALTA VER: Descriptores gráficos
+
+=============================
+
+&&&&&&&&&&&&&&&&&&&&&&&&&

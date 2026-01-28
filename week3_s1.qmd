@@ -1,0 +1,207 @@
+---
+title: "week3_s1"
+format: html
+editor: visual
+---
+
+```{r}
+#install.packages("tidyverse")
+```
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+#library(tidyverse)
+library(ggplot2)
+```
+
+# Día Lunes
+
+## Solución del quizz de práctica en clase
+
+Cargamos la data
+
+```{r}
+DF <- read_csv("Seminuevos.csv")
+DF
+```
+
+### Preguntas
+
+#### 1. ¿Cúal es la cantidad de celdas que tienen alguna respuesta?
+
+Me están pidiendo celdas no vacías
+
+Entonces recordamos que la cantidad de celdas vacías =\>Number of NA's
+
+```{r}
+sum(is.na(DF))
+```
+
+Número de celdas no vacías = Total de celdas - cantidad de NA's = 967\*13-68
+
+```{r}
+967*13-68
+```
+
+Or
+
+```{r}
+sum(!is.na(DF))
+```
+
+Respuesta: **12503 celdas no vacías (Respondidas).**
+
+#### 2. ¿Cuál es la cantidad de casos incompletos?
+
+Podemos usar `complete.casos` para poder obtener filas completas.
+
+Después lo negamos con "!" para poder obtener los incompeltos
+
+```{r}
+sum(!complete.cases(DF))
+
+```
+
+> Recuerda que caso es es cada fila, Tambien se llama obsercación o Unidad muestral
+
+Respuesta: **Se tiene 67 casos incompletos**
+
+#### 3. ¿Cuál es la variable que tiene más datos faltantes?
+
+##### Primera forma
+
+```{r}
+apply(is.na(DF), 2, sum)
+
+```
+
+Respuesta: **La variable es Estado Civil**
+
+##### Segunda forma
+
+```{r}
+sum(is.na(DF$Modelo))
+sum(is.na(DF$Color))
+#....
+#...
+#...
+```
+
+Manualmente :v
+
+#### 4. ¿Cuál es la cantidad de colores distintos de los vehiculos, que la empresa a vendido?
+
+```{r}
+unique(DF$Color)
+```
+
+Respuesta: **Contando serían 30 colores**
+
+Segunda forma:\
+
+```{r}
+table(DF$Color, useNA = "always")
+```
+
+#### 5. ¿Cuál es el color más frecuente de los vehículos que compran las mujeres?
+
+Hacemos una tabla cruzada
+
+```{r}
+customDF <- table(DF$Color, DF$Genero, useNA = "always")
+customDF
+```
+
+Respuesta: **La respuesta es Plata Metálico**
+
+Otra manera:
+
+```{r}
+
+#Para ver que valores tiene Genero
+#unique(DF$Genero)
+
+
+DF_filtered <- filter(DF, Genero == "Femenino")
+table(DF_filtered$Color)
+```
+
+#### 6. ¿Cuál es el precio de venta mínimo del quinto superior de los vehículos que se han vendido en dólares?
+
+```{r}
+#unique(DF$Moneda)
+
+
+DF_dollars <- filter(DF, Moneda == "US $")
+quantile(DF_dollars$`PRECIO DE VENTA`,0.8, na.rm=T)
+```
+
+Respuesta: **EL precio de venta mínimo del quinto superior de vehículos vendidos en dólares es de 32848**
+
+#### 7. ¿Cuál es el coeficiente de variación del descuento que se ha hecho a los vehículos que fueron vendidos en soles?
+
+```{r}
+#unique(DF$Moneda)
+
+DF_soles <-  filter(DF, Moneda == "S/.")
+#names(DF_soles)
+descuentos <- DF_soles$`Precio Real`- DF_soles$`PRECIO DE VENTA`
+descuentos
+```
+
+> Recordemos que:
+>
+> $$
+> \text{Coeficiente de variación} = \frac{\text{Desviación Estándar}}{media}
+> $$
+
+```{r}
+S<-sd(descuentos) ## desviación estándar
+M <-mean(descuentos) ## media
+CoefVar <- S/M
+CoefVar
+round(CoefVar, 2)
+```
+
+EL valor aproximado del coeficiente de variación es de: **0.56**
+
+### Texto conceptual
+
+Sol:
+
+```{r}
+names(DF)
+
+Km5<-filter(DF, `Kilometraje (x10 mil km)`>5)
+Km5
+```
+
+La ecuación del pago al SET
+
+Sea X: número de siniestros
+
+Y: pago al SET
+
+Y= 500+200\*X
+
+utilidades
+
+$$
+Promedio(a+b(x))= a + b(Promedio(x))\\
+S(a+b(x))=|b|*S(x)\\
+V(a+b(x))=b^2V(X)
+$$
+
+Hallamos promedio de siniestros
+
+```{r}
+X<- mean(Km5$Siniestros, na.rm=TRUE)
+Y=500+200*X
+round(Y, 2)
+
+```
+
+EL pago al SET es de: **1048.02** dólares

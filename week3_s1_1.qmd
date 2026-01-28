@@ -1,0 +1,104 @@
+---
+title: "week3_s1_1"
+format: html
+editor: visual
+---
+
+# Uso de gráficos
+
+> Lecciones previas,
+>
+> transumete y ver clase del viernes semana 2
+
+Definamos que hay una tabla Sexcor, que tiene una columna de Sexcor con data del sexo pero con formato corregido
+
+```{r}
+table(DFT$Sexcor, useMA ="always")
+```
+
+Debe salir algo así:
+
+``` bash
+-------------------------------------------
+desconocido |         F|      M|      <NA>
+    4       |    849   |  1998 |     99
+```
+
+Copiando Frecuencias
+
+```{r}
+frec <- c(4, 849, 1998, 99)
+frec
+```
+
+Hagamos un gráfico circular de Sexcor
+
+```{r}
+pie(frec)
+```
+
+Creemos una leyenda con las mismas cantidades.
+
+```{r}
+pie(frec, labels = frec)
+```
+
+> Sin embargo no es suficiente info
+
+La verdadera leyenda
+
+```{r}
+pie(frec, labels = frec)
+legend("topleft", legend = c("Desconocido", "Femenino", "Maculino", "NA's"), fill = c("white", "lightblue", "mistyrose", "skyblue"))
+```
+
+> Podemos customizar los colores
+
+## Nuevo paquete
+
+```{r}
+#install.packages("plotrix") #done
+```
+
+```{r}
+library(plotrix)
+```
+
+ahora el pie en 3d se llama pie3D
+
+```{r}
+#pie3D(frec, labels = frec, )
+#....... 
+#revisar material
+
+```
+
+# Diagrama de cajas
+
+Se hace para cuantitativas
+
+Contiene información resumida en base a 5 números importantes
+
+Min, Cuat 1, Mediana, Cuat 3, Max
+
+Diagrama en code:
+
+```{r}
+boxplot()
+```
+
+## Asimetria vs Simetria
+
+Traza puntos en min, max. q1 y q3,
+
+Y dependiendo de la curva se definen como asimétrico a la derecha (curva prolongando a la derecha)
+
+$Moda <= Mediana <= Promedio$
+
+y lógicamente también se aplica cuando es a la izquierda.
+
+$Moda >= Mediana >= Promedio$
+
+Y al simetría es cuando ninguno de estos casos se presenta.
+
+$Moda = Mediana = Promedio$

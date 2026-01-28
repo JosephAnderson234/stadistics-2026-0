@@ -1,0 +1,527 @@
+---
+title: "05_Estadística_Básica"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+En SOURCE, para hacer un cambio de línea, debe digitarse al final de la oración, dos espacios en blanco.\
+**Algunas funciones especiales de R.**\
+**Se escribe en negrita, en SOURCE, colocando la frase entre dos asteriscos a cada lado.**\
+**Axl Rosse**
+
+*En cursiva: Colocar la frase entre un asterisco a cada lado.*
+
+***Negrita y cursiva: tres asteriscos a cada lado.***
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+## pipe: *%\>%*
+
+*Cambia el orden de la secuencia de lectura* en algunos códigos.
+
+Usemos la data *`autosseminuevos.csv  (del Q1)`*
+
+```{r}
+AS<-read_csv("autosseminuevos.csv")
+AS
+```
+
+Luego:
+
+Filtraré los vehículos HILUX:
+
+```{r}
+filter(AS, Modelo=="HILUX" )
+#lectura: filtro de la data AS, a los modelos HILUX
+```
+
+Lo anterior ahora lo escribo usando PIPE:
+
+```{r}
+AS %>% filter(Modelo=="HILUX")
+#Lectura: De la data AS, filtro a los modelos HILUX
+```
+
+Otro ejemplo:
+
+Filtrar de AS a los que tienen HILUX y luego **seleccionar** solo la columna Genero e Imprimirlo
+
+```{r}
+FMSG<-select(filter(AS, Modelo=="HILUX" ), Genero)     
+print(FMSG)
+```
+
+Equivale a:
+
+```{r}
+print(select(filter(AS, Modelo=="HILUX" ), Genero))
+#Lectura: Imprimo de haber Selecionado Género, del fitrado de HILUX.
+```
+
+Equivale a:
+
+```{r}
+AS %>% filter(Modelo=="HILUX") %>% select(Genero) %>% print
+#De la data AS, filtro el modelo HILUX y selecciono luego Género y luego lo imprimo.
+```
+
+## Summarise( )
+
+no confundirlo con *`summary`*
+
+Con esto se puede obtener algunos cálculos deseados , en una matriz nueva.
+
+```{r}
+Calc_Siniestros<- summarise(AS,Media=mean(Siniestros, na.rm=T), Mediana=median(Siniestros, na.rm=T), NAs=sum(is.na(Siniestros)), Varianza=var(Siniestros, na.rm=T), Desviacion=sd(Siniestros, na.rm=T), Total_siniestros= sum(Siniestros, na.rm=T))
+Calc_Siniestros
+```
+
+#### NOTA ACERCA DE REDONDEOS
+
+Calcular el coeficiente de variación de los siniestros: $CV=\frac{Desviación}{Media}$\
+
+```{r}
+CVsin<- sd(AS$Siniestros,na.rm=T)/ mean(AS$Siniestros, na.rm=T)
+round(CVsin,2)
+# esto es lo correcto
+```
+
+Respuesta correcta: CV = 0.70
+
+Algunos alumnos hacen así:
+
+```{r}
+CVRsin<- round(sd(AS$Siniestros,na.rm=T),2)/ round(mean(AS$Siniestros, na.rm=T),2)
+round(CVRsin,2)
+# Esto es incorrecto
+```
+
+Incorrecto: CV= 0.71
+
+para redondear, lo correcto es, hacer los cálculos previos sin redondear. Y solo al final, para dar la respuesta, se debe redondear. Una sola vez, en todo el proceso del cálculo final.
+
+Continuamos con *`summarise`*
+
+El código anterior de *`summarise`* se puede usar también con *`pipe`*:
+
+```{r}
+AS%>%summarise(Media=mean(Siniestros, na.rm=T), Mediana=median(Siniestros, na.rm=T), NAs=sum(is.na(Siniestros)), Varianza=var(Siniestros, na.rm=T), Desviacion=sd(Siniestros, na.rm=T))
+```
+
+Otro ejemplo.
+
+Ahora usamos DFT (proviene de DatosDiversos de Canvas)
+
+```{r}
+DFT
+```
+
+podemos calcular
+
+```{r}
+Calc_Edad<-summarise(DFT, Mínimo=min(Edad, na.rm=T), Máximo=max(Edad,na.rm=T),  Edades_distintas=n_distinct(Edad), Primera_Edad=first(Edad), Ultima_Edad=last(Edad), Suma_edades= sum(Edad,na.rm=T) )
+Calc_Edad
+```
+
+También:
+
+```{r}
+DFT%>%summarise( Mínimo=min(Edad, na.rm=T), Máximo=max(Edad, na.rm=T),  Edades_distintas=n_distinct(Edad), Primera_Edad=first(Edad), Ultima_Edad=last(Edad), Suma_edades= sum(Edad, na.rm=T) )
+```
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+**HASTA AQUI EN VIERNES 23/01**
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+## GRÁFICO para ***dos Variables cualitativa***
+
+Una gráfica recomendada es realizar un *MOSAICO*:
+
+**INTERACCION ENTRE 2 VARIABLES categóricas**
+
+**MOSAICO**
+
+Es una tabla graficada, con todas las posibilidades entre dos variables cualitativas o puede tenerse alguna variable discreta pero con pocos valores distintos.
+
+Genera regiones rectangulares, cuyo tamaño es proporcional a la frecuencia en cada una de las regiones.
+
+como ejemplo usamos una tabla de Mosaico que relaciona a **sexo** y **ciclo** de la base **DFT**
+
+Como se entiende?
+
+Llamemos X a la primera variable. Y a la segunda variable.
+
+El ancho horizontal de cada rectángulo indica la frecuencia relativa (porcentaje) p de cada valor que adopta X.
+
+La altura de cada rectángulo indica la proporción de cada valor de Y en un valor fijo de X. la suma de estas alturas debe dar p.
+
+El área de cada rectángulo indica la frecuencia conjunta para cada X y cada Y.
+
+Si se observa que hay rectángulos que tienen tamaños mas diferenciados que otros, se podría tener una dependencia o relación o asociación no aleatoria entre las variables. Si los tamaños fueran similares o aproximados para todas los valores de X, se podría decir que hay independencia entre las variables.
+
+Otro ejemplo de **DFT (**de datos diversos que se ha estado limpiando)
+
+```{r}
+tabsexoyciclo<-table(DFT$Sexcor ,DFT$Ciclo)
+tabsexoyciclo 
+mosaicplot(tabsexoyciclo,main="Sexo vs Ciclo",col=c("purple","yellow", "white", "red"))
+```
+
+con los NA
+
+```{r}
+tabsexoycicloNA<-table(DFT$Sexcor ,DFT$Ciclo, useNA = "always")
+tabsexoycicloNA 
+mosaicplot(tabsexoycicloNA,main="Sexo vs Ciclo",col=c("purple","yellow", "white", "red"))
+```
+
+## 
+
+Con AS, damos otro ejemplo de MOSAICO:
+
+```{r}
+AS<-read_csv("autosseminuevos.csv")
+AS
+```
+
+```{r}
+tabModyMon<-table(AS$Moneda,AS$`Tipo Cliente`, useNA = "always")
+tabModyMon 
+mosaicplot(tabModyMon,main="Moneda vs Tipo de cliente",col=c("blue","yellow", "pink"))
+```
+
+**REGRESIÓN LINEAL SIMPLE**
+
+Es para relacionar dos variables numéricas.
+
+**Objetivo**: Hallar la ecuación de una recta "especial" que pasa por una nube de puntos. Esta colección de puntos se puede apreciar haciendo un gráfico de dispersión.
+
+El método de Regresión Lineal sirve para determinar una relación lineal del tipo $y=\beta_0+\beta_1 *x$ entre dos variables $x, y$.
+
+$$
+\beta_0: \text{intercepto de la recta con eje Y o término independiente}
+$$
+
+$$
+\beta_1: \text{pendiente de la recta o coeficiente de regresión}
+$$
+
+En el caso en que $y$ depende de $x$:
+
+$x$ **==\> variable independiente**
+
+$y$ **==\> variable dependiente**
+
+Ejemplo:
+
+Se tiene las notas de 10 alumnos: Notas en parcial y Notas en final.
+
+```{r}
+notasF<-c(16,15,18,11,14,13,14,11,14,19)  # notas en ex final 
+notasP<-c(15,17,18,12,16,15,14,11,13,18)  # notas en ex parcial
+```
+
+La variable dependiente es ***Y:Notas en Final***, que depende de las **Notas en parcial:X.**
+
+"Si en el parcial saco nota muy baja , entonces en el final debo sacar nota mas alta".
+
+Podríamos denotarlas así:
+
+```{r}
+yF<-notasF
+xP<-notasP
+yF
+xP
+```
+
+Al hacer un diagrama de dispersión, **la variable dependiente se ubica en el eje** $Y$ , mientras que **la independiente, en el eje** $X$ .
+
+**GRÁFICO DE DISPERSIÓN:**
+
+```{r}
+plot(notasF ~ notasP, col= "blue")  # en plot se escribe primero Y, luego X
+```
+
+Se observa que hay una tendencia creciente, es decir , a medida que aumenta la nota en el parcial, entonces, su nota en el final también aumenta.
+
+De manera alternativa , también puede obtenerse un gráfico de dispersión, así:
+
+```{r}
+pairs(notasP ~ notasF, col= "red")   # en cualquier orden
+```
+
+Para medir la relación entre dos variables, se tiene un coeficiente denominado
+
+# Covarianza :
+
+Es un valor numérico que indica el grado de variación conjunta de dos variables aleatorias respecto a sus medias. Es el dato básico para determinar si existe una dependencia entre ambas variables y además es el dato necesario para estimar otros parámetros básicos, como el coeficiente de correlación lineal o la recta de regresión.
+
+\* Si $cov(X;Y)>0$ : Hay una tendencia ascendente o creciente. Es decir *cuando X aumenta, la variable Y también aumenta.*
+
+\* Si $cov(X;Y)<0$ : Hay una tendencia descendente o decreciente. Es decir *cuando X aumenta, la variable Y disminuye*.
+
+\* Si $cov(X;Y)=0$ **:** No hay una relación lineal entre las variables. Es decir los cambios en X, no afectan a los cambios en Y, en forma lineal. Esto no quiere decir que X, Y sean independientes. ***Podría existir una relación no lineal entre las variables.***
+
+La covarianza puede tomar cualquier valor : (+), (-). 0.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+No confundir **COVARIANZA** (que es para dos variables), con **COEFICIENTE DE VARIACIÓN** ( Es para una variable).
+
+$$
+CV=\frac{desviación}{media}
+$$
+
+Recordar el **Coeficiente de variación:**
+
+Si **CV**\<=0.3 ==\> datos homogéneos (Baja dispersión).
+
+Si 0.3 \<**CV**\<= 0.6 ==\> dispersión media o moderada.
+
+Si **CV** \>0.6 ==\> Datos heterogéneos (alta dispersión)
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Los valores de la covarianza ya están mas arriba. Se calcula así:
+
+Aquí la fórmula para la covarianza, la cual usa los promedios
+
+$$
+Cov(x,y)=(\overline{X.Y}) -\overline{X}. \overline{Y}
+$$ Ejemplo:
+
+Mas rápido es usando R studio.
+
+Calculando la covarianza de notasF y notasP.
+
+```{r}
+cov(notasP, notasF)  # no importa el orden
+```
+
+**Al ser positivo,** se puede decir que hay una tendencia ascendente de izquierda a derecha, es decir a medida que la nota del parcial aumenta, se tendrá que la nota del final también aumenta.
+
+**Nota:** Mientras mas alto es el valor absoluto de la covarianza, la relación lineal es mas fuerte.
+
+### COEFICIENTE DE CORRELACION:
+
+$$
+-1\le r \le 1
+$$
+
+El coeficiente de correlación de Pearson es una medida de dependencia lineal entre dos variables aleatorias cuantitativas. A diferencia de la covarianza, la correlación de Pearson es independiente de la escala de medida de las variables.
+
+$$
+r=\frac{cov(x;y)}{S(x).S(y)}
+$$
+
+De manera menos formal, podemos definir el coeficiente de correlación de Pearson como un índice que puede utilizarse para medir el grado de relación de dos variables siempre y cuando ambas sean cuantitativas y continuas.
+
+\* **Si r=1** ==\> La relación lineal es perfecta y ascendente de izquierda a derecha ( relación creciente)
+
+\* Si **r=0** ==\> No hay relación lineal entre las 2 variables.
+
+\* **Si r=-1** ==\> la relación lineal es perfecta y descendente de izquierda a derecha (relación inversa)
+
+-   Si $0 \le |r |\le 0.3$ ==\> la relación lineal es mala o correlación baja
+
+-   Si $0.3< |r| \le 0.6$ ==\> relación lineal moderada o correlación media
+
+-   Si $0.6 <|r| \le 1$ ==\> la relación lineal es buena o correlación alta.
+
+    En general:
+
+$$
+-1 \le r \le 1
+$$
+
+Ejemplo: Hallemos el coeficiente de correlación entre las notas de parcial y final:
+
+```{r}
+cor(notasF,notasP)
+```
+
+Interpretación:
+
+Hay una buena relación lineal directa entre las notas del parcial y del final.
+
+**Hallemos ahora la ecuación de regresión:**
+
+Ahora creamos un data frame
+
+```{r}
+
+DR<- data.frame("X"=notasP,"Y"=notasF) 
+DR
+```
+
+Se usa: *\``lm(var_depend(y) ~ var_ind(x), data)`\`*
+
+```{r}
+resultados<-lm(DR$Y ~ DR$X,data=DR)
+# primero se pone Y, luego se pone X. Al final se pone el nombre del Data Frame. 
+resultados
+```
+
+*"lm"* lo que te da, es la ecuación de una línea recta: $y=\beta_0 + \beta_1 * x$
+
+Es decir, del reporte de `lm,` se obtiene que:
+
+**==\>** $y= 0.2760+0.9546*X$
+
+aquí $\beta_{0}=0.2760$, $\beta_{1}=0.9546$
+
+Ejemplo de aplicación de esa ecuación:
+
+**PRONÓSTICOS CON REGRESIÓN LINEAL**
+
+-   *si la nota en parcial fuera **05*** entonces, **la nota en el final sería:**
+
+*Y=0.2760 + 0.9546\*(05)= 5.049*
+
+-   *si la nota en parcial fuera **12*** entonces, **la nota en el final sería:**
+
+*Y=0.2760 + 0.9546\*(12)=* 11.7312
+
+*si la nota en parcial fuera **19*** entonces, **la nota en el final sería:**
+
+*Y=0.2760 + 0.9546\*(19) = 18.4134*
+
+```{r}
+x<-c(5, 12, 19)
+y<-0.2760+0.9546*x
+"las notas respectivas en el final serán:"
+y
+```
+
+La gráfica de dispersión, nuevamente
+
+```{r}
+plot(DR$X,DR$Y,xlab="X_notasP",ylab="Y_notasF", col="blue")   # PRIMERO SE COLOCA x.
+```
+
+Pero ahora le agregamos la recta de regresión
+
+```{r}
+plot(DR$X,DR$Y,xlab="X_notasP",ylab="Y_notasF", col="blue") 
+abline(resultados, col="red")
+```
+
+\#################################################
+
+INTERPRETACIONES DE LA ECUACIÓN DE REGRESIÓN: Y = Beta0 + beta1\*X
+
+**β0= 0.2760** :"*cuando X=0, entonces Y= β0"* ( Cuando la nota en el parcial es CERO, entonces la nota en el final sería 0.2760 ).
+
+**β1= 0.9546** :*"por cada unidad de aumento en 𝑥, la variable 𝑦 varía en promedio en β1 unidades"* (Por cada punto que se aumenta en la nota del parcial, se tendrá que la nota del final aumentaría en promedio en 0.9546 puntos) .
+
+Ejemplo de DFT: *Seminuevos.csv*
+
+```{r}
+AS<-read_csv("autosseminuevos.csv")
+AS
+
+```
+
+Identificando columnas sin NA:
+
+```{r}
+apply(is.na(AS), 2, sum)  # el 2 : para columnas.
+```
+
+Tomemos **PRECIO DE VENTA** y **Kilometraje (x10 mil km)**
+
+```{r}
+Yprecio<-AS$`PRECIO DE VENTA`  # var dependiente.
+Xkm<-AS$`Kilometraje (x10 mil km)`  # var independiente.
+
+```
+
+El precio depende de kilometraje.
+
+Diagrama de dispersión:
+
+```{r}
+plot(Xkm, Yprecio)
+```
+
+```{r}
+regdf<- lm(AS$`PRECIO DE VENTA` ~ AS$`Kilometraje (x10 mil km)`, data = AS)  
+# primero se pone Y.
+regdf
+```
+
+La ecuación de regresión será:
+
+$$
+y=26705.4+229.3*X
+$$
+
+Beta \_0: 26705.4 ==\> Cuando el vehículo tiene kilometraje CERO, entonces su valor de venta es de 26705.4 dólares.
+
+Beta_1: 229.3 ==\> por cada **un** diez mil kilómetros de aumento del vehículo, el valor de venta aumenta en promedio en 229.3 dólares.
+
+```{r}
+cor(DF$`PRECIO DE VENTA`, DF$`Kilometraje (x10 mil km)`)
+```
+
+El modelo es muy malo, ya que se aproxima a CERO.
+
+**NOTA:**
+
+Para realizar una Regresión Lineal *se debe tener la misma cantidad de datos para X e Y*.
+
+Para cada X se debe tener el valor de su Y y viceversa. Es decir todos las parejas (X,Y) deben estar completas.
+
+Si se tuviera NAs en las variables debe realizarse ***un proceso de Imputacion***, el cual consiste en cambiar los NAs por algunos valores especiales para no sesgar el análisis.
+
+Si no hay datos atípicos se puede cambiar *los NA por la media.(usando mean(DF\$columna, na.rm=T))*
+
+Si hay datos atípicos pero la distribución es algo simétrica puede cambiarse *por la media.*
+
+Si hay datos atípicos y la distribución es Asimétrica, conviene cambiar *los NA por la mediana*.
+
+Para Regresión las variables deben ser cuantitativas.
+
+Si se tiene una variable cualitativa y nos piden imputar, puedes cambiar los NA *por la moda*.
+
+Para una variable cuantitativa contínua puede graficarse un histograma o boxplot
+
+Para una variable cualitativa puede graficarse un diagrama circular o tambien un diagrama de palos (bastones, barritas)
+
+Para una variable cualitativa y otra cuantitativa se puede usar tambien el Boxplot Indexado (diagrama de cajas indexado)
+
+Para ***dos Variables cualitativas*** una gráfica recomendada es realizar un *MOSAICO*.
+
+THE END
