@@ -1,0 +1,646 @@
+---
+title: "Consolidated_for_partial"
+format: html
+editor: visual
+---
+
+## 
+
+## Package
+
+Loading utils:
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+```
+
+# CONCEPTOS BÁSICOS DE ESTADÍSTICA 1
+
+Es la ciencia q tiene por objeto desarrollar un conjunto de métodos, técnicas y procedimientos para
+
+-   Recopilar datos
+
+-   Organizar datos
+
+-   Presentar datos
+
+-   Analizar los datos
+
+-   Inferir a partir de los datos
+
+![](images/clipboard-3703881015.png){width="337"}
+
+## Definiciones:
+
+1.  Datos: medidas u observaciones de interés.
+2.  Unidad muestral: elemento o individuo de la muestra. (A quien o a que se selecciona)
+3.  Variable: característica de interés de un elemento. Puede ser:
+
+*`Numérica (cuantitativa):`* el valor de la variable es un número.
+
+-   Continua: la variable puede tomar cualquier valor en un intervalo. (generalmente es con unidades)
+
+-   Discreta: la variable puede tomar una cantidad numerable de valores numéricos diferentes. (generalmente son enteros)
+
+*`Categórica (cualitativa):`* el valor de la variable no es un número.
+
+-   Ordinal: valores discretos que tienen un orden claro; excelente, bueno, mediocre, malo.
+
+-   Nominal: valores discretos sin un orden específico; blanco, negro, rojo, verde, azul.
+
+4.  Tabla o matriz de datos: Aquí las unidades muestrales se dan en filas y las variables corresponden a las columnas.
+5.  Población: conjunto de todos los individuos o elementos de interés.
+6.  Muestra: subconjunto de la población, idealmente se espera que la muestra sea representativa de la población.
+7.  Censo: cuando se entrevista a toda la población; típicamente es muy caro, en algún sentido, trabajar con un censo.
+8.  Encuesta: Es cuando la información que se obtiene proviene de una parte de la población (muestra).
+
+## Ejemplos
+
+**Ejemplo 1:**
+
+| VARIABLES                                | TIPO              |
+|------------------------------------------|-------------------|
+| Cantidad de facturas por pagar           | cuantit. discreta |
+| Satisfacción de una película             | cualitat. ordinal |
+| Tiempo empleado en un examen             | cuantit. continuo |
+| Peso de recién nacidos                   | cuantit. continuo |
+| Mejor película                           | cualitat. nominal |
+| Cantidad de veces que llevas estadística | cuantit. discreta |
+| Sexo del recién nacido                   | cualitat. nominal |
+
+**EJEMPLO 2:**
+
+Se desea hacer un estudio dirigido a los universitarios de UTEC, acerca de su opinión sobre la calidad del menú que se da en el comedor. Para esto se ha decidido seleccionar 200 universitarios.
+
+Indique, la población de interés, la muestra y la unidad muestral. Además indique alguna variable y su tipo.
+
+Solución:
+
+Población: Todos los universitarios de Utec.
+
+muestra: los 200 universitarios elegidos de Utec
+
+unidad: Cada universitario de Utec
+
+Variable: Calidad del menu
+
+tipo de variable: cualitativa ordinal
+
+**EJEMPLO 3:** En el mes de diciembre de 2025, se ha encuestado a 100 usuarios de Hiraoka de Miraflores, que han adquirido el software de antivirus Panda 2025. Se les preguntará acerca del número de licencias que adquirieron, la categoría del Software, duración de la licencia y el costo.
+
+Indique población, muestra, unidad muestral, variable, tipo.
+
+Solución:
+
+Población: Todos los clientes de Hiraoka miraflores de diciembre 2025, que han adquirido antivirus Panda 2025.
+
+muestra: los 100 clientes de mi población
+
+unidad: cada cliente de Hiraoka Miraflores que adquirió antivirus Panda en diciembre de 2025.
+
+variables:
+
+1\) Número de licencias compradas: cuantitativa discreta.
+
+2\) Categoría del antivirus: cualitativa nominal.
+
+3\) Duración de la licencia: cuantitativa discreta
+
+4\) Costo: cuantitativa discreta.
+
+&&&&&&&&&&&&&&&&&
+
+**hasta aqui por hoy lunes.**
+
+&&&&&&&&&&&&&&&&&
+
+# MUESTREO
+
+## Concepto:
+
+Es la técnica o procedimiento que se usa para seleccionar una muestra.
+
+Una muestra debe ser
+
+-   aleatoria, random.randit()
+
+-   representativa, debe ser una parte que contiene una distribuición de datos de la población
+
+-   tamaño adecuado, ni tan grande ni tan chico xd
+
+## Tipos de muestreo:
+
+### Muestreo no probabilístico:
+
+La representatividad depende de cosas difíciles de controlar.
+
+*Comentario*: No se selecciona la muestra de manera aleatoria o científica, sino según criterios subjetivos o de conveniencia. Esto puede introducir sesgos significativos que afecten la representatividad de la muestra y la validez de los resultados.
+
+#### Muestreo por conveniencia:
+
+Se toman en base a los datos que se tienen, por su facilidad de acceso o por alguna ventaja para la muestra. Por lo general con esto se obtienen hábitos, opiniones y puntos de vista, de manera más simple.
+
+*Comentario:* Es el más fácil de hacer porque usas lo que tienes a mano, pero puede no representar bien a toda la población. Por ejemplo, encuestar solo a tus amigos sobre un producto.
+
+#### Muestreo por juicio:
+
+Un experto dictamina que elementos de la población son seleccionados para la muestra, la representatividad de la muestra depende del juicio del experto.
+
+*Comentario:* Un especialista elige quiénes entran en la muestra según su experiencia. Es útil cuando necesitas personas con características específicas, pero depende mucho de qué tan buena sea la decisión del experto.
+
+### Muestreo Probabilístico:
+
+La representatividad depende del azar, el tamaño de la muestra y las suposiciones de estructura.
+
+#### Muestreo aleatorio simple (MAS):
+
+se seleccionan al azar los elementos de la población que participan en la muestra. Todas las muestras posibles de un mismo tamaño deben tener la misma probabilidad.
+
+*Comentario:* Es como un sorteo justo donde todos tienen las mismas posibilidades de ser elegidos. Garantiza que la muestra sea imparcial, aunque necesitas tener acceso a toda la población.
+
+#### Muestreo estratificado:
+
+La población está particionada en grupos disjuntos homogéneos de acuerdo a algunas características. Se hace muestreo aleatorio simple en cada estrato, el número de elementos a tomar en cada estrato es, frecuentemente, proporcional al tamaño del estrato.
+
+*Comentario:* Primero divides la población en grupos similares (por edad, género, nivel de ingresos, etc.), luego tomas una muestra aleatoria de cada grupo. Esto asegura que todos los grupos importantes estén representados en tu muestra.
+
+![](images/clipboard-1298404250.jpeg)
+
+#### Muestreo por conglomerados:
+
+También llamado inverso del estratificado.
+
+La población está particionada en conglomerados disjuntos, similares entre sí. Primero se toma una muestra aleatoria simple de los conglomerados y luego se toma una muestra aleatoria simple de cada conglomerado seleccionado.
+
+*Comentario:* Divides la población en grupos naturales (por ejemplo, escuelas, ciudades o empresas), seleccionas algunos grupos al azar y luego encuestas a todos o a una muestra dentro de esos grupos. Es útil cuando la población está geográficamente dispersa.
+
+Se divide en conglomerados,\
+En un conglomerado hay muchos datos heterogeneos
+
+Pero compra entre conglomerados, tienden a ser homogeneos
+
+### Sesgo
+
+El sesgo es un peso desproporcionado a favor o en contra de una idea o cosa, generalmente de una manera cerrada, perjudicial o injusta. Las personas pueden desarrollar sesgos a favor o en contra de un individuo, un grupo o una creencia. En ciencia e ingeniería, un sesgo es un error sistemático. El sesgo estadístico resulta de un muestreo injusto de una población, o de un proceso de estimación que no da resultados precisos en promedio
+
+# Codes of R to use in Rstudio
+
+```{r} #install.packages("readr") done #install.packages("plyr") done  #install.packages("dplyr") done #install.packages("tidyr") done #install.packages("ggplot2") done}
+```
+
+```{r} #use library library(readr)}
+```
+
+### Matrices
+
+```{r} A<-c(3,5,7,9) B<-c(0,2,4,6) M1<-cbind(A,B) # Uniendo por columnas M2<-rbind(A,B) # Uniendo por filas "vector A" A "vector B"  B "matríz M1: unido por columnas" M1 "matriz M2: unido por filas" M2 D<-c(2,4,6,3,5,7,0,1) matrix(D,nrow=2, ncol=4) matrix(D, nrow=4,ncol=2) E<-c(1,4,7,10,2,5,8,11,3,6,9,12) MMM<-matrix(E, nrow=4, ncol=3) MMM t(MMM)}
+```
+
+***matrix** necesita un vector que contenga todos los datos de la matriz, pero estos datos deben ser copiados en vertical, ya que **matrix** formara la matriz leyendo los datos en columnas.*
+
+**SUBIR UN EXCEL:**
+
+Para subir datos de un excel se usará ***read_csv(" ").***
+
+1\) Primero se debe colocar el excel en una carpeta del escritorio, que llamaremos DOCUMENTOS. Aquí debe estar el Curso de R que se ha creado.
+
+2\) Luego abrir Drive ==\> Nuevo ==\> **subir archivo**.
+
+3\) Abriendo el archivo ==\> Descargar ==\> **Valores separados por comas.**
+
+4\) Ir a descargas ==\> copiar y colocar en la carpeta del proyecto DOCUMENTOS.
+
+5\) En R aparecerá el archivo en formato csv.
+
+6\) Ya se puede leer usando *read_csv*
+
+%%%%%%%%%
+
+```{r} Famosos<-read_csv("FAMOSOS1.xlsx - Hoja1 (6).csv") Famosos}
+```
+
+\####################################################
+
+```{r} head(Famosos) #aqui las 6 primeras observaciones tail(Famosos) #aqui las 6 últimas observaciones}
+```
+
+%%%%%%%%%%%%
+
+Cada fila se llama: **Observación** (es toda la información que nos brinda cada encuestado)
+
+Cada columna es una **variable** (es aquello que nos interesa conocer)
+
+Cada Casilla o celda se llama **DATO** (es cada respuesta a cada variable)
+
+Celdas vacías ==\> NA
+
+***Dim***
+
+Halla la dimensión del data frame
+
+```{r} dim(Famosos)}
+```
+
+***nrow***
+
+halla solo el número de filas
+
+```{r} nrow(Famosos)}
+```
+
+***ncol***
+
+halla el número de columnas
+
+```{r} ncol(Famosos)}
+```
+
+**Formando tablas:**
+
+Para formar una tabla de variable cualitativa o para discretas ( que tienen pocos valores distintos), se usa *`table`*
+
+```{r} "TABLA DE ACTIVIDAD DE LOS FAMOSOS"  table(Famosos$Actividad)  "tabla de GÉNERO DE LOS FAMOSOS"  table(Famosos$Género)}
+```
+
+**Moda:** es lo que mas se repite ==\> Moda de actividades: ??. Frecuencia modal :??{r}
+
+Moda de Actividades: Canto
+
+Frecuencia modal: 7
+
+EJEMPLOS DE PREGUNTAS usando *Famosos.*
+
+1.  **Calcule cuantos personajes con seguridad no se dedican al canto:**
+
+    Usamos table:
+
+    ```{r} table(Famosos$Actividad)}
+    ```
+
+    En el excel hay 25 filas, es decir son 25 encuestados.
+
+    Pero al sumar las cantidades de Table, se obtiene 24. La explicación es , que hay un famoso que no ha puesto su ACTIVIDAD y por lo tanto no se nada de él.
+
+    En *`table`* se tiene las personas que con seguridad han puesto su actividad .
+
+    ==\> Cantidad que se dedican al canto : 7 (con seguridad)
+
+    Cant. de personas que respondieron ahí - cant. de personas que si dicen que cantan:
+
+    24 - 7 = 17. ==\> hay *17 famosos que con seguridad admiten que no cantan*.
+
+2.  **¿qué porcentaje se dedica a tecnología?**
+
+    De la tabla de Actividad:
+
+    son 25 los encuestados ==\> 100%
+
+    son 3 que están en tecnología ==\> p%
+
+    p%= 12%. El 12 % se dedica a tecnología.
+
+    \*Si la pregunta fuera: ¿Que porcentaje **con seguridad** se dedica a Tecnología?
+
+    Aqui no cuento a Axl Ross, pues **no tengo la seguridad** de su Actividad ya que no lo ha mencionado. Entonces:
+
+    24 ==\>\>100%
+
+    3 ==\>\> q% y se halla.
+
+3.  **Indique la moda de la actividad de famosos: Es el valor que mas se repite**.
+
+    ya esta respondido: es CANTO. y son 7 famosos que lo indicaron.
+
+4.  **¿Qué porcentaje son mujeres, con seguridad, según la DATA?**
+
+    ```{r} table(Famosos$Género)}
+    ```
+
+    Observamos que hay 23 personas que si respondieron con seguridad su género.
+
+    23 ==\> 100%
+
+    5 ==\> p% ==\> p%= (5x100%)/23 = ....
+
+5.  **De los que indicaron que cantan ¿qué porcentaje son MUJERES?**
+
+    Aquí intervienen dos variables: Actividad y Género
+
+```{r} table(Famosos$Género, Famosos$Actividad)}
+```
+
+Los que cantan son 7. de ellos 2 son mujeres.
+
+7 ==\>100%
+
+2 ==\> q% ==\> q%= (2x100%)/7 = ....
+
+6.  **De aquellos que indicaron que son hombres ¿qué porcentaje indicaron que se dedican al canto?**
+
+    18 ==\> 100%
+
+    5 ==\> z% ==\> z%= (5x100%)/18=...
+
+7.  **¿De los que cantan, cuantos tienen edad mayor de 35?**
+
+    Intervienen variables: Actividad y Edad
+
+    ```{r} table(Famosos$Edad, Famosos$Actividad)}
+    ```
+
+Son 7 que cantan y de ellos 3 tienen edad que pasa de 35 años.
+
+7 ==\> 100%
+
+3==\>\> p% ==\> p%= (3x100%)/7= 42.86%
+
+```{r} round(3*100/7, 2)}
+```
+
+## DESCRIPTORES DE POSICIÓN
+
+Aquí se va a usar algunas fórmulas que permiten hallar números especiales que están en determinada posición.
+
+### **Cálculos con R:**
+
+Ingresamos datos numéricos:
+
+X= NOTAS DE UN QUIZ
+
+```{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}
+```
+
+***1) La media de x:***
+
+también llamado promedio. Es válido solo para variables numéricas y nos da un valor representativo de todo el conjunto de datos.
+
+```{r} mean(X)}
+```
+
+aquí R no lo puede hallar debido a que X tiene NA.
+
+Se debe hacer así:
+
+```{r} mean(X, na.rm = T)   # se ignora los NA y ya se puede calcular la media.}
+```
+
+La nota promedio en el quiz es 10.28571.
+
+Para tenerlo con dos decimales:
+
+```{r} round(mean(X, na.rm = TRUE), 2)  # con dos decimales.}
+```
+
+La nota promedio en el Q1 es 10.29.
+
+***La mediana:***
+
+Es un valor representativo de todos los datos y con seguridad está en el centro de toda la cantidad de datos.
+
+```{r} median(X)   # aqui no lo hallará debido a que hay NA,s median(X, na.rm=T)  # aquí si lo halla.}
+```
+
+Interpretación de la mediana:
+
+menores notas---------50%--------Me=8 ———50% ———mayores notas
+
+**La nota máxima** del 50% **de las menores notas** es 8.
+
+**La nota mínima** del 50% **de las mayores notas** es 8.
+
+\###################
+
+\###################
+
+```{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}
+```
+
+**La media:**
+
+```{r} mean(X)   # No lo halla porque hay en X, datos perdidos:NA mean(X, na.rm=T)   # Aquí si lo calcula.}
+```
+
+La nota promedio en Q1 es 10.28
+
+**La mediana:**
+
+```{r} median(X)    # Aquí no lo calcula median(X, na.rm=T)   # Aquí si lo calcula.}
+```
+
+La mediana es 8.
+
+El 50% de las menores notas tiene como nota máxima 08.
+
+El 50% de las mayores notas tiene como nota mínima 08.
+
+***La moda:***
+
+Es el dato que mas se repite.
+
+```{r} table(X)   # Aquí no se cuenta los NA.}
+```
+
+La moda es: 16 y su frecuencia modal es 4 (se repite 4 veces). Unimodal.
+
+Sumando las frecuencias (la segunda fila de TABLE) da 14.
+
+Pero se tiene 16 datos. hay dos datos perdidos (NA)
+
+**Si se desea que la tabla cuente los NA, se debe agregar: UseNA= always**
+
+**Tabla contando NA**
+
+```{r} table(X, useNA = "always")  # aqui se contará los NA.}
+```
+
+Se observa que hay 2 NAs.
+
+Se obtiene diversos descriptores usando:
+
+```{r} summary(X)}
+```
+
+**Min(4)**\_\_\_\_\_\_25%\_\_\_\_\_\_\_**Q1**\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Q2=Me**\_\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Q3**\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Max(20)**
+
+*Mínimo= 4*
+
+*Máximo=20*
+
+*Media= 10.29*
+
+*Mediana= 8*
+
+*Cuartil 1= 6 ==\> La nota máxima del 25% de las menores notas es 06*
+
+*Cuartil 3= 16 ==\> La nota maxima dl 75% de las menores notas es 16.*
+
+*Cantidad de NA: 2*
+
+Interpretaciones:
+
+Mediana=8: la mayor nota del 50% de los que tienen menor nota es 8 . O también: La menor nota del 50% de los que tienen mas nota es 8.
+
+Cuartil 1= 6: La mayor nota del 25% de los que tienen menores notas es 6 . O también: La menor nota del 75% de los que tienen mayor nota es 6.
+
+Cuartil 3 = 16: La mayor nota del 75% de los que tienen menores notas es 16. O también: La menor nota del 25% de los que tienen mayores notas es 16.
+
+**PREGUNTAS:** Del vector X
+
+```{r} summary(X)}
+```
+
+¿Entre que valores está el 50% de las menores notas?: Entre 4 y 8 (Me)
+
+¿Entre que valores está el 50% de las mayores notas?. Entre 8 (Me) y 20
+
+¿Entre que valores está el 25% de las mayores notas?. Entre Q3= 16 y 20
+
+¿Entre que valores están las notas de los alumnos que se encuentran en el 50% central? Entre 6 y 16
+
+**Cuantiles:**
+
+Los cuantiles sirven para hallar cualquier porcentaje de una data.
+
+```{r} quantile(X, 0.1, na.rm=T )    # Calcula el 10% quantile(X, 0.3, na.rm=T )    # calcula el 30% quantile(X, 0.9, na.rm=T)     # Calcula el 90% quantile(X, 0.7, na.rm=T)     # Calcula el 70%}
+```
+
+**Ejemplo:** En el conjunto X estan las notas de un alumno . Desde que nota, este alumno ingresaria a formar parte del Quinto Superior?
+
+min. nota.......................................................**80%**...........................................**.p...........20%............max. nota**
+
+p=Cuantil 80.
+
+```{r} quantile(X, 0.8, na.rm=T)}
+```
+
+En el archivo ***Famosos***
+
+Hallare el 50% de Actividad y el 80% de los personajes.
+
+Para calcular porcentajes de variable cualitativas se debe colocar en quantile, **type=3**
+
+```{r} # Actividad y Personaje son cualitativos quantile(Famosos$Actividad, 0.5,type=3,  na.rm=T)  quantile(Famosos$Personaje, 0.8,type=3,  na.rm=T)}
+```
+
+Sea el vector de letras:
+
+```{r} V<-c("b", "c", "e", "e", "h", "m") quantile(V, 0.5, type=3) quantile(V, 0.9, type=3)}
+```
+
+**Mas ejemplos**
+
+De la Data de Famosos.
+
+**media o promedio:**
+
+Halle la estatura promedio de los famosos
+
+```{r} mean(Famosos$Estatura)}
+```
+
+Halle la edad promedio redondeada a dos decimales.
+
+```{r} round(mean(Famosos$Edad, na.rm=T),2)}
+```
+
+La edad promedio de los famosos es 37 años.
+
+**Mediana:** Es el dato que está en el centro, luego de ordenar a todo el conjunto de datos.
+
+```{r} median(Famosos$Edad, na.rm=T)}
+```
+
+**Moda de Edad:**
+
+```{r} table(Famosos$Edad, useNA ="always")}
+```
+
+La moda es 30 años, pues es la que mas se repite: 4 veces. (el 4: frecuencia modal)
+
+# Matemáticas:
+
+Los cálculos matemáticos se hacen en el **CHUNK.**
+
+Aquí mostramos un poco de la **escritura matemática** para textos: se usa símbolos de dolar.
+
+Se puede usar: un dolar a cada lado de todo o doble dolar en cada lado del texto.
+
+**Ejemplos de texto matemático en la misma linea del texto.**
+
+Digitaré como texto matemático a la ecuación de una recta, lo cual se escribe entre un dolar a cada lado: $y=mx+b$.
+
+Ejemplo: Una multiplicación es conmutativa $a*b=b*a$ , es decir se puede cambiar el orden de los textos.
+
+Otro ejemplo de texto matemático en la misma línea: $Pitágoras: a^{2} =  b^{2} + c^{2}.$
+
+Sub índices: $X_{1}+X_{2}$
+
+Mas ejemplos==\> La fórmula de *Caída libre* (física): $h=Vo*t-0.5* g*t^2$
+
+Una ecuación de segundo grado: $ax^2+bx+c=0$
+
+Ejemplo de texto matemático centrado:
+
+$$ P(evento)=\frac{n(evento)}{n(\Omega)} $$
+
+$$ \text{Las soluciónes de la ecuación de segundo grado:}\\ x=\frac{-b +\sqrt{b^2-4a*c}}{2a}\\ x=\frac{-b -\sqrt{b^2-4a*c}}{2a} $$
+
+Se coloca doble dolar en una linea aparte, para que quede centrado: $$\text{La ecuación de un plano es:  } ax+by+cz=d$$
+
+Algunos símbolos de estadística:
+
+$$ \text{Símbolo de promedio o media:  } \overline{X} $$
+
+$$ \text{Símbolo de mediana:  } M_e $$
+
+$$ \text{letras griegas}\\  \alpha, \theta, \beta,\sigma, \delta, \Delta, \phi, \Phi, \gamma,\iota\\  \text{Desviaciones estándar:  } \sigma_1 , \sigma_2, \sigma_{xyz}\\  \text{la  varianza:  } \sigma_1^2, \sigma_{xyz}^{2} $$
+
+$$ \tau,\phi $$
+
+$$ \text{Aquí doy un ejemplo de un texto matemático} $$
+
+Ahora podemos escribir las fórmulas para los descriptores.
+
+-   **La media:** También llamada **PROMEDIO**. Es un valor representativo de todo un conjunto de datos. La media es válida solo para datos numéricos. La media tiene el inconveniente de que es muy susceptible a los datos extremos ( al mayor o al menor)
+
+Dado los $n$ datos siguientes: $x_1, x_2, ... , x_n$
+
+Su media será:
+
+$$ \overline{X}=\frac{\sum_{i=1}^{i=n} x_{i}}{n} $$
+
+o también:
+
+$$ \overline{X}=\frac{x_{1}+x_{2}+...+x_{n}}{n} $$
+
+-   **La mediana:** Es una medida de tendencia central, que trata de determinar el dato que ocupa la posición central siempre y cuando, estén ordenados de menor a mayor. La mediana no se afecta con los extremos.
+
+    Ejemplo: $X= 1, 4, 4, 6, 7, 13, 14, 15, 20$ (cantidad impar de datos)==\> $Me=7$
+
+    $Y= 1, 3, 5, 5, 8, 11, 12, 16, 16, 20$ (cantidad par de datos) ==\> $Me= \frac{8+11}{2}= 9.5$
+
+    Para cantidad impar de datos, la mediana es el que está en el Centro.
+
+    Para cantidad par de datos, la mediana es la semisuma de los dos centrales.
+
+-   **Moda:** Es un descriptor que indica cual es el dato que mas se repite. Se puede aplicar a variables numéricas o no numéricas.
+
+    Ejemplo: $X: 4, 6, 8, 4,19, 20, 3, 5, 4, 7, 7, 7, 4, 4$ ==\> $Mo= 4$ (que se repite 5 veces) y su $\text{frecuencia modal es  } 5$ .
+
+    Posibilidades de la moda:
+
+    1\) Puede que no exista moda. Ejemplo: Notas del quiz==\> 18, 15, 04, 20, 19, 12.
+
+    2\) Puede haber una sola moda ==\> unimodal. Ejemplo: 12, 14, 14, 14, 14, 14, 20, 20. ==\> Mo=14 (su frecuencia modal:5)
+
+    3\) Puede haber 2 modas ==\> bimodal ==\>ejemplo: 05, 06, 06, 06, 15, 15, 15, 10, 20, 19, 19, ==\> Hay dos modas: 06 y 15 (frecuencia modal: 3)
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+NOTA FINAL: Si todo el qmd está correcto, entonces al presionar Render, se debe obtener el HTML. Si no sale el HTML, entonces, abajo en la CONSOLA aparece un mensaje: "ejecución interrumpida". Además ahi se inicará en que líneas numeradas están los errores que R studio ha detectado.

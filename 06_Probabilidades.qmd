@@ -1,0 +1,113 @@
+---
+title: "6_Probabilidades"
+format: html
+editor: visual
+---
+
+# Introducción a las probabilidades
+
+## Experimento Aleatorio
+
+Es un experimento en donde el resultado no está garantizado con exactitud, aunque tomemos todas las precauciones necesarias para que las condiciones de su realización sean las mismas.
+
+Este depende del azar; entonces lo que pretendemos hacer con la **teoría de probabilidades** es establecer un lenguaje que sirva para hablar, entender y **tratar de predecir los eventos** sujetos a **incertidumbre**.
+
+La descripción de un experimento aleatorio se da por 3 elementos:
+
+-   Espacio de resultados, universo o espacio muestral: donde van todos los resultados individuales pertinentes.
+
+-   La colección de los eventos relevantes: cada evento es un subconjunto del universo
+
+-   Una función de probabilidad; una función que a cada evento le asigne un número entre cero y uno
+
+# 🧠 ¿Qué es una σ-álgebra?
+
+Una **σ-álgebra** sobre un conjunto ( $\Omega$ ) (llamado *espacio muestral*) es una colección ( $\mathcal{F}$ ) de subconjuntos de ( $\Omega$ ) que cumple tres propiedades:
+
+1.  **Contiene el conjunto vacío**:\
+    ( $\emptyset \in \mathcal{F}$ ) → entonces también ( $\Omega \in \mathcal{F}$ )
+
+2.  **Cerrada bajo complementos**:\
+    Si ( $A \in \mathcal{F}$ ), entonces ( $A^c = \Omega - A \in \mathcal{F}$)
+
+3.  **Cerrada bajo uniones contables**:\
+    Si ( $A_1, A_2, A_3, \dots \in \mathcal{F}$ ), entonces ( $\bigcup_{i=1}^{\infty} A_i \in \mathcal{F}$ )
+
+Esto garantiza que podemos hacer operaciones probabilísticas coherentes sobre los subconjuntos de ( $\Omega$).
+
+### 📌 Ejemplo práctico: lanzar un dado
+
+El espacio muestral es:\
+
+$$
+\Omega = {1, 2, 3, 4, 5, 6}
+$$
+
+Se presentan varias colecciones de subconjuntos para evaluar si son σ-álgebras:
+
+#### a) ( $\mathcal{F}_1 = {\emptyset, {2,4,6}, {1,3,5}, \Omega}$ )
+
+✅ **Sí es una σ-álgebra**.
+
+-   Contiene ( $\emptyset$ ) y ( $\Omega$ )
+
+-   Los subconjuntos son complementarios entre sí
+
+-   Está cerrada bajo unión (por ejemplo, ${2,4,6} \cup {1,3,5} = \Omega$)
+
+#### b) ( $\mathcal{F}_2 = {{1,2,3}, {4,5,6}}$ )
+
+❌ **No es una σ-álgebra**.
+
+-   No contiene ( $\emptyset$ )
+
+-   No incluye complementos ni ( $\Omega$ )
+
+# Espacio muestral y eventos
+
+Sabemos que a $\sigma - Algebra$ de $\Omega$ se denomina espacio muestral a $\Omega$
+
+En simplicidad, es el conjunto donde están incluidos todas las posibilidades que se obtendrían en el experimento aleatorio
+
+Cada elemento del $\sigma - Algebra$ de $\Omega$ es denominado evento.
+
+En resumen, un evento forma parte del espacio muestral. Es la parte que nos interesa
+
+![![](images/clipboard-3036003846.png)](images/clipboard-298782381.png)
+
+# Principio de adición y multiplicación
+
+![](images/clipboard-2853362921.png)
+
+# Combinatoria
+
+![](images/clipboard-843951376.png)
+
+```{r}
+# Combinatoria de 5 en 2
+choose(5, 2)
+# Resultado: 10
+
+(choose(4, 3)*choose(6,2))/choose(10, 5)
+14/36
+
+```
+
+![](images/clipboard-1146841384.png)
+
+# Permutación
+
+![](images/clipboard-3257042200.png)
+
+```{r}
+permutacion <- function(n, k) {
+  factorial(n) / factorial(n - k)
+}
+
+# Ejemplo
+permutacion(5, 2)  # Resultado: 20
+```
+
+![](images/clipboard-1470136314.png)
+
+![](images/clipboard-3431313115.png)

@@ -1,0 +1,145 @@
+---
+title: "EP"
+format: html
+editor: visual
+---
+
+# EP
+
+Loading utils:
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+```
+
+## Pregunta 1
+
+```{r}
+DF <- read_csv("M1A.csv")
+DF
+```
+
+```{r}
+#Datos faltantes
+sum(is.na(DF))
+
+#Casos incompletos por los datos faltantes
+FilasIncompletas <- sum(!complete.cases(DF))
+FilasIncompletas
+##Como eliminaremos todas los casos faltantes
+#nos quedamos con 
+FilasCompletas <- nrow(DF) - FilasIncompletas
+
+```
+
+## Pregunta 2
+
+```{r}
+#Esto es lo que nos queda de nuestra muestra
+muestraRest <- FilasCompletas * ncol(DF)
+muestraRest
+#Para calcular porcentualmente lo que perdimos
+totalMuestra = nrow(DF) * ncol(DF)
+
+
+porcentajeActual = ((totalMuestra - muestraRest)/totalMuestra)*100
+porcentajeActual
+
+round(porcentajeActual, 2)
+
+##Para el menor tamaño efectivo
+which.min(colSums(!is.na(DF)))
+names(which.min(colSums(!is.na(DF))))
+```
+
+## Pregunta 3
+
+```{r}
+
+prevENAs <- sum(is.na(DF$E))
+DF$E <- chartr("OI", "01", DF$E)
+DF$E
+
+currentNAs<- sum(is.na(DF$E))
+#NO AFECTA NADA TODO SE VOLVERIA NA
+
+#De 8 a 37
+currentNAs - prevENAs
+
+```
+
+```{r}
+x <- "MiXeD cAsE 123"
+chartr("iXs", "why", x)
+```
+
+## Pregunta 4
+
+```{r}
+#DF$Calidad
+
+#Matrix<- summarise(DF,Media=mean(Calidad, na.rm=T), Mediana=median(Calidad, na.rm=T), NAs=sum(is.na(Calidad)), Varianza=var(Calidad, na.rm=T), Desviacion=sd(Calidad, na.rm=T))
+#Matrix
+
+tipo <- "categórica ordinal"
+
+unique(DF$Calidad)
+
+DF$Calidad <- factor(DF$Calidad,
+                                    levels = c("Estándar",  "Buena",     "Excelente", "Premium",   "Básica" ),                                    ordered = TRUE)
+
+q1<- quantile(DF$Calidad, 0.25, type=3, na.rm = TRUE)
+q1
+
+## Se dedujo los datos a aprtir de la mediana
+
+```
+
+## Pregunta 5
+
+```{r}
+nf <- layout(mat = matrix(c(1,2) , 2 , 1, byrow = TRUE), height = c(2,1))
+par(mar=c(0.0, 4.1, 2.1, 1.1))
+hist(DF$Peso, xlim = c(0, max(DF$Peso)), ylab = "densidad", main = "Histograma de peso", prob = TRUE, axes = FALSE, breaks = 20, col = "lightblue")
+axis(2)
+legend("topright", legend = "Promedio", pch = 4, bty = "n", pt.cex = 1.5)
+par(mar=c(4.1, 4.1, 0.6, 1.1))
+boxplot(DF$Peso, horizontal = TRUE, bty = "n", ylim = c(0, max(DF$Peso)), frame = FALSE, axes = TRUE, col = "lightblue")
+points(mean(DF$Peso, na.rm = TRUE), 1, pch = 4, cex = 1.5)
+title(xlab = "peso (kg)", line = 2)
+```
+
+## Pregunta 6
+
+```{r}
+boxplot(DF$Precio ~ DF$Calidad
+        , varwidth = TRUE
+        , main = "Precio en términos de calidad"
+        , ylab = "precio (S/.)"
+        , xlab = "calidad"
+        , col = "lightgreen"
+        )
+abline(h = mean(DF$Precio), lty = 2, col = "red")
+points(1:5
+       , c(mean(DF$Precio[DF$Calidad == "Básica"])
+           , mean(DF$Precio[DF$Calidad == "Estándar"])
+           , mean(DF$Precio[DF$Calidad == "Buena"])
+           , mean(DF$Precio[DF$Calidad == "Excelente"])
+           , mean(DF$Precio[DF$Calidad == "Premium"])
+           )
+       , pch = 4
+       )
+legend("topright"
+       , legend = c("Promedio por calidad", "Promedio global")
+       , pch = c(4, NA)
+       , lty = c(NA, 2)
+       , col = c("black", "red")
+       , bty = "n"
+       )
+```

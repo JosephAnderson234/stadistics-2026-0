@@ -1,0 +1,141 @@
+---
+title: "Q2_practice"
+format: html
+editor: visual
+---
+
+## 
+
+## Quiz 1
+
+Loading utils:
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+permutacion <- function(n, k) {
+  factorial(n) / factorial(n - k)
+}
+```
+
+# Loading file:
+
+```{r}
+DATA <- read_csv("autosseminuevos.csv")
+DATA
+```
+
+# Pregunta 1:
+
+AL elegir un cliente al azar ¿Cúal es la probabilidad de que haya adquirido un vehiculo mendiante Crédito Vehicular MAF?
+
+```{r}
+espMuestral <- nrow(DATA)
+
+
+dist <- table(DATA$`Modalidad de Venta`, useNA = "always")
+espEvento <- as.numeric(dist["Crédito Vehicular MAF"])
+
+```
+
+Ahora para calcular esa probabilidad tenemos que aplicar la fórmula:
+
+$$
+P(E) = \frac{n(E)}{n(\Omega)}
+$$
+
+```{r}
+res <- espEvento / espMuestral
+round(res, 2)
+```
+
+# Pregunta 2:
+
+Un vendedor de la empresa tiene asignado para su venta 6 vehículos automáticos y 4 vehículos mecánicos. **Un empresario le solicita 5 vehículos de los que dispone el vendedor** ¿Cual es la probabilidad de que adquiera 3 automáticos y 2 mecánicos?
+
+Se tiene que el espacio muestral para esta probabilidad:
+
+$n(\Omega) = C^{10}_{5}$
+
+```{r}
+n_omega = choose(10, 5)
+```
+
+Además necesitamos calcular la probabilidad de esos dos eventos, que al cumplir la propiedad de multiplicación se calcula así
+
+$n(E) = C^{6}_{3} * C^{4}_{2}$
+
+```{r}
+n_e <- choose(6, 3) * choose(4, 2)
+
+prob_e <- n_e /n_omega
+round(prob_e, 2)
+```
+
+# Problema 3:
+
+En MITSUI se tiene actualmente 10 espacios de estacionamiento que están numerados de 1 a 10. Llegan 7 clientes con sus vehículos y el Vigilante les de a cada cliente un número del 1 al 7. ¿De cuántas maneras se pueden estacionar los vehículos de los clientes con número par, en los lugares pares y los que tienen número impar en lugares impares?
+
+Para el espacio muestral:
+
+```{r}
+
+n_e <- permutacion(10, 7)
+```
+
+Para el evento:
+
+![](images/clipboard-40396615.png){width="450"}
+
+# Problema 4:
+
+Del total de clientes que *han anotado su género* en el archivo, se sabe que 300 hombres gustan de vehículos automáticos y la mitad de esta cantidad coincide con el total de mujeres que gustan de autos mecánicos. Al elegir un cliente al azar se obtuvo uno que prefiere vehículos automátcios ¿Cuál es la probabilidad de que sea mujer?
+
+```{r}
+sumrz<- table(DATA$Genero, useNA = "always")
+nMasculino = as.numeric(sumrz["Masculino"])
+nFemenino = as.numeric(sumrz["Femenino"])
+```
+
+Como sabemos que B = CLiente que prefiere automático
+
+Se quiere saber A = Que el cliente sea mujer
+
+Con los datos sabemos:
+
+| na   | Muj | Hombre | total |
+|------|-----|--------|-------|
+| Auto | 57  | 300    | 357   |
+| Mec  | 150 | 450    | 600   |
+| na   | 207 | 750    | 957   |
+
+Sabemos que
+
+$$
+P(A | B) = \frac{P(A\cap B)}{P(B)} =\frac{\frac{57}{957}}{\frac{357}{957}}=\frac{57}{357}
+$$
+
+# Problema 5
+
+Se desea determinar si los eventos son independientes:
+
+A: preferir una camioneta
+
+B: preferir un vehículo de color negro
+
+para ello se sabe que los que prefieren camionetas son el 40% de todos los clientes, los que prefieren vehículos negros son el 50% y **los que no prefieren camionetas negras son el 80%**.
+
+Usando solo esta información, inidique si ambos eventos so o no son independientes y calcule $P(AUB)$
+
+(gráfica de VEN)
+
+# Problema 6
+
+```{r}
+table(DATA$Moneda, DATA$Genero, useNA = "always")
+```

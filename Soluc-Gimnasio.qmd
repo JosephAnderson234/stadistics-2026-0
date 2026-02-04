@@ -1,0 +1,202 @@
+---
+title: "Gimnasio_solucionario"
+author: "Mely"
+format: html
+editor: visual
+---
+
+```{r}
+r <- function(x){
+  return(round(x, digits = 2))
+}
+```
+
+```{r}
+library(readr)
+library(dplyr)
+```
+
+```{r}
+DF <- read_csv("Promoción_2026.csv")
+```
+
+```{r}
+head(DF)
+```
+
+# 1
+
+El conjunto de datos tiene \[nobs\] observaciones y \[nvar\] variables.
+
+Hay un total de \[nna\] datos faltantes y podemos afirmar que el número de observaciones completas es \[nc\].
+
+Al haber seleccionado a todos los clientes con a lo mucho 53 semanas de antigüedad se realizó un muestreo por \[tipo\] (estratos\|conveniencia\|conglomerados).
+
+```{r}
+nrow(DF)
+ncol(DF)
+```
+
+```{r}
+sum(is.na(DF))
+sum(complete.cases(DF))
+```
+
+El muestreo utilizado es por conveniencia.
+
+# 2a
+
+```{r}
+summary(DF)
+```
+
+```{r}
+X <- DF$Edad
+
+r(sum(!is.na(X)))
+r(mean(X))
+r(sd(X))
+r(min(X))
+r(median(X))
+r(max(X))
+r(sd(X)/mean(X))
+
+```
+
+```{r}
+DF
+```
+
+# 2 b
+
+```{r}
+X <- DF$Masa
+
+r(sum(!is.na(X)))
+r(mean(X))
+r(sd(X))
+r(min(X))
+r(max(X))
+r(median(X))
+r(sd(X)/mean(X))
+
+```
+
+# 2 c
+
+```{r}
+X <- DF$Estatura
+
+r(sum(!is.na(X)))
+r(mean(X))
+r(sd(X))
+r(min(X))
+r(max(X))
+r(median(X))
+
+r(sd(X)/mean(X))
+
+```
+
+# 3
+
+```{r}
+X <- DF$PGC
+
+r(sum(!is.na(X)))
+r(mean(X, na.rm = TRUE))
+r(sd(X, na.rm = TRUE))
+r(min(X, na.rm = TRUE))
+r(median(X, na.rm = TRUE))
+r(max(X, na.rm = TRUE))
+r(sd(X, na.rm = TRUE)/mean(X, na.rm = TRUE))
+```
+
+# 4
+
+```{r}
+hist(DF$Tiempo)
+abline(v = c(median(DF$Tiempo, na.rm = TRUE), mean(DF$Tiempo, na.rm = TRUE)), col = c("red", "blue"))
+```
+
+#5 variable nivel_condicion_fisica
+
+```{r}
+DF$Nivel_condicion_fisica
+```
+
+ordenarlo
+
+```{r}
+tipo <- "categórica ordinal"
+
+DF$Nivel_condicion_fisica <- factor(DF$Nivel_condicion_fisica,
+                                    levels = c("Muy baja", "Baja", "Media", "Buena", "Excelente"),
+                                    ordered = TRUE)
+
+```
+
+Calcular los cuartiles
+
+#type=3, el cuantil se obtiene sin interpolar(no se promnedia entre datos vecinos), se toma directamente un dato observado de la muestra.
+
+```{r}
+q1<- quantile(DF$Nivel_condicion_fisica, 0.25, type=3, na.rm = TRUE)
+q1
+q2<- quantile(DF$Nivel_condicion_fisica, 0.5, type=3, na.rm = TRUE)
+q2
+q3<- quantile(DF$Nivel_condicion_fisica, 0.75, type=3, na.rm = TRUE)
+q3
+```
+
+#6 usar funcvion desconocidaq Para el estudio, el gimnasio ha decidido enfocarse únicamente en los clientes con una antigüedad entre la semana 5 y la semana 35.
+
+a)  Realice la limpieza de datos correspondiente considerando este criterio.
+
+b)  Utilice la función cut() para clasificar la antigüedad de los clientes en 3 intervalos estadísticos
+
+c)  Utilice group_by() para calcular, en cada intervalo, el promedio, la mediana, la desviación estándar y el coeficiente de variación de la antigüedad.
+
+```{r}
+summary(DF$Tiempo)
+
+```
+
+```{r}
+DF_limpio <- DF %>%
+  filter(!is.na(Tiempo), Tiempo >= 5, Tiempo <= 35)
+
+```
+
+```{r}
+DF_limpio
+```
+
+```{r}
+DF_limpio$Tiempo_cat <- cut(DF_limpio$Tiempo, breaks= c(5, 15, 25, 35),
+                            include.lowest = TRUE, right = TRUE)
+DF_limpio$Tiempo_cat
+```
+
+```{r}
+table(DF_limpio$Tiempo_cat)
+```
+
+```{r}
+DF_limpio %>%
+  group_by(Tiempo_cat) %>%
+  summarise(
+    n = n(),
+    promedio = r(mean(Tiempo)),
+    mediana = r(median(Tiempo)),
+    desviacion = r(sd(Tiempo)),
+    coef_var = r(desviacion / promedio)
+  )
+
+```
+
+Luego de hacer la limpieza,
+
+el promedio en el intervalo \[5,15\] es 7.91 , la mediana es 7, la desviación estandar es 2.81 y el coficiente de variacion es 0.36
+
+el promedio en el intervalo (15,25\] es 19.44 , la mediana es 19, la desviación estandar es 2.88 y el coeficiente de variacion es 0.15

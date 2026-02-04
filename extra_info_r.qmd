@@ -1,0 +1,460 @@
+---
+title: "some_news"
+format: html
+editor: visual
+---
+
+# 📘 GUÍA COMPLETA DE RStudio
+
+### Uso general y uso específico para Estadística
+
+## 1️⃣ ¿Qué es R y qué es RStudio?
+
+### 🔹 R
+
+-   Lenguaje de programación **especializado en estadística y análisis de datos**
+
+-   Gratuito y de código abierto
+
+-   Muy usado en investigación, ciencia de datos, economía, epidemiología, etc.
+
+### 🔹 RStudio
+
+-   Es un **entorno de desarrollo (IDE)** para trabajar cómodamente con R
+
+-   No reemplaza a R, lo hace más fácil de usar
+
+## 2️⃣ Interfaz de RStudio (lo básico)
+
+RStudio se divide normalmente en **4 paneles**:
+
+### 1. Editor de scripts (arriba izquierda)
+
+-   Donde escribes tu código `.R`
+
+-   Puedes guardar y reutilizar análisis
+
+-   Ejecutar líneas con **Ctrl + Enter**
+
+### 2. Consola (abajo izquierda)
+
+-   Donde R ejecuta el código
+
+-   Muestra resultados, errores y advertencias
+
+### 3. Environment / History (arriba derecha)
+
+-   **Environment**: objetos cargados (vectores, data frames, modelos)
+
+-   **History**: comandos usados
+
+### 4. Files / Plots / Packages / Help (abajo derecha)
+
+-   **Files**: archivos del proyecto
+
+-   **Plots**: gráficos
+
+-   **Packages**: paquetes instalados
+
+-   **Help**: ayuda de funciones
+
+## 3️⃣ Objetos básicos en R
+
+### 🔹 Tipos de datos
+
+```         
+x <- 5        # numérico y <- 3.2      # numérico z <- "hola"   # carácter b <- TRUE     # lógico 
+```
+
+### 🔹 Estructuras de datos
+
+| Estructura | Uso                               |
+|------------|-----------------------------------|
+| vector     | datos de una sola variable        |
+| matrix     | datos numéricos en filas/columnas |
+| data.frame | tablas estadísticas               |
+| factor     | variables categóricas             |
+| list       | objetos variados                  |
+
+Ejemplo:
+
+```         
+edad <- c(18, 20, 22, 21) sexo <- factor(c("M", "F", "F", "M"))  datos <- data.frame(edad, sexo) 
+```
+
+## 4️⃣ Manejo de datos (muy importante en estadística)
+
+### 🔹 Importar datos
+
+```         
+datos <- read.csv("archivo.csv") datos <- read.table("archivo.txt", header = TRUE) 
+```
+
+### 🔹 Explorar datos
+
+```         
+head(datos) tail(datos) str(datos) summary(datos) dim(datos) 
+```
+
+### 🔹 Acceder a variables
+
+```         
+datos$edad datos[,1] datos[1:5, ] 
+```
+
+## 5️⃣ Estadística descriptiva en R
+
+### 🔹 Medidas básicas
+
+```         
+mean(datos$edad) median(datos$edad) sd(datos$edad) var(datos$edad) 
+```
+
+### 🔹 Tablas de frecuencia
+
+```         
+table(datos$sexo) prop.table(table(datos$sexo)) 
+```
+
+### 🔹 Resúmenes por grupos
+
+```         
+tapply(datos$edad, datos$sexo, mean) aggregate(edad ~ sexo, data = datos, mean) 
+```
+
+## 6️⃣ Gráficos estadísticos
+
+### 🔹 Gráficos básicos
+
+```         
+hist(datos$edad) boxplot(datos$edad) plot(datos$edad) 
+```
+
+### 🔹 Comparación entre grupos
+
+```         
+boxplot(edad ~ sexo, data = datos) 
+```
+
+### 🔹 Diagramas de dispersión
+
+```         
+plot(x, y) 
+```
+
+## 7️⃣ Inferencia estadística en R
+
+### 🔹 Pruebas de hipótesis
+
+```         
+t.test(datos$edad) t.test(edad ~ sexo, data = datos) 
+```
+
+### 🔹 Normalidad
+
+```         
+shapiro.test(datos$edad) 
+```
+
+### 🔹 Correlación
+
+```         
+cor(x, y) cor.test(x, y) 
+```
+
+### 🔹 ANOVA
+
+```         
+modelo <- aov(edad ~ sexo, data = datos) summary(modelo) 
+```
+
+## 8️⃣ Regresión
+
+### 🔹 Regresión lineal
+
+```         
+modelo <- lm(y ~ x, data = datos) summary(modelo) 
+```
+
+### 🔹 Diagnóstico
+
+```         
+plot(modelo) 
+```
+
+## 9️⃣ Paquetes estadísticos clave
+
+### 🔹 Instalar paquetes
+
+```         
+install.packages("ggplot2") install.packages("dplyr") 
+```
+
+### 🔹 Cargar paquetes
+
+```         
+library(ggplot2) library(dplyr) 
+```
+
+### 🔹 Paquetes importantes
+
+| Paquete | Uso                     |
+|---------|-------------------------|
+| ggplot2 | gráficos avanzados      |
+| dplyr   | manipulación de datos   |
+| tidyr   | datos ordenados         |
+| psych   | estadística descriptiva |
+| car     | análisis estadístico    |
+| MASS    | modelos                 |
+
+## 🔟 Buenas prácticas en RStudio
+
+✅ Usa **scripts**, no solo la consola\
+✅ Nombra variables claramente\
+✅ Comenta tu código:
+
+```         
+# Esto calcula la media mean(x) 
+```
+
+✅ Usa **proyectos de RStudio**
+
+## 1️⃣1️⃣ Ayuda en R
+
+```         
+?mean help(lm) 
+```
+
+```{r}
+?mean
+help(lm)
+```
+
+# 📝 R PARA EXÁMENES (GUÍA PRÁCTICA)
+
+## 1️⃣ Comandos que SIEMPRE te piden
+
+### 🔹 Ver el data frame
+
+```         
+head(datos) str(datos) summary(datos) dim(datos) names(datos) 
+```
+
+👉 **TIP EXAMEN**:\
+Si no sabes qué hacer, empieza con `str()` y `summary()`.
+
+## 2️⃣ Tipos de variables (pregunta clásica)
+
+```         
+is.numeric(datos$edad) is.factor(datos$sexo) 
+```
+
+Convertir:
+
+```         
+datos$sexo <- factor(datos$sexo) datos$edad <- as.numeric(datos$edad) 
+```
+
+## 3️⃣ Estadística descriptiva (IMPRESCINDIBLE)
+
+### 🔹 Una variable numérica
+
+```         
+mean(x) median(x) sd(x) var(x) range(x) 
+```
+
+### 🔹 Variable categórica
+
+```         
+table(datos$sexo) prop.table(table(datos$sexo)) 
+```
+
+👉 **Frase típica de examen**:
+
+> “Calcule medidas descriptivas para la variable X”
+
+## 4️⃣ Subconjuntos de datos (MUY COMÚN)
+
+```         
+subset(datos, sexo == "F") subset(datos, edad > 20) 
+```
+
+Con filas y columnas:
+
+```         
+datos[datos$edad > 20, ] 
+```
+
+## 5️⃣ Gráficos que caen en exámenes
+
+### 🔹 Histograma
+
+```         
+hist(datos$edad) 
+```
+
+### 🔹 Boxplot
+
+```         
+boxplot(datos$edad) boxplot(edad ~ sexo, data = datos) 
+```
+
+### 🔹 Dispersión
+
+```         
+plot(x, y) 
+```
+
+👉 **TIP**: si ves “analice gráficamente”, usa **histograma o boxplot**.
+
+## 6️⃣ Normalidad (CLÁSICO)
+
+```         
+shapiro.test(datos$edad) 
+```
+
+📌 Interpretación rápida:
+
+-   **p \> 0.05** → normal
+
+-   **p ≤ 0.05** → no normal
+
+## 7️⃣ Pruebas estadísticas (MEMORIZA ESTO)
+
+### 🔹 t de Student (dos medias)
+
+```         
+t.test(x, y) t.test(edad ~ sexo, data = datos) 
+```
+
+Condición: normalidad ✔️
+
+### 🔹 Wilcoxon (no paramétrica)
+
+```         
+wilcox.test(x, y) 
+```
+
+### 🔹 Correlación
+
+```         
+cor(x, y) cor.test(x, y) 
+```
+
+-   Pearson → normal
+
+-   Spearman → no normal
+
+```         
+cor.test(x, y, method = "spearman") 
+```
+
+### 🔹 ANOVA
+
+```         
+modelo <- aov(y ~ grupo, data = datos) summary(modelo) 
+```
+
+## 8️⃣ Regresión lineal (SALE MUCHO)
+
+```         
+modelo <- lm(y ~ x, data = datos) summary(modelo) 
+```
+
+📌 Qué mirar en el examen:
+
+-   **p-value** → significancia
+
+-   **R-squared** → ajuste
+
+-   **signo del coeficiente** → relación
+
+## 9️⃣ Tablas resumen por grupos
+
+```         
+aggregate(edad ~ sexo, data = datos, mean) tapply(datos$edad, datos$sexo, mean) 
+```
+
+## 🧠 FRASES QUE EL PROFESOR AMA VER
+
+-   “Se asume normalidad (Shapiro-Wilk, p \> 0.05)”
+
+-   “Existe diferencia estadísticamente significativa”
+
+-   “No se rechaza la hipótesis nula”
+
+-   “La relación es positiva/negativa”
+
+## 🧾 PLANTILLA RÁPIDA PARA CUALQUIER EJERCICIO
+
+```         
+# Exploración str(datos)
+summary(datos)
+# Gráfico
+hist(datos$x) 
+# Normalidad
+shapiro.test(datos$x) 
+# Prueba
+t.test(x ~ grupo, data = datos) 
+```
+
+## 🧪 MINI EJERCICIO TÍPICO DE EXAMEN
+
+**Pregunta:**\
+“Determine si existe diferencia en la edad según el sexo”
+
+```         
+boxplot(edad ~ sexo, data = datos) shapiro.test(datos$edad) t.test(edad ~ sexo, data = datos) 
+```
+
+Si quieres, en el siguiente mensaje puedo:
+
+-   📄 Simular **un examen completo resuelto**
+
+-   ⏱️ Enseñarte **qué hacer en los primeros 5 minutos**
+
+-   🔍 Explicar **cómo interpretar salidas de R**
+
+-   📌 Hacer una **chuleta en 1 sola página**
+
+## Secretosss
+
+```{r}
+install.packages("openai")
+```
+
+```{r}
+library(httr2)
+library(jsonlite)
+
+# Token desde variable de entorno
+token <- Sys.getenv("GITHUB_TOKEN")
+
+# Endpoint y modelo
+endpoint <- "https://models.github.ai/inference/chat/completions"
+model <- "openai/gpt-5"
+
+# Construir request
+req <- request(endpoint) |>
+  req_headers(
+    Authorization = paste("Bearer", token),
+    "Content-Type" = "application/json"
+  ) |>
+  req_body_json(list(
+    model = model,
+    messages = list(
+      list(role = "system", content = "Eres un experto en estadística y probabilidaes que da respuestas directas y despues da una sección de explicación de resolución"),
+      list(role = "user", content = "Cuatro vehículos se van a estacionar y disponen de 7 lugares consecutivos. Calcule la probabilidad de 
+que se estacionen de tal manera que haya un lugar vació entre cada par de vehículos.")
+    )
+  ))
+
+# Enviar request
+resp <- req_perform(req)
+
+# Parsear respuesta
+data <- resp_body_json(resp)
+
+# Mostrar contenido
+cat(data$choices[[1]]$message$content, "\n")
+```

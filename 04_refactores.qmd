@@ -1,0 +1,222 @@
+---
+title: "04_refactored"
+format: html
+editor: visual
+---
+
+## 
+
+# Introducción
+
+Este documento tiene como objetivo **reforzar el uso de R para estadística descriptiva y limpieza de datos**, explicando **qué hace cada función** y **por qué se usa**, con énfasis en `dplyr` y gráficos básicos.
+
+## Carga de librerías
+
+```{r}
+# Paquetes para lectura, manipulación y visualización de datos
+library(readr)      # Lectura de archivos CSV
+library(plyr)       # Funciones básicas de manipulación (legacy)
+library(dplyr)       # Manipulación de datos (filter, select, mutate, summarise)
+library(tidyr)       # Reordenamiento de datos
+library(tidyverse)  # Conjunto de paquetes (incluye dplyr, ggplot2, stringr, etc.)
+library(ggplot2)    # Gráficos estadísticos 
+```
+
+## Lectura de datos
+
+Se trabaja con dos versiones de la base:
+
+-   **DD**: datos originales
+
+-   **DDP**: copia que será limpiada y transformada
+
+```{r}
+DD <- read_csv("datos_diversos.csv")  # Lectura del archivo CSV DDP <- DD      # Copia de trabajo DDP 
+DDP <- DD
+problems(DD)
+```
+
+## Función `select()` – Selección de columnas
+
+La función `select()` permite **elegir columnas específicas** de un data frame o **eliminar columnas innecesarias**.
+
+### Revisión de nombres de columnas
+
+```{r}
+names(DDP)  # Muestra los nombres de todas las columnas 
+```
+
+### Selección explícita de columnas
+
+```{r}
+# Se seleccionan solo las variables relevantes
+DDP2 <- select(DDP, Edad, Ciclo, Período)
+DDP2 
+```
+
+### Selección por rangos consecutivos
+
+```{r}
+# Se conservan solo las columnas útiles (del Período a Indicaciones)
+DDP1 <- select(DDP, "Período":"Indicaciones")
+DDP1 
+```
+
+Este nuevo data frame **ya no contiene columnas inútiles**.
+
+## Filas completas
+
+```{r}
+# Cuenta cuántas filas no tienen ningún NA
+sum(complete.cases(DDP1)) 
+```
+
+Estas filas corresponden a encuestas completamente respondidas.
+
+## Eliminación de columnas (otras formas)
+
+```{r}
+# Eliminando columnas por posición
+DDP3 <- DDP[, -23]
+# Eliminando columnas por nombre
+DDP4 <- select(DDP, -...19, -...20, -...21, -...22, -...23) 
+```
+
+## Función `filter()` – Selección de filas
+
+`filter()` permite **extraer observaciones que cumplen condiciones lógicas**.
+
+### Ejemplo: alumnos de la sección 2
+
+```{r}
+Sec2 <- filter(DDP1, Sección == "2")
+Sec2 
+```
+
+### Conversión de tipo y cálculo de promedio
+
+```{r}
+# Convertimos Edad a numérica para poder calcular estadísticas
+Sec2$Edad <- as.numeric(Sec2$Edad)
+mean(Sec2$Edad) 
+```
+
+## Ejemplo con múltiples condiciones
+
+Seleccionar alumnos con **edad menor a 30** y **estatura mayor o igual a 170 cm**.
+
+```{r}
+EDYEST <- filter(DDP1, Edad < 30, `Estatura (cm)` >= 170)
+EDYEST 
+```
+
+```{r}
+# Desviación estándar del peso
+sd(EDYEST$`Peso (kg)`, na.rm = TRUE) 
+```
+
+## Diagramas de cajas (Boxplot)
+
+El boxplot resume la información mediante **cinco valores**:
+
+-   Mínimo
+
+-   Q1
+
+-   Mediana
+
+-   Q3
+
+-   Máximo
+
+```{r}
+# Conversión a numérico
+DDP1$Edad <- as.numeric(DDP1$Edad)
+# Boxplot vertical
+boxplot(DDP1$Edad)
+# Boxplot horizontal 
+boxplot(DDP1$Edad, horizontal = TRUE) 
+```
+
+```{r}
+# Resumen numérico asociado al boxplot
+summary(DDP1$Edad) 
+```
+
+## Coeficiente y fracción de dispersión
+
+```{r}
+# Rango intercuartílico y rango total
+Q <- quantile(DDP1$Edad, na.rm = TRUE)
+RIC <- Q[4] - Q[2]
+RT <- max(DDP1$Edad, na.rm = TRUE) - min(DDP1$Edad, na.rm = TRUE)
+RIC / RT 
+```
+
+## Limpieza de variables cualitativas – `unique()` y `mutate()`
+
+```{r}
+# Renombramos columna para facilitar el trabajo
+DDP1 <- rename(DDP1, Zodiaco = `Signo del zodiaco`) 
+# Observamos respuestas distintas
+unique(DDP1$Zodiaco) 
+```
+
+## Uso de `%in%` para múltiples valores
+
+```{r}
+Edadysigno <- filter(   DDP1,   Edad %in% c(18, 21, 23),   Zodiaco %in% c("Tauro", "tauro", "TAURO", "tauri") ) Edadysigno 
+```
+
+## Coeficiente de variación
+
+```{r}
+Edadysigno$`Peso (kg)` <- as.numeric(Edadysigno$`Peso (kg)`)
+media <- mean(Edadysigno$`Peso (kg)`, na.rm = TRUE)
+desv  <- sd(Edadysigno$`Peso (kg)`, na.rm = TRUE)
+CV <- desv / media
+paste(round(100 * CV, 2), "%") 
+```
+
+## Corrección de variables con `stringr`
+
+```{r}
+library(stringr)  
+# Eliminación de espacios y estandarización
+DFT <- DDP1
+DFT$Sexo <- str_trim(DFT$Sexo)
+DFT$Sexo <- toupper(DFT$Sexo)  
+# Corrección mediante case_when 
+DFT <- mutate(   DFT,   Sexcor = case_when(     Sexo %in% c("M", "MM") ~ "M",     Sexo == "F" ~ "F",     TRUE ~ "desconocido"   ) ) 
+table(DFT$Sexcor) 
+```
+
+## Gráficos para variables cualitativas
+
+```{r}
+# Frecuencias
+freq <- table(DFT$Sexcor) 
+# Gráfico de barras 
+barplot(freq,         main = "Distribución por Sexo",         col = c("lightblue", "pink", "gray"),         ylab = "Frecuencia") 
+```
+
+## Histogramas – Variables cuantitativas
+
+```{r}
+# Histograma de estaturas corregidas
+hist(DFT$EstaturaCorr,      breaks = 10,      col = "lightgreen",      main = "Histograma de Estaturas",      xlab = "Estatura (cm)") 
+```
+
+## Conclusión
+
+En este documento se ha trabajado:
+
+-   Selección y filtrado de datos (`select`, `filter`)
+
+-   Limpieza de variables cualitativas y cuantitativas
+
+-   Cálculo de estadísticos descriptivos
+
+-   Visualización mediante gráficos básicos
+
+Este flujo de trabajo es **fundamental antes de cualquier análisis estadístico o modelamiento**.

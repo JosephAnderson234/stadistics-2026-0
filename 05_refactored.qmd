@@ -1,0 +1,222 @@
+---
+title: "05_refactored"
+format: html
+editor: visual
+---
+
+# Introducción a Quarto
+
+Quarto permite combinar **texto explicativo**, **fórmulas matemáticas** y **código ejecutable en R** dentro de un solo documento reproducible. Al hacer clic en **Render**, se genera un archivo final (HTML, PDF, etc.) que incluye tanto el contenido como los resultados del código.
+
+Más información: [https://quarto.org](https://quarto.org/)
+
+Este bloque ejecuta una operación básica y muestra el resultado en el documento.
+
+### Opciones de los bloques de código
+
+```         
+#| echo: false 2 * 2 
+```
+
+-   `echo: false` indica que **no se mostrará el código**, solo el resultado.
+
+-   Es útil cuando se desea ocultar el código y mostrar únicamente el resultado final.
+
+## Carga de librerías
+
+```         
+
+```
+
+```{r}
+library(readr)      # Lectura de archivos CSV y texto 
+library(plyr)       # Manipulación básica de datos (precursor de dplyr) 
+library(dplyr)      # Manipulación de datos: filtrar, seleccionar, resumir 
+library(tidyr)      # Ordenamiento y limpieza de datos 
+library(tidyverse)  # Conjunto de paquetes para ciencia de datos 
+library(ggplot2)    # Visualización gráfica 
+```
+
+Estas librerías facilitan el análisis, limpieza y visualización de datos.
+
+## Formato de texto en Quarto (SOURCE)
+
+-   **Salto de línea**: al final de la oración escribir dos espacios en blanco.
+
+-   **Negrita**: `**texto**`
+
+-   *Cursiva*: `*texto*`
+
+-   ***Negrita y cursiva***: `***texto***`
+
+## Operador PIPE `%>%`
+
+El operador PIPE permite **encadenar funciones**, haciendo el código más legible.
+
+En lugar de leer el código de adentro hacia afuera, se lee **de izquierda a derecha**.
+
+## Lectura de datos
+
+Usamos el archivo `autosseminuevos.csv`:
+
+```{r}
+AS <- read_csv("autosseminuevos.csv")  # Carga el archivo CSV en el data frame AS
+AS
+```
+
+## Filtrado de datos
+
+### Filtrar vehículos modelo HILUX
+
+```{r}
+filter(AS, Modelo == "HILUX") 
+```
+
+**Lectura:** De la base AS, se filtran únicamente los registros cuyo modelo es HILUX.
+
+### El mismo filtro usando PIPE
+
+```{r}
+AS %>% filter(Modelo == "HILUX") 
+```
+
+## Filtrar y seleccionar columnas
+
+Filtrar los vehículos HILUX y seleccionar solo la columna `Genero`:
+
+```{r}
+FMSG <- select(filter(AS, Modelo == "HILUX"), Genero)
+print(FMSG) 
+```
+
+### Versión compacta
+
+```{r}
+AS %>%   filter(Modelo == "HILUX") %>%   # Filtra solo HILUX
+  select(Genero) %>%               # Selecciona la columna Género
+  print()                           # Imprime el resultado 
+```
+
+## Función `summarise()`
+
+> **No confundir `summarise()` con `summary()`**
+
+-   `summarise()` crea un **nuevo data frame** con estadísticas específicas.
+
+-   `summary()` muestra un resumen general automático.
+
+### Estadísticas de la variable Siniestros
+
+```{r}
+Calc_Siniestros <- summarise(AS,   Media = mean(Siniestros, na.rm = TRUE), Mediana = median(Siniestros, na.rm = TRUE),   NAs = sum(is.na(Siniestros)),   Varianza = var(Siniestros, na.rm = TRUE),   Desviacion = sd(Siniestros, na.rm = TRUE),   Total_siniestros = sum(Siniestros, na.rm = TRUE) )
+Calc_Siniestros 
+```
+
+Cada estadístico se calcula ignorando valores perdidos (`NA`).
+
+## Coeficiente de Variación (CV)
+
+$CV = \frac{Desviación}{Media}$
+
+### Cálculo correcto
+
+```{r}
+CVsin <- sd(AS$Siniestros, na.rm = TRUE) / mean(AS$Siniestros, na.rm = TRUE)
+round(CVsin, 2) 
+```
+
+> **Regla importante:** se debe redondear **solo al final**, nunca durante el cálculo.
+
+### Forma incorrecta
+
+```{r}
+CVRsin <- round(sd(AS$Siniestros, na.rm = TRUE), 2) / round(mean(AS$Siniestros, na.rm = TRUE), 2)
+round(CVRsin, 2) 
+```
+
+Esto introduce error por redondeos intermedios.
+
+## Gráfico de Mosaico (dos variables cualitativas)
+
+Un **mosaico** representa gráficamente una tabla de contingencia.
+
+-   El **ancho** representa la frecuencia de la variable X.
+
+-   La **altura** representa la proporción de Y dado X.
+
+-   El **área** representa la frecuencia conjunta.
+
+### Ejemplo con DFT
+
+```{r}
+tabsexoyciclo <- table(DFT$Sexcor, DFT$Ciclo)
+tabsexoyciclo
+mosaicplot(tabsexoyciclo, main = "Sexo vs Ciclo", col = c("purple", "yellow", "white", "red")) 
+```
+
+Si los rectángulos difieren mucho en tamaño, puede existir **dependencia** entre las variables.
+
+## Regresión Lineal Simple
+
+Se utiliza para modelar la relación entre dos variables numéricas:
+
+$y = \beta_0 + \beta_1 x$
+
+-   ( \$\\beta_0\$ ): intercepto
+
+-   ( \$\\beta_1\$ ): pendiente
+
+## Ejemplo: notas de alumnos
+
+```{r}
+notasF <- c(16,15,18,11,14,13,14,11,14,19)  # Notas del examen final
+notasP <- c(15,17,18,12,16,15,14,11,13,18)  # Notas del examen parcial 
+```
+
+### Gráfico de dispersión
+
+```{r}
+plot(notasF ~ notasP, col = "blue") 
+```
+
+Se observa una **tendencia creciente**: a mayor nota en el parcial, mayor nota en el final.
+
+## Covarianza
+
+```{r}
+cov(notasP, notasF) 
+```
+
+-   Positiva: relación creciente
+
+-   Negativa: relación decreciente
+
+-   Cero: no hay relación lineal
+
+## Coeficiente de Correlación de Pearson
+
+```{r}
+cor(notasF, notasP) 
+```
+
+Este coeficiente mide la **fuerza y dirección** de la relación lineal y siempre está entre -1 y 1.
+
+## Modelo de regresión
+
+```{r}
+DR <- data.frame(X = notasP, Y = notasF)
+resultados <- lm(Y ~ X, data = DR)
+resultados 
+```
+
+La ecuación obtenida es la recta que mejor se ajusta a los datos.
+
+## Interpretación
+
+-   (\\beta_0): valor esperado de Y cuando X = 0
+
+-   (\\beta_1): cambio promedio en Y por cada unidad adicional de X
+
+## Conclusión
+
+Este documento integra **análisis estadístico básico**, **visualización** y **modelado lineal**, utilizando buenas prácticas de programación reproducible con Quarto y R.

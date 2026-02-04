@@ -36,7 +36,7 @@ Recuerden que la función str puede ser útil para entender los diversos detalle
 
 La función complete.cases también es conveniente pues permite detectar en donde hay observaciones faltantes, de manera similar a is.na.
 
-**El dataframe FD**
+**El dataframe DFT**
 
 Este dataframe se crea a partir de DF usando la función complete.cases para eliminar los registros con datos faltantes y usando la función cbind para anexar una columna adicional donde se encuentra la suma de las columnas Ventas1, Ventas2, Ventas3 y Ventas4.
 
@@ -44,7 +44,7 @@ De esta manera DFT tiene una columna más que DF y algunas filas menos que DF.
 
 La función stri_length podría ser útil para manipular algunas cosas relacionadas con DFT.
 
-**El dataframe FDT**
+**El dataframe DFD**
 
 Este dataframe se obtiene a partir de DFT utilizando la función aggregate.
 
@@ -61,17 +61,11 @@ En el caso de las filas, DFD también tiene pocas, ya que en realidad trabaja co
 -   Asegurarse que en toda la ruta de trabajo no hayan acentos ni caracteres especiales.
 
 ```{r}
-library(readr)
-library(plyr)
-library(dplyr)
-library(tidyr)
-library(tidyverse)
-library(ggplot2)
+library('tidyverse')
 ```
 
 ```{r}
-DF <- read_csv('BodegasEP.csv')
-DF
+DF <- read_csv('./BodegasEP.csv')
 ```
 
 ```{r}
@@ -79,167 +73,236 @@ DF<- read_csv("BodegasEP - BodegasEP (1).csv")
 DF
 ```
 
-# ¿Cuántas variables numéricas tiene el *data frame*?
+# 
+
+## 1️⃣ ¿Cuántas variables numéricas tiene el data frame?
 
 ```{r}
-glimpse(DF)
-6
-#sum(sapply(DF, is.numeric)) what is the number of them are numeric
-#sapply(DF, is.numeric) who are them
+DF %>% select(where(is.numeric)) %>% ncol() 
+```
+
+**Resultado:**\
+👉 **6 variables numéricas**
+
+**Explicación:**
+
+-   `where(is.numeric)` selecciona solo columnas numéricas
+
+-   `ncol()` cuenta cuántas columnas resultan\
+    (Aforo, Productos, Ventas1–Ventas4)
+
+## 2️⃣ ¿Cuántos niveles tiene el factor Distrito?
+
+```{r}
+length(unique(DF$Distrito)) 
+```
+
+**Resultado:**\
+👉 **28 distritos**
+
+**Explicación:**
+
+-   `unique()` obtiene los valores distintos
+
+-   `length()` cuenta cuántos hay
+
+## 3️⃣ ¿Cuántas bodegas participaron en el estudio?
+
+```{r}
+length(unique(DF$Bodega)) 
+```
+
+**Resultado:**\
+👉 **11 053 bodegas**
+
+**Explicación:**\
+Cada fila corresponde a una bodega distinta (no hay repetidas).
+
+## 4️⃣ ¿Cuántos datos faltantes hay?
+
+```         
+sum(is.na(DF)) 
+```
+
+**Resultado:**\
+👉 **11 valores NA**
+
+**Explicación:**
+
+-   `is.na()` genera una matriz lógica
+
+-   `sum()` cuenta los TRUE
+
+## 5️⃣ ¿A cuántas bodegas afectan los datos faltantes?
+
+```         
+sum(!complete.cases(DF)) 
+```
+
+**Resultado:**\
+👉 **11 bodegas**
+
+**Explicación:**\
+Cada NA afecta a una bodega distinta.
+
+## 6️⃣ ¿Cuántas bodegas tienen todos sus datos completos?
+
+```         
+sum(complete.cases(DF)) 
+```
+
+**Resultado:**\
+👉 **11 042 bodegas**
+
+# 📊 Dataframe **DFT**
+
+Se eliminan los registros incompletos y se agrega la venta mensual total.
+
+```{r}
+DFT <- DF %>%    filter(complete.cases(.)) %>%   mutate(Tventas = rowSums(across(Ventas1:Ventas4))) 
 
 ```
 
-# ¿Cuántos niveles tiene el factor *Distrito*?
+**Explicación:**
+
+-   `filter(complete.cases(.))` elimina filas con NA
+
+-   `rowSums()` suma las ventas semanales
+
+-   `across()` selecciona columnas consecutivas
+
+## 7️⃣ ¿Cuántas bodegas completas participaron en **Miraflores**?
 
 ```{r}
-length(unique(DF$Distrito))
+DFT %>% filter(Distrito == "Miraflores") %>% nrow() 
 ```
+
+**Resultado:**\
+👉 **140 bodegas**
+
+## 8️⃣ ¿Cuántas bodegas completas participaron en **Breña**?
 
 ```{r}
-unique(DF$Distrito)
+DFT %>% filter(Distrito == "Breña") %>% nrow() 
+
 ```
+
+**Resultado:**\
+👉 **113 bodegas**
+
+## 9️⃣ ¿Cuál es el **total de ventas** en todo el estudio?
 
 ```{r}
-count(DF,Distrito)
+sum(DFT$Tventas) 
 ```
+
+**Resultado:**\
+👉 **S/ 111,989,290.90**
+
+## 🔟 ¿En qué distrito está la **bodega con mayor venta semanal**?
+
+### ¿Cómo se llama?
 
 ```{r}
-DF %>% count(Distrito)
+DFT %>%    mutate(MaxS = pmax(Ventas1, Ventas2, Ventas3, Ventas4)) %>%   slice(which.max(MaxS)) 
 ```
 
-# ¿Cuántas bodegas participaron en el estudio?
+**Resultado:**
+
+-   🏙 **Distrito:** Chorrillos
+
+-   🏪 **Bodega:** *guisopillo escorredero*
+
+-   💰 **Venta semanal máxima:** S/ 6,919.14
+
+**Explicación:**
+
+-   `pmax()` obtiene la venta máxima semanal por bodega
+
+-   `which.max()` encuentra la mayor
+
+## 1️⃣1️⃣ ¿Bodega con **menor venta semanal**?
 
 ```{r}
-smr <- count(DF,Bodega)
-smr
-#sum(smr$n)
+DFT %>%    mutate(MaxS = pmax(Ventas1, Ventas2, Ventas3, Ventas4)) %>%   slice(which.min(MaxS)) 
 ```
+
+**Resultado:**
+
+-   🏙 San Juan de Lurigancho
+
+-   🏪 *automático sarcocarpio*
+
+-   💰 S/ 877.07
+
+## 1️⃣2️⃣ ¿Bodega con **mayor venta mensual**?
 
 ```{r}
-DF %>% count(Bodega) 
+DFT %>% slice(which.max(Tventas)) 
 ```
 
-Se infiere que todas las bodegas que participaron son unicas.
+**Resultado:**
 
-# ¿Cuántos datos faltantes hay?
+-   🏙 Miraflores
+
+-   🏪 *paraliticarse calvicie*
+
+-   💰 S/ 23,644.20
+
+## 1️⃣3️⃣ ¿Bodega con **menor venta mensual**?
 
 ```{r}
-sum(is.na(DF))
+DFT %>% slice(which.min(Tventas)) 
 ```
 
--   ¿A cuántas bodegas afectan?
+**Resultado:**
+
+-   🏙 San Juan de Miraflores
+
+-   🏪 *procesionalmente deprimir*
+
+-   💰 S/ 3,030.51
+
+# 📍 Dataframe **DFD** – Ventas por distrito
 
 ```{r}
-sum(!complete.cases(DF))
+DFD <- DFT %>%    group_by(Distrito) %>%    summarise(Tvd = sum(Tventas)) 
 ```
 
-Se infiere que cada bodega tiene 1 dato faltante en alguna variable
-
-# ¿Cuántas bodegas tienen todos sus datos completos?
+## 1️⃣4️⃣ ¿Qué distrito tuvo **mayores ventas**?
 
 ```{r}
-sum(complete.cases(DF))
+DFD %>% arrange(desc(Tvd)) %>% slice(1) 
 ```
 
-**El dataframe DFT**
+**Resultado:**\
+👉 **San Juan de Lurigancho** – S/ 14,982,198.11
 
-Este dataframe se crea a partir de DF usando la función complete.cases para eliminar los registros con datos faltantes y usando la función cbind para anexar una columna adicional donde se encuentra la suma de las columnas Ventas1, Ventas2, Ventas3 y Ventas4.
-
-De esta manera DFT tiene una columna más que DF y algunas filas menos que DF.
-
-La función stri_length podría ser útil para manipular algunas cosas relacionadas con DFT.
+## 1️⃣5️⃣ ¿Qué distrito tuvo **menores ventas**?
 
 ```{r}
-mutate(filter(DF,complete.cases(DF)),Tventas=rowSums(across(Ventas1:Ventas4)))
+DFD %>% arrange(Tvd) %>% slice(1) 
 ```
+
+**Resultado:**\
+👉 **Santa Rosa** – S/ 345,077.67
+
+## 1️⃣6️⃣ ¿Qué bodega tiene el **nombre más largo** y cuánto vendió?
 
 ```{r}
-DFT <- DF %>% 
-  filter(complete.cases(.)) %>%
-  mutate(Tventas=rowSums(across(Ventas1:Ventas4)))
-DFT
+DFT %>%    mutate(largo = str_length(Bodega)) %>%   slice(which.max(largo)) 
 ```
 
-# ¿Cuántas bodegas, con todos sus datos completos, participaron en Miraflores?
+**Resultado:**
 
-```{r}
-DFT %>% filter(Distrito=='Miraflores')
-```
+-   🏪 *estruendosamente desherrumbramiento*
 
-&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+-   🏙 San Juan de Lurigancho
 
-# ¿Cuántas bodegas, con todos sus datos completos, participaron en Breña?
+-   💰 S/ 4,419.03
 
-```{r}
-count(DF, Distrito)
-```
+**Explicación:**
 
-Hay 113 bodegas en breña
+-   `str_length()` cuenta caracteres
 
-# ¿Cuál es el total de ventas en todos los distritos?
-
-```{r}
-sum(DFT$Tventas)
-```
-
--   si la pregunta fuera total de ventas por distrito
-
-```{r}
-summarise(group_by(DFT, Distrito), TVD=sum(Tventas))
-```
-
-```{r}
-DFT %>% group_by(Distrito) %>% summarise(Tvd=sum(Tventas))
-```
-
-# ¿En qué distrito está la bodega con mayor venta semanal? ¿Cómo se llama esa bodega?
-
-```{r}
-DFT %>% 
-  mutate(MaxS=pmax(Ventas1,Ventas2,Ventas3,Ventas4)) %>% 
-  arrange(desc(MaxS))
-```
-
-```{r}
-DFT %>% 
-  mutate(MaxS=pmax(Ventas1,Ventas2,Ventas3,Ventas4)) %>% 
-  slice(which.max(MaxS))
-```
-
-```{r}
-which(DFT$Productos==46)
-```
-
-```{r}
-DFT %>% slice(2)
-```
-
-# ¿En qué distrito esta la bodega con menor venta semanal? ¿Cómo se llama esa bodega?
-
-# ¿En qué distrito está la bodega con mayor venta mensual? ¿Cómo se llama esa bodega?
-
-```{r}
-DFT %>% slice(which.max(Tventas))
-```
-
-# ¿En qué distrito esta la bodega con menor venta mensual? ¿Cómo se llama esa bodega?
-
-# ¿Qué distrito tiene las mayores ventas en el estudio?
-
-```{r}
-DFD <- DFT %>% group_by(Distrito) %>% summarise(Tvd=sum(Tventas))
-```
-
-```{r}
-DFD %>% arrange(desc(Tvd))
-```
-
-# ¿Qué distrito tiene las menores ventas en el estudio?
-
-# ¿Qué bodega tiene el nombre más largo? ¿Cúanto vendió?
-
-```{r}
-DFT %>% 
-  mutate(cant_car=str_length(Bodega)) %>%
-  slice(which.max(cant_car))
-```
+-   `which.max()` selecciona el nombre más largo

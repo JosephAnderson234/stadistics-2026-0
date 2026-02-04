@@ -35,6 +35,8 @@ sum(complete.cases(DC))
 sum(complete.cases(DD))
 ```
 
+![](images/clipboard-1762445047.png)
+
 ```{r}
 porc_na_DC <- sum(is.na(DC)) / (nrow(DC) * ncol(DC)) * 100
 round(porc_na_DC, 2)
@@ -47,6 +49,8 @@ round(porc_elim_DD, 2)
 
 ```
 
+![](images/clipboard-322295896.png)
+
 ```{r}
 sum(complete.cases(DC))
 sum(complete.cases(DD))
@@ -56,6 +60,10 @@ names(which.min(colSums(!is.na(DD))))
 
 
 ```
+
+![](images/clipboard-925049273.png)
+
+![](images/clipboard-524626919.png)
 
 ```{r}
 length(unique(DC$Pais))
@@ -76,6 +84,14 @@ DC %>%
 
 ```
 
+![](images/clipboard-4132542923.png)
+
+![](images/clipboard-2335127599.png)
+
+![](images/clipboard-3477811988.png)
+
+![](images/clipboard-2154381043.png)
+
 ```{r}
 DC %>% 
   filter(Pais == "United Kingdom") %>%
@@ -91,6 +107,10 @@ fila_max <- DFU[which.max(DFU$ContDia), ]
 fila_max
 ```
 
+![](images/clipboard-1650378763.png)
+
+![](images/clipboard-814151816.png)
+
 ```{r}
 DFU_pos <- DFU %>% filter(ContDia > 0)
 round(min(DFU_pos$ContDia), 2)
@@ -103,6 +123,8 @@ round(IQR(DFU_pos$ContDia), 2)
 round(sd(DFU_pos$ContDia) / mean(DFU_pos$ContDia), 2)
 
 ```
+
+![](images/clipboard-1225435384.png)
 
 ```{r}
 DC %>% filter(Fecha == max(Fecha)) -> DF
@@ -120,6 +142,8 @@ Trop2 <- Trop[!Mort %in% out]
 boxplot(Mort2 ~ Trop2)
 ```
 
+![](images/clipboard-1676417722.png)
+
 ```{r}
 DFU <- DFU %>%
   mutate(
@@ -129,6 +153,8 @@ DFU <- DFU %>%
 plot(DFU$Fecha, DFU$TMA, type = "l")
 
 ```
+
+![](images/clipboard-312061862.png)
 
 ```{r}
 breaks <- seq(0, 10000, by = 1000)
@@ -157,6 +183,8 @@ DX <- left_join(DZ,DD)
 DX$Mort <- DX$Muertos/DX$Contagiados
 DX <- DX[!is.na(DX$Mort),]
 ```
+
+![](images/clipboard-4292704659.png)
 
 ```{r}
 Trop <- (-23 <= DX$Latitud) & (DX$Latitud <= 23)

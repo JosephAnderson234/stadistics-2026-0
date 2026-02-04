@@ -210,7 +210,7 @@ Creamos una tabla estadística para variable cualitativa
 llenemos la tabla de frecuencias con todos los personajes famosos de la DATA.
 
 | Actividad  | frecuencia absoluta | frecuencia relativa | frecuencia porcentual |
-|-----------------|------------------|------------------|--------------------|
+|------------|---------------------|---------------------|-----------------------|
 | Ajedréz    | 1                   | 1/27                | (100/27)%             |
 | Atleta     | 3                   | 3/27                | (3/27)%               |
 | Baile      | 2                   | 2/27                | (2/27)%               |
@@ -264,7 +264,7 @@ hist(fam$Estatura, labels = TRUE)
 Formamos la tabla de intervalos para Estatura:
 
 | Estaturas en cms. | Marca de clase(xi) | fi: frecuencia absoluta. | hi=fi/n | Fi: Frecuencia absoluta acumulada | Hi: Frecuencia relativa acumulada |
-|------------|------------|------------|------------|------------|------------|
+|----|----|----|----|----|----|
 | \[155 a 160\> | 157,5=x1 | 1 | 1/27= | 1=F1 | 1/27= |
 | \[160 a 165\> | 162,5=x2 | 4 | 4/27= | 5=F2 | 5/27= |
 | \[165 a 170\> | 167,5=x3 | 2 | 2/27= | 7=F3 | 7/27= |
