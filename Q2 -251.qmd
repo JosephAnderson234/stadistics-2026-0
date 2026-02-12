@@ -1,0 +1,287 @@
+---
+title: "Q2 SOL"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+**"SEMINUEVOS CARS"** es una empresa peruana dedicada a la venta de vehículos seminuevos en buen estado y con una buena garantía de servicio postventa. Para todas sus ventas realizadas, ellos promocionan un Precio Real del vehículo y siempre aplican un descuento y así obtienen el Precio de Venta. Ofrecen vehículos con precios en dólares y otros en soles. Se puede observar en la data el valor del Tipo de Cambio a soles, para cada venta. La especialidad de la empresa es vender vehículos de la marca Toyota, ofreciendo sus diversos Modelos y una gran variedad de Colores.
+
+La empresa ofrece diversas modalidades de ventas a sus clientes, los cuales son personas Naturales y también Jurídicas.
+
+En la data *Seminuevos.csv* se encuentra la información de los vehículos vendidos por la empresa.
+
+```{r}
+DF<-read_csv("Seminuevos.csv")
+DF
+```
+
+**Problema 1:**
+
+Al elegir un cliente al azar ¿Cuál es la probabilidad de que haya adquirido un vehículo mediante Crédito Vehicular MAF?
+
+**solución:**
+
+```{r}
+table(DF$`Modalidad de Venta`, useNA = "always")
+
+```
+
+Rpta:
+
+```{r}
+p_Crédito_MAF<-219/967
+p_Crédito_MAF
+round(p_Crédito_MAF, 2)
+```
+
+**Problema 2:**
+
+Un vendedor de la empresa tiene asignado para su venta 6 vehículos automáticos y 4 vehículos mecánicos. **Un empresario le solicita 5 vehículos de los que dispone el vendedor.** ¿Cuál es la probabilidad de que adquiera 3 automáticos y 2 mecánicos
+
+**solución:**
+
+Número de casos del espacio muestral:
+
+```{r}
+em<- choose(10,5)
+em
+```
+
+```{r}
+evento<-choose(6,3)*choose(4,2)
+evento
+```
+
+```{r}
+P_3A2M<- evento/em
+round(P_3A2M,2)
+```
+
+**Problema 3:**
+
+En MITSUI se tiene actualmente 10 espacios de estacionamiento que están numerados de 1 a 10. LLegan 7 clientes con sus vehículos y el Vigilante les da a cada cliente un número del 1 al 7. ¿De cuántas maneras se pueden estacionar los vehículos de los clientes con número par, en los lugares pares y los que tienen número impar en los lugares impares?
+
+**solución:**
+
+10 lugares: L1, L2, L3L, L4, L5, L6, L7, L8, L9, L10
+
+Vehículos: 1, 2, 3, 4, 5 ,6, 7
+
+Se desea: V2, V4, V6 ==\> L2, L4, L6, L8, L10 ==\> POSIBILIDADES:
+
+V2 ==\> 5
+
+V4 ==\> 4
+
+V6 ==\> 3
+
+TOTAL= 60 posibilidades.
+
+V1, V3, V5. V7 ==\> L1, L3, L5, L7, L9
+
+V1 ==\> 5
+
+V3==\> 4
+
+V5 ==\> 3
+
+V7 ==\> 2
+
+TOTAL: 120
+
+Respuesta: 60x120= 7200
+
+```{r}
+orden_3en5<- 5*4*3
+orden_4en5<- 5*4*3*2
+Total<- orden_3en5*orden_4en5
+Total
+```
+
+**LA PROBABILIDAD CONDICIONAL:**
+
+Aquí se tiene dos eventos.
+
+**Evento B:** Es lo que ya se sabe que ha ocurrido.
+
+**Evento A:** Es lo que deseamos que suceda.
+
+$$
+P(\text{A dado B})= P(A|B)= \frac{P(A \cap B)}{P(B)}
+$$
+
+Ejemplo:
+
+se sabe que Carloncho no estudia, cual sería la probabilidad que Carloncho apruebe?
+
+A: Que Carloncho Apruebe,
+
+B: carloncho no estudia
+
+**Problema 4:**
+
+Del total de clientes que *han anotado su género* en en el archivo, se sabe que 300 hombres gustan de vehículos automáticos y la mitad de esta cantidad coincide con el total de mujeres que gustan de autos mecánicos. Al elegir un cliente al azar **se obtuvo uno que prefiere vehículos automáticos** ¿cuál es la probabilidad de que sea mujer?
+
+**Solución:**
+
+Se sabe que: B=Cliente que prefiere automático.
+
+Se quiere : A= Que el cliente sea mujer.
+
+```{r}
+table(DF$Genero, useNA = "always")
+```
+
+|            | Mujeres | Hombres |     |
+|------------|---------|---------|-----|
+| Mecánico   | 150     | 450     | 600 |
+| Automático | 57      | **300** | 357 |
+|            | 207     | 750     | 957 |
+
+Se pide:
+
+$$
+P(que.sea.Mujer| prefiere. automático)=\frac{P(Mujer \cap automático)}{P(automático)}=\frac{57/957}{357/957}= 57/357.
+$$
+
+Respuesta: 57 / 357 = 0.15966
+
+```{r}
+round(0.15966, 2)
+```
+
+**EVENTOS INDEPENDIENTES**
+
+Dos eventos A y B son Independientes cuando , lo que le sucede a uno de ellos, al otro , no le afecta.
+
+Caso contrario serían dependientes.
+
+$$
+\text{A y B son independientes, si y solo si: } P(A\cap B)= P(A)*P(B)
+$$
+
+**Problema 5:**
+
+Se desea determinar si los eventos siguientes son independientes:
+
+A: preferir una camioneta.
+
+B: preferir un vehículo de color negro.
+
+para ello se sabe que los que prefieren camionetas son el 40% de todos los clientes, los que prefieren vehículos negros son el 50% y **los que no prefieren camionetas negras son el 80%.**
+
+Usando solo esta información, indique si ambos eventos son o no independientes y calcule $P(A\cup B)$ .
+
+**Solución:**
+
+**No prefieren camioneta negra= 0.8 ==\> prefieren camioneta negra =0.20**
+
+|                           | A: prefiere camioneta | A': No camioneta |      |
+|---------------------------|-----------------------|------------------|------|
+| **B: Vehículo negro**     | **0.20**              | 0.30             | 0.50 |
+| **B': no vehículo negro** | 0.20                  | 0.30             | 0.50 |
+|                           | 0.40                  | 0.60             | 1    |
+
+y se observa que se cumple: $P(A\cap B) = P(A)*P(B)$
+
+$$
+P(A\cap B)=0.20
+$$
+
+$$
+P(A)=0.40
+$$
+
+$$
+P(B)=0.50
+$$
+
+pero vemos que se cumple: 0.20= 0.40\*0.50
+
+**Entonces A y B son independientes.**
+
+además $P(A\cup B)=0.20+0.20+0.30=0.70$ .
+
+**Problema 6:**
+
+Se ha hecho una encuesta a todos los hombres que anotaron su género. Luego, del archivo dado se dedujo que un porcentaje de hombres pagaron en dólares y el resto pagó en soles.
+
+De aquellos que pagaron en dólares un 25% gusta de vehículos eléctricos, mientras que de los que pagaron en soles , un 50% gusta de vehículos eléctricos. Si se selecciona al azar, un cliente hombre y se sabe que no le gusta los vehículos eléctricos, ¿cual es la probabilidad de que haya pagado en soles?
+
+**Solución:**
+
+```{r}
+
+table(DF$Moneda,DF$Genero,  useNA = "always")
+```
+
+750 hombres. Se elige uno:
+
+-   Si paga en Soles (78/750)====\>Gusta de Eléctricos (0.50). No gusta E (0.50)
+
+-   Si paga en Dólares (672/750)==\>Gusta de Eléctricos (0.25). No gusta E (0.75)
+
+Se pide: $P(S|E')=\frac{P(S \cap E')}{P(E')}=\frac{0.104*0.5}{0.104*0.5 +0.896*0.75}=\frac{0.052}{0.724}=0.07$
+
+**Problema 7:**
+
+Cuatro clientes A, B, C y D entran independientemente a MITSUI con la intención de comprar un auto. La probabilidad de que cada uno compre es 0.2, 0.3, 0.4 y 0.5 respectivamente.
+
+Calcular la probabilidad de que al menos uno de ellos compre su vehículo.
+
+**Solución:**
+
+P(A compre)=0.2 ==\> P(A no compre)=0,8
+
+P(B compre)=0.3 ==\> P(B no compre)=0.7
+
+P(C compre)= 0.4 ==\> P(C no compre)=0.6
+
+P(D compre)=0.5 ==\> P(D no compre)=0.5
+
+Si hay 4 clientes A, B, C, D, que entran a comprar vehículo:\
+¿Cuántos clientes podrían comprar vehículo?==\> *0 clientes,* ***1 cliente*****, 2 clientes, 3 clientes, 4 clientes.**
+
+No hay mas posibilidades.
+
+**P(al menos uno compre)**=P(**1 o 2 o 3 o 4 clientes compren**) = 1 - P(*0 cliente compren*)
+
+=1-(0.8\*0.7\*0.6\*0.5 )=0.832.
+
+**Problema 8:**
+
+Acerca de su preferencia por los Corolla o Rav, se encuesta a 20 clientes. De ellos 12 manifiestan que les agrada Corolla, 13 indican que les agrada RAV y 2 indicaron que no les agrada ninguno de estos vehículos.
+
+a\) Si se selecciona un cliente al azar, ¿cuál es la probabilidad de que le agrade ambos vehículos?
+
+b)  Si se selecciona 4 clientes ¿cuál es la probabilidad de que solo a 2 de ellos les guste RAV?

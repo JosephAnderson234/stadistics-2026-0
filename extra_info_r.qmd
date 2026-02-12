@@ -444,8 +444,7 @@ req <- request(endpoint) |>
     model = model,
     messages = list(
       list(role = "system", content = "Eres un experto en estadística y probabilidaes que da respuestas directas y despues da una sección de explicación de resolución"),
-      list(role = "user", content = "Cuatro vehículos se van a estacionar y disponen de 7 lugares consecutivos. Calcule la probabilidad de 
-que se estacionen de tal manera que haya un lugar vació entre cada par de vehículos.")
+      list(role = "user", content = "Del archivo dado: De todos los vehículos verdes metálicos y dorados metálicos que tiene la empresa, se ha decidido seleccionar dos de cada uno de estos colores, para trasladarlos a otra sede. ¿De cuántas maneras se puede obtener dicha selección de vehículos?")
     )
   ))
 

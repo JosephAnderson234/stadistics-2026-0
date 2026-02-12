@@ -21,6 +21,9 @@ library(stringr)
 permutacion <- function(n, k) {
   factorial(n) / factorial(n - k)
 }
+complemento <- function(n){
+  1 - n
+}
 ```
 
 # Loading file:
@@ -100,6 +103,8 @@ Del total de clientes que *han anotado su género* en el archivo, se sabe que 30
 sumrz<- table(DATA$Genero, useNA = "always")
 nMasculino = as.numeric(sumrz["Masculino"])
 nFemenino = as.numeric(sumrz["Femenino"])
+nMasculino
+nFemenino
 ```
 
 Como sabemos que B = CLiente que prefiere automático
@@ -139,3 +144,28 @@ Usando solo esta información, inidique si ambos eventos so o no son independien
 ```{r}
 table(DATA$Moneda, DATA$Genero, useNA = "always")
 ```
+
+# Problema 7
+
+Cuatro clientes A, B, C y D entran independientemente a MITSUI con la intención de comprar un auto. La probabilidad de que cada uno compre es 0.2, 0.3, 0.4 y 0.5 respectivamente
+
+Calcular la probabilidad de que al menos uno de ellos compre su vehiculos
+
+Es una serie de:
+
+```{r}
+p_a_c<-0.2
+p_a_nc <- complemento(p_a_c)
+p_b_c<-0.3
+p_b_nc <- complemento(p_b_c)
+p_c_c<-0.4
+p_c_nc <- complemento(p_c_c)
+p_d_c<-0.5
+p_d_nc <- complemento(p_d_c)
+
+# Para hello podemos sacar el complemento de la probabilidad de que nadie compre
+
+1 - (p_a_nc*p_b_nc*p_c_nc*p_d_nc)
+```
+
+# -

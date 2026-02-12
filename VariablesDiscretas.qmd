@@ -1,0 +1,1561 @@
+---
+title: "VARIABLES DISCRETAS"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Variables Discretas:
+
+Una variable aleatoria discreta es una función que asigna a cada elemento del $\Omega$ (espacio muestral) , números que sean contables.
+
+Una variable aleatoria por lo general esta determinada mediante un texto, del cual se deduce algún cálculo numérico sencillo.
+
+**Experimento:** Se lanza 3 monedas simultáneamente.
+
+**Variable aleatoria:** *X="#Caras - #Sellos"*
+
+Espacio muestral al lanzar 3 monedas:
+
+$$
+\Omega=\{ccc,ccs,csc,css,sss,ssc,scs,scc\}\rightarrow n(\Omega)=8
+$$
+
+|   | ccc | ccs | csc | css | sss | ssc | scs | scc |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| **X** | **3**-**0**=3 | **2**-**1**=1 | **2-1**=1 | **1**-**2**=-1 | **0**-**3**=-3 | **1**-**2**=-1 | **1**-**2**=-1 | **2**-**1**=1 |
+
+Rango de X: (contiene solo los valores distintos que toma la variable X)
+
+$$
+R_{X}=\{-1, 1, -3, 3\}
+$$
+
+**función de probabilidad:**
+
+|      | X=1 | X=-1 | X=3 | X=-3 | suma(P(X)) |
+|------|-----|------|-----|------|------------|
+| P(X) | 3/8 | 3/8  | 1/8 | 1/8  | 1          |
+
+```{r}
+# X: #caras - #sellos
+X<- c(-3,-1, 1, 3)  # Son los valores de X
+P<- c(1/8, 3/8, 3/8, 1/8)   # Son las probabilidades de X.
+X
+P
+```
+
+OTRO EJEMPLO:
+
+se lanza 3 monedas.
+
+X: #Sellos
+
+$$
+\Omega=\{ccc, ccs, csc, css, sss,ssc, scs, scc\}
+$$
+
+$$
+\text{Rango de X}: {0,1,2,3}
+$$
+
+función de probabilidad de X:
+
+|      |     |     |     |     |
+|------|-----|-----|-----|-----|
+| X    | 0   | 1   | 2   | 3   |
+| P(X) | 1/8 | 3/8 | 3/8 | 1/8 |
+
+**Esperado** o **media** o **Momento de orden 1:**
+
+El esperado es el valor que se esperaría obtener de X. También es un promedio.
+
+$$
+E(X)=x_1 * p(x_1)+x_2*p(x_2)+x_3*p(x_3)+x_4*p(x_4)+...
+$$
+
+$$
+E(X)=\sum_{1}^{k} x_{i}*p(x_{i})
+$$
+
+Con R, calculando del ejemplo de *X= \# de caras - \# de sellos.*
+
+```{r}
+EX<- X %*% P   # %*%: es un producto escalar, es decir es la suma de los productos de X y P.
+EX
+```
+
+Se espera obtener un valor promedio para X de CERO:
+
+**Momento de segundo orden o Esperado de X al cuadrado:**
+
+$$
+E(X^2)=\sum_{1}^{k} x_{i}^2 * p(x_{i})
+$$
+
+```{r}
+EX2<- X^2 %*% P
+EX2
+```
+
+$E(X^2)=3$
+
+**Varianza**
+
+$$
+V(X)=E(X^2)-[E(X)]^2
+$$
+
+Del ejemplo de X=#caras - #sellos: V(X)=3 - 0 =3
+
+```{r}
+VX <- EX2 - (EX)^2
+VX
+```
+
+Desviación estándar: $S=\sqrt{V(X)}$
+
+```{r}
+s<-sqrt(VX)
+s
+```
+
+Coeficiente de variación: $CV(X)=\frac{s}{E(X)}$
+
+```{r}
+CV<- s/EX
+CV
+```
+
+CV= infinito pues, la media o Esperado vale CERO y la división entre cero produce infinito.
+
+Cuando la media es CERO, no se debe hallar el coeficiente de variación.
+
+**PROBLEMA:**
+
+En una caja se tiene 2 bolitas Verdes y 3 Azules. Se sacaran bolitas hasta encontrar 1 bolita azul. por cada extracción se paga 2 soles ¿cuál es el pago que se espera realizar?
+
+solución:
+
+X= \# de extracciones hasta tener una azul ==\> Rango de x=1, 2, 3.
+
+Si x=1 ==\> se ha sacado 1A ==\> P(1A)=3/5=0.6
+
+Si x=2 ==\> se ha sacado 1V y 1A ==\> P(1V, 1A)=(2/5).(3/4)=3/10=0.3
+
+si x=3 ==\> se ha sacado 1V y 1V y 1 A ==\>P(1V,1V, 1A)=(2/5).(1/4).(3/3)=1/10 = 0.1
+
+Comprobando: 0.6+0.3 +0.1 = 1
+
+| Col1           | Col2 | Col3 | Col4 |
+|----------------|------|------|------|
+| X              | 1    | 2    | 3    |
+| Prob=P(X)=P(Y) | 0.6  | 0.3  | 0.1  |
+| Y=Pago         | S/ 2 | S/ 4 | S/ 6 |
+
+Esperado de Y: E(Y)= 2\*0.6+4\*0.3+6\*0.1=3 ==\> Se espera pagar en promedio S/ 3.
+
+**PROBLEMA:**
+
+En un taller se tienen 5 vehiculos y se sabe que hay dos fallados . El mecánico va a ir revisando al azar los vehículos , hasta encontrar los dos fallados.
+
+¿Cuál es el esperado del número de autos que se revisará?
+
+Solución.
+
+**F F** F' F' F'
+
+X= \# de autos que se revisa hasta encontrar los dos fallados ==\> Rango de X: 2, 3, 4, 5.
+
+si X=2 ==\> F, **F** ==\> P(F,F)=(2/5)(1/4)=0.1
+
+si X=3 ==\>**2**(F, F'), **F** ==\>P(F, F', F)=**2**\* (2/5)(3/4)(1/3)=0.2
+
+si X=4 ==\> **3**(F, F', F'), **F ==\>** P(F,F', F', F)=**3**\*(2/5)(3/4)(2/3)(1/2)=0.3
+
+si X=5 ==\> **4**(F,F',F',F'),**F** ==\> P(F,F',F',F',**F**)=**4**\*(2/5)(3/4)(2/3)(1/2)(1/1)=0.4
+
+Comprobando: 0.1+0.2+0.3+0.4=1.
+
+| Col1 | Col2 | Col3 | Col4 | Col5 |
+|------|------|------|------|------|
+| X    | 2    | 3    | 4    | 5    |
+| P(X) | 0.1  | 0.2  | 0.3  | 0.4  |
+
+E(X)=2\*0.1+3\*0.2+4\*0.3+5\*0.4=4 ==\> Se espera realizar 4 extracciones en promedio.
+
+## MODELOS DE DISTRIBUCIÓN DISCRETAS
+
+RESUMEN de **MODELOS DE DISTRIBUCIONES DISCRETAS:**
+
+En las discretas , existen EXITO y FRACASO.
+
+EXITO==\> es lo que se desea.
+
+FRACASO==\> lo que no te piden.
+
+**BINOMIAL** ==\> Tiene una **n** (cantidad **total** de elementos) y **p= P(éxito).** (n y p :datos)
+
+**GEOMÉTRICA** ==\> Se hacen experimentos hasta que tobtengas un éxito: **p=P(éxito)** (p:dato)
+
+**BINOMIAL NEGATIVA (Pascal)**==\> Se hacen experimentos hasta tener **K** éxitos: **p=P(éxito)** (k, p:datos))
+
+**HIPERGEOMÉTRICA**==\>(hay población y muestra) Se sacan elementos **sin reposición**. (Datos: población y muestra)
+
+**POISSON:** Se cuenta los exitos , pero no se puede contar los fracasos. (Dato: \# promedio de éxitos en una medida)
+
+\##################
+
+**HASTA AQUÍ HOY VIERNES 06/02**
+
+\##################
+
+Nota: En R studio, la geométrica y la binomial negativa, cuentan los fracasos obtenidos
+
+# **DISTRIBUCIONES DISCRETAS**
+
+Es necesario declarar una variable **X=Número de** ..... ( tomará valores enteros)
+
+1\) **BINOMIAL:**
+
+*Características:*
+
+-   Proviene de un experimento aleatorio que posee solo dos posibilidades: **éxito** y **fracaso.** **(Éxito*:*** *Lo que nos piden*). Fracaso es lo contrario del éxito.
+
+-   S*e repetirá **𝑛 veces***. (n: dato)
+
+-   *Cada experimento realizado es **con reposición** o también se dice que **son independientes.***
+
+***Nota:*** el éxito del que se habla aquí en Estadística , no se refiere a lograr bueno. Se refiere a obtener **lo que nos piden.**
+
+*Datos:*
+
+**n** : \# de veces que se repite el experimento ,
+
+**𝑃(é𝑥𝑖𝑡𝑜)=𝑝,**
+
+**𝑃(𝑓𝑟𝑎𝑐𝑎𝑠𝑜)=𝑞=1-p**
+
+==\> (**p+q=1**)
+
+**Observación:** *En una binomial las probabilidades p y q, no cambian* aunque repita el experimento muchas veces.
+
+Nota: Si el experimento se hace **sin reposición** entonces no será Binomial, ya que las probabilidades van a cambiar. Cuando es **sin reposición,** lo mas probable es, que sea **hipergeométrica.**
+
+Variable aleatoria: *𝑿=# 𝒅e é𝒙𝒊𝒕𝒐𝒔, 𝒆𝒏 𝒍𝒐𝒔 𝒏 experimentos..*
+
+Rango de X: ***0,** 1, 2, 3, 4, ..., **n**.*
+
+Probabilidad:
+
+$$
+P(X=xo)= C^{n}_{xo}.p^{xo}.q^{n-xo}
+$$
+
+Sin embargo, **es muy poco frecuente el utilizar dicha fórmula**, porque R studio lo calcula.
+
+siendo C(n,x): combinación de n elementos, en grupos de x.
+
+*Esperado:* 𝑬(𝑿)=𝒏𝒑
+
+*Varianza:* 𝑽(𝑿)=𝒏.𝒑.𝒒
+
+**Con R:**
+
+*Probabilidad de un solo valor xo==\>* 𝑷(**𝑿=xo**)=??==\> ***d*****𝒃𝒊𝒏𝒐𝒎**(*xo*,𝒏,𝒑)
+
+*Probabilidad acumulada (**de que X sea a lo mas xo**) ==\>* 𝑷(𝑿≤xo)=?? **𝒑𝒃𝒊𝒏𝒐𝒎**(xo,𝒏,𝒑)
+
+Ejemplo:
+
+Experimento: Se lanzará un dado 10 veces.
+
+Se desea contar el número de veces en que se obtiene el 2.
+
+-   n=30
+
+-   P(2 en el dado)=1/6 EXITO ,
+
+-   P(no obtener 2 en el dado)=5/6 FRACASO
+
+a\) ¿cuál es la probabilidad de **obtener 7 veces el 2**?
+
+*n= 30*
+
+*Exito : Obtener **el \# 2.***
+
+***X: \# de veces que sale el \# 2 ==\> se desea obtener el 2.***
+
+***p=P(Exito)**=P(**obtener el 2**)=**1/6***
+
+*q=P(Fracaso)= P(no obtener el 2 )=5/6*
+
+Se desea: P(**X=10**) ==\> dbinom
+
+```{r}
+dbinom(10,30, 1/6)  # P(x=7)
+```
+
+P(X=10) = 0.0129609.
+
+b\) ¿cuál es la probabilidad de tener **a lo mas 5** veces el \# 2?
+
+X: \# de veces que se obtiene el 2.
+
+P(X\<=5) ==\> pbinom
+
+```{r}
+pbinom(5,30, 1/6)  # P(X<=5)
+```
+
+**P(X\<=5)**= P(X=0)+P(X=1)+P(X=2)+P(X=3)+P(X=4)+ P(X=5)=0.9975618
+
+c\) ¿Cúal es la probabilidad de tener mas de 10 veces el número 6?
+
+Primera forma:
+
+```{r}
+pr <- 1 - pbinom(10, 30, 1/6)
+pr
+```
+
+Segunda forma:
+
+p(x\>x0) = pbinom(x0, n, p, lower.tail=F)
+
+**NOTA:**
+
+```{r}
+"dbinom"   # se usa cuando se quiere P(X=xo)
+
+dbinom(2,3,0.2) # P(X=2) CON X=2, n=3 y p=0.2
+
+"pbinom"   # Se usa cuando se quiere P(X<=xo)
+
+pbinom(1,3,0.2) # P(X<=1)=P(X=0)+P(X=1),     X<=1, n=3, p=0.2
+pbinom(2, 5,0.4)  # P(X<=1)= P(X=0)+P(X=1)+P(X=2)
+
+
+"pbinom con lower.tail=FALSE"
+
+pbinom(6,3,0.2, lower.tail = FALSE) # = P(X>6) =P(X>=7)
+
+P(X>=9) =P(X>8)
+P(X>=5) =P(X>4)
+
+```
+
+Notar lo siguiente:
+
+**P(X\<=1) + P(X\>1)=0.896 + 0.104 = 1**
+
+P(X\<=2) + P(X\>2) =1,
+
+El complemento de *X\<=a* es *X\>a.*
+
+Nota:
+
+P(X\>=4) =???
+
+P(X\>=4)=P(X\>3)
+
+```{r}
+n=5
+p=0.2
+pbinom(3,n, p, lower.tail= FALSE)
+```
+
+**pbinom(3,n,p)**=P(X=0) + P(X=1)+P(X=2) + P(X=3) =pbinom(3,10,0.2, lower.tail=TRUE)
+
+P(X\>=8) = P(X\>7) =pbinom(7, 10,0.2, lower.tail=FALSE)
+
+P(X\>=20) = P(X\>19)
+
+***P(X\>=a) = P(X \>a-1) ==\> se halla con R usando lower.tail=FALSE.***
+
+¿Calcular la probabilidad de obtener caras 5 o 6, al menos 8 veces?
+
+**PROBLEMA :**
+
+Suponga que un examen consta de 12 preguntas de opción múltiple. Cada pregunta tiene 5 posibles respuestas y solo una es correcta.
+
+1\) Halle la probabilidad de tener 4 o menos respuestas correctas, si un estudiante responde todas las preguntas al azar.
+
+2\) ¿Cuál es la probabilidad de que 2 , 3 , 4 o 5, preguntas sean respondidas correctamente?
+
+3\) Si contesta las 12 preguntas al azar, ¿cuál es la probabilidad de contestar incorrectamente por lo menos 5 preguntas?
+
+4\) Contestando todas al azar ¿cuál es la cantidad esperada de *preguntas respondidas incorrectamente*?
+
+5\) Un alumno aprueba el curso si saca por lo menos 05, por ello no estudia mucho y decide marcar al azar. Si el desaprueba, no recibirá propina en Navidad. Si aprueba con máximo 10, recibirá 400 soles. Si aprueba con mas nota recibirá 800 soles. ¿cuál es la propina esperada por el alumno? *Considere que cada pregunta vale 1 punto.*
+
+**Soluciones:**
+
+**Problema 1**
+
+*Halle la probabilidad de tener **4 o menos** respuestas **correctas**, si un estudiante responde todas las preguntas al azar ==\> n=12*
+
+Como el alumno marca una respuesta al azar para cada pregunta y como cada pregunta tiene 5 opciones==\> **P(Acertar)=1/5=*0.2 , P(no Acertar)=4/5=0.8***
+
+***X: \# de preguntas contestadas correctamente.** ==\> es Binomial, **pues tiene un total n=12** y además en cada pregunta tiene solo 2 posibilidades: Acierta (Exito) o No acierta (Fracaso)*
+
+*p=P(Exito) = P(Acertar) =1/5 =0.2*
+
+Se pide **`P(X<= 4)`**
+
+Recordar: `dbinom: P(x=4)` ; `pbinom: P(x<= 4)`
+
+```{r}
+pbinom(4, 12, 0.2)
+round(pbinom(4,12,0.2), 2)
+```
+
+P(X\<=4) = 0.9274445 = 92, 744%
+
+**Problema 2 (continuación)**
+
+*¿Cuál es la probabilidad de que 2 , 3 , 4 o 5 preguntas sean **respondidas correctamente**?*
+
+SOLUCION:
+
+Variable:
+
+X= \# de "**preguntas contestadas correctamente**." ==\> Binomial con n=12 y p=P(**acertar**)=0.2
+
+Se desa: P(X=2 o X=3 o X=4 o X=5) = P(2\<=X\<=5)
+
+**Primera forma:**
+
+se pide P(2\<=X\<=5)= **P(X=2)** + **P(X=3)** + **P(X=4)+P(X=5)**
+
+```{r}
+dbinom(2, 12, 0.2)+dbinom(3, 12, 0.2) + dbinom(4, 12, 0.2)+dbinom(5,12, 0.2)
+```
+
+también:
+
+**segunda forma:**
+
+```{r}
+dbinom(2:5, 12, 0.2)
+sum(dbinom(2:5, 12, 0.2))
+```
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**Problema 3: (continuación)**
+
+*Si contesta las 12 preguntas al azar, ¿cuál es la probabilidad de **contestar incorrectamente** por lo menos 5 preguntas?*
+
+SOLUCION:
+
+Usamos otra variable:
+
+**Y= \# de preguntas contestadas** **incorrectamente** ==\>el éxito es : contestar incorrectamente.
+
+Binomial con n=12, ***p=P(fallar)=4/5 = 0.8** (éxito), q=P(Acertar) =0.2*
+
+Se desea ***P(Y\>=5)***
+
+Esto se calculará usando `lower.tail= FALSE` , pero tener presente que esto, lo que halla es P(X\>a)
+
+Pero esto no lo halla R studio.
+
+*En general: P(Y\>=a) = P(Y\> a-1) en discretas.*
+
+Con R se calcula **P(Y\>4)** = **P(Y \>= 5)**
+
+```{r}
+pbinom(4,12, 0.8, lower.tail=F)  # P(Y>4) = P(Y>=5)
+```
+
+**Problema 4: (continuación)**
+
+*Contestando todas al azar ¿cuál es la cantidad esperada de **preguntas respondidas incorrectamente**?*
+
+**SOLUCIÓN:**
+
+En binomial: E(variable)=n.p
+
+Recordar que en Binomial: ***E(Y)= n.p siendo p=P(contestar fallado)***
+
+Usamos la variable Y: \# de preguntas falladas ==\> n=12, p=4/5=0.8
+
+Se pide: **E(Y)=n.p**= 12(0.8) = 9.6 ==\> se espera tener en promedio 9.6 preguntas incorrectas, es decir aprox 10 preguntas incorrectas, de las 12 que ha marcado.
+
+&&&&&&&&&&&&&&
+
+&&&&&&&&&&&&&&
+
+**Resumiendo la Binomial:**
+
+La binomial tiene la siguientes características:
+
+A\) son experimentos que tienen solo dos posibilidades: **Éxito** (lo q te piden) y **Fracaso** (lo q no te piden)
+
+B\) El experimento se repite **n veces.**
+
+C\) **P(Éxito)=p** ( no cambia) y P(Fracaso)=q
+
+D\) Aquí cada repetición del experimento es **CON REPOSICIÓN**.
+
+E\) Variable aleatoria: **X= \# de éxitos al hacer el experimento n veces.**
+
+F\) Rango de x: {0,1,2,3,4,5,..., n}
+
+Entonces
+
+$$
+E(X)=n.p
+$$
+
+$$
+V(X)=n.p.q
+$$
+
+**PROBLEMA 5: (continuación) ==\> very very Fijaza**
+
+*Un alumno va a dar un quiz con 12 preguntas para marcar que tienen cada una 5 alternativas. El alumno aprueba el curso si saca por lo menos 05, por ello no estudia mucho y decide marcar al azar. **Si el desaprueba,** no recibirá propina en Navidad. **Si aprueba con máximo 10,** recibirá 400 soles. **Si aprueba con mas nota** recibirá 800 soles. ¿cuál es la propina esperada por el alumno? Considere que cada pregunta vale 1 punto y marca las 12 preguntas. No hay puntaje negativo.*
+
+**SOLUCIÓN:**
+
+*La propina* tiene 3 posibilidades. (no es binomial)
+
+La binomial es:
+
+*X: \# de preguntas correctas que el alumno marca en 12 preguntas.*
+
+**Exito**: pregunta contestada correctamente.
+
+Aquí se tiene n=12 y p=P(**éxito**)=P(El alumno marca correcto)=1/5 =0.2
+
+*prop: Propina que recibe el alumno* ==\> Sus valores pueden ser: S/ 0, S/ 400, S/ 800.
+
+**Aprueba si X\>=5.**
+
+**Desaprueba con X\<=4** ==\> Propina= 0 soles.
+
+**Si aprueba con 5\<=X\<=10** ==\> Propina= 400 soles.
+
+**Si aprueba con X\>= 11** ==\> Propina = 800 soles.
+
+Se desea: E(Propina)=???
+
+Se usará la fórmula siguiente:
+
+$$
+E(U)=\sum_{todas. las. U}(U*P(U))
+$$
+
+Formaré un tabla que contiene a todas las posibilidades:
+
+| X          | U=Propina | P(U)=P(Propina)                        |
+|------------|-----------|----------------------------------------|
+| 0\<=X\<= 4 | S/ 0      | P(pr=0)=**P(X\<=4)**= 0.9274445        |
+| 5\<=X\<=10 | S/ 400    | P(pr=400)=**P(5\<=X\<=10)**= 0.0725553 |
+| X=11 o 12  | S/ 800    | P(pr=800)=**P(X=11 o 12)**= 0.0000002  |
+|            |           | Suma de probabilidades = 1             |
+
+```{r}
+pbinom(4,12, 0.2)   # P(X<=4)
+sum(dbinom(5:10,12, 0.2))   # P(5<=X <=10)
+sum(dbinom(11:12, 12, 0.2))   # P(X>10)=P(X>=11)
+```
+
+Finalmente, debemos recordar que *prop: propina*
+
+$$
+E(prop)=\sum(prop*P(prop))
+$$
+
+Comprobando la suma de probabilidades:
+
+```{r}
+0.9274445+0.0725553+0.0000002
+```
+
+Finalmente de la tabla ya se puede calcular el Esperado de ***pr.***
+
+```{r}
+prop<-c(0,400, 800)  #aquí  van las propinas
+P <- c(0.9274445,0.0725553,0.0000002)  # probabilidad de las propinas
+Epr<- prop %*% P     # producto escalar (suma de los productos)
+Epr
+```
+
+Se espera que reciba en promedio 29.02228 soles.
+
+# **2) Geométrica:**
+
+*Características:*
+
+-   Cada experimento tiene solo dos posibilidades: Éxito y Fracaso.
+
+-   Proviene de experimentos que *se realizan **hasta obtener** por primera vez el éxito.*
+
+-   No tiene `n`
+
+*Variable aleatoria teórica:* 𝑿=# de intentos hasta obtener el éxito por primera vez.
+
+**DATOS:** 𝑃(é𝑥𝑖𝑡𝑜)=**𝑝**, 𝑃(𝑓𝑟𝑎𝑐𝑎𝑠𝑜)=**𝑞**, p+q=1 ==\> Estas probabilidades no cambian. Son fijas.
+
+Probabilidad:
+
+$$
+P(X=xo)=p*q^{x-1}
+$$
+
+*Esperado:* 𝑬(𝑿)=𝟏/𝒑 (Esperado del \# de intentos hasta tener el primer éxito)
+
+*Varianza:* 𝑽(𝑿)=𝒒/(𝒑\^𝟐)
+
+Rango de X: {1,2,3,4,5,....}
+
+**Observación: 𝑅 utiliza una forma equivalente de variable geométrica.**
+
+*Variable aleatoria de R*: *𝒀= **\# de fracasos** hasta obtener el éxito por primera vez.*
+
+Probabilidad: 𝒑(𝒀=𝒚)=𝒑.𝒒\^𝒚
+
+Esperado: 𝑬(𝒀)=𝒒/𝒑 (esperado del número de veces que fracasé hasta tener el primer exito)
+
+Varianza: 𝑽(𝒀)=𝒒/(𝒑\^𝟐)
+
+***Entre ambas variables se cumple que: X = Y + 1 (X: \# de intentos. Y: \# de fracasos)***
+
+Con R: (usando Y) **Y=X-1**
+
+probabilidad: 𝑷(𝒀=yo)=?? ==\> 𝒅𝒈𝒆𝒐𝒎(yo,𝒑)
+
+probabilidad acumulada: 𝑷(𝒀≤yo)=?? ==\>𝒑𝒈𝒆𝒐𝒎(yo,𝒑)
+
+**Ejemplo:**
+
+Sea *X: \# de veces que un alumno lleva Estadística 1 , **hasta que lo apruebe.*** ==\> Esto es una geométrica.
+
+Rango de X: {1,2,3,........} ( depende de la universidad)
+
+Supongamos que la probabilidad de que Carloncho apruebe es 0.1.
+
+*Hallar la probabilidad de aprobarlo en la tercera vez* ==\> P(*X=3*) ==\> no lo halla R.
+
+Pero para hallarlo con R studio : *Y= \# de veces que desapruebo Estadística 1. (R cuenta los fracasos).*
+
+**P(X=3)** = **P(Y=2)** = dgeom(2, p), siendo p=P(aprobar).
+
+```{r}
+dgeom(2,0.1)
+```
+
+¿y cuál es la probabilidad de que lo apruebe a la segunda)
+
+Se pide P(X=2)=P(Y=1)
+
+***Y: \# de veces que no aprobaste.***
+
+```{r}
+dgeom(1,0.1)
+```
+
+**PROBLEMA 6**: (Continuación del problema 1)
+
+En un quiz de 12 preguntas , cada una de ellas tiene 5 alternativas.
+
+*Un alumno aprueba el curso si saca por lo menos 05, por ello no estudia mucho y decide marcar al azar. Considere que cada pregunta vale 1 punto y son 12 preguntas*
+
+*¿P(el primer acierto del alumno, esté en la sexta pregunta que marca al azar)?*
+
+SOLUCIÓN:
+
+*variable teórica:*
+
+*X= \# de preguntas respondidas **hasta tener** la primera pregunta correcta.*
+
+==\> ***p=P(acertar)=1/5 = 0.2,*** q=0.8.
+
+se pide: p( **A' A'A' A' A'** ***A*** ) ... (**A:** acertar, **A'**: fallar)==\> Se desea: *P(X=6).*
+
+Para R: **y= \# DE PREGUNTAS respondidas falladas.**
+
+Se pide:: P(x=6)= p(y=5)=???
+
+```{r}
+dgeom(5,0.2)
+```
+
+La probabilidad de tener la primera pregunta correcta en el sexto intento, al champear, será 0.065536.
+
+**Pregunta Adicional:**
+
+***¿Cuál es el \# esperado de preguntas que debe contestar hasta obtener una correcta?***
+
+Usamos la X teórica:
+
+X=# de preguntas contestadas hasta obtener una correcta ==\> geométrica con p=0.2
+
+De la variable teórica: ***E(X)=1/p = 1/0.2 =5***. Se espera que en la quinta pregunta contestada obtenga una correcta.
+
+Adicional:
+
+***¿Cuál es el número esperado de preguntas falladas hasta obtener una correcta?***
+
+c
+
+Aqui usamos la **Y de R studio:**
+
+usamos : *Y= \# de preguntas falladas hasta obtener una correcta*==\> geométrica con p=0.2 y q= 0.8
+
+***E(Y)=q/p = 0.8/0.2= 4.*** Se espera que contestando 4 preguntas falladas, la quinta sea correcta.
+
+**LA YAPITA DEL DÍA:**
+
+Frank Einsteín lanzará un dado, para jugar ludo. ¿Cuál será la probabilidad de que en el décimo intento , recién pueda mover su primera ficha?
+
+Solución:
+
+X: Número de intentos hasta que salga el SEIS. ==\> es Geométrica
+
+==\> **p=P(Obtener SEIS)= 1/6**, q=5/6.
+
+Se desea: **P(X=10)**= P(Y=9) ( R studio, cuenta los fracasos obtenidos)
+
+```{r}
+dgeom(9, 1/6)
+```
+
+La probabilidad de que recién pueda mover sus fichas en el décimo intento será 0.0320112.
+
+## **3)** **BINOMIAL NEGATIVA O PASCAL:**
+
+Es similar a una geométrica pero aquí se espera ***K éxitos.***
+
+Proviene de un experimento aleatorio que posee solo dos posibilidades: éxito y fracaso, pero que se repetirá varias veces *hasta obtener 𝑘 éxitos.*
+
+DATOS: **𝑃(é𝑥𝑖𝑡𝑜)=𝑝,** 𝑃(𝑓𝑟𝑎𝑐𝑎𝑠𝑜)=𝑞 ==\> p+q=1... p y q no deben de cambiar.
+
+Variable aleatoria teórica: 𝑿=# de intentos *hasta tener K éxitos.*
+
+Probabilidad:
+
+$$
+P(X=xo)=C^{xo-1}_{k-1}.p^{k}*q^{xo-k}
+$$
+
+Esperado: 𝑬(𝑿)=𝒌/𝒑
+
+Varianza: 𝑽(𝑿)=𝒌.𝒒/𝒑\^𝟐
+
+**Observación**: Aquí también 𝑅 utiliza una forma equivalente.
+
+Variable aleatoria: 𝒀=# de fracasos hasta obtener K éxitos.
+
+Probabilidad: 𝒑(𝒀=𝒚)=C(k+y-1, k-1).𝒑\^𝒌.𝒒\^𝒚
+
+Esperado: 𝑬(𝒀)=𝒌.𝒒/𝒑
+
+Varianza: 𝑽(𝒀)=𝒌.𝒒/𝒑\^𝟐
+
+Entre ambas variables se cumple que: **X = Y + k**
+
+Con R:
+
+probabilidad: 𝑷(𝒀= yo )=?? 𝒅𝒏𝒃𝒊𝒏𝒐𝒎(yo,𝒌,𝒑)
+
+probabilidad acumulada: 𝑷(𝒀≤ yo)=?? 𝒑𝒏𝒃𝒊𝒏𝒐𝒎(yo,𝒌,𝒑)
+
+**Muy poco útil:**
+
+inversa acumulada: 𝑷(𝒀≤t)=po, t=?? 𝐪𝐧𝐛𝐢𝐧𝐨𝐦(po,𝒌,𝒑)
+
+**Ejemplo:** se seguira participando de un sorteo hasta que un participante lo gane 3 veces ¿Cual es la probabilidad de que participe del sorteo 7 veces? Si la probabilidad de que gane es 0.05
+
+**X=# de veces que participa del sorteo hasta ganar 3 veces. ==\> k= 3**
+
+Segun el texto, se desea X= 7 ==\> P(X=7)=???
+
+Número de veces que fracasó = 7-3 = 4
+
+Sea Y= \# de veces que fracasó
+
+Con R studio : ***P(X=7) = P(Y = 4)*** y esto último se pone en R studio.
+
+```{r}
+dnbinom(4,3, 0.05)
+```
+
+Problema 7:
+
+*Un alumno aprueba el curso si saca por lo menos 05, por ello no estudia mucho y decide marcar al azar. Considere que cada pregunta vale 1 punto y son 12 preguntas. Cada pregunta con 5 alternativas.*
+
+S*e sabe que el alumno aprobará su evaluación si contesta al menos 5 buenas. Si el alumno quiere contestar lo mínimo para aprobar, ¿cuál es la probabilidad de que apruebe respondiendo 12 preguntas?*
+
+SOLUCIÓN:
+
+se tenia: P(acertar)=1/5=0.2
+
+X=# de preguntas contestadas hasta acertar 5 preguntas ==\> k=5
+
+==\> Binomial negativa (k=5, p=0.2)
+
+se desea: *P(x=12)*
+
+Pero R Studio considera:
+
+*Y= \# de preguntas mal contestadas* ==\> Binomial negativa: k=5, p=0.2
+
+Se desea: **P(X=12)=P(Y=7) hay 7 falladas en las 12 preguntas.**
+
+```{r}
+dnbinom(7,5,0.2)
+```
+
+**Adicional:**
+
+Calcular los esperados:
+
+A\) Esperado del número de preguntas que debe marcar hasta obtener 5 buenas:
+
+***E(X)=k/p*** = 5/0.2= *25 preguntas que debe contestar hasta obtener 5 buenas.*
+
+B\) Esperado del número de **preguntas falladas** hasta obtener 5 buenas:
+
+**E(Y)= k.q/p**= *5(0.8)/0.2=20* preguntas falladas que tendré hasta obtener 5 buenas.
+
+## **4) HIPERGEOMÉTRICA:**
+
+Proviene de un experimento aleatorio donde se extrae ***una muestra de K elementos sin reposición*****,** de una *población de **N** elementos*, que contiene solo dos tipos de elementos llamados Exito y Fracaso,siendo ***m** la cantidad de ÉXITOS* y ***n** la cantidad de fracasos* (N= m + n)
+
+**DATOS:**
+
+1\) N: Población
+
+2\) m: \# de éxitos en la población
+
+3\) n: \# de fracasos en la población
+
+4\) K: Tamaño de la muestra .
+
+Notar que : **m+ n = N**
+
+Aquí la probabilidad de los éxitos ira cambiando en cada experimento que se realice, ya que es sin reposición.
+
+Variable aleatoria: *𝑿=# de éxitos en la muestra sacada de una población de tamaño N.*
+
+Probabilidad:
+
+$$
+P(X=xo)= \frac{C^m_{xo}.C^n_{k-xo}}{C^N_k}
+$$
+
+*Esperado:*
+
+$$
+E(X)=K.\frac{m}{N}
+$$
+
+*Varianza:*
+
+$$
+V(X)=K.\frac{m}{N}.(1-\frac{m}{N})(\frac{N-K}{N-1})
+$$
+
+Con R:
+
+probabilidad 𝑷(**X=xo**)=?? ==\>𝒅𝒉𝒚𝒑𝒆𝒓(xo,m,n,k) Siendo: *m la cantidad total de éxitos*, *n la cantidad de fracasos* y *k la muestra seleccionada*.
+
+probabilidad acumulada 𝑷(**X≤xo**)=?? ==\> 𝒑𝒉𝒚𝒑𝒆𝒓(xo,m,n,k)
+
+**No es útil:**
+
+inversa acumulada 𝑷(X≤t)=po, t=?? 𝐪𝒉𝒚𝒑𝒆𝒓(po,m,n,k)
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**ejemplo:** ¿que significa?? para un enunciado que diga "extrayendo bolitas de una caja con **Azules (éxitos)** y **Blancas (fracasos**), se tiene lo siguiente:"
+
+> Éxitos, fracasos y muestra
+
+\`\`\`{r}
+
+***dhyper(1, 2, 3,4)***
+
+\`\`\`
+
+Del código dado se estaría calculando ***P(X=1)***
+
+Número de éxitos en población *= 2 (hay 2 azules)*
+
+Número de fracasos en población *= 3 (hay 3 blancas)*
+
+Tamaño de la muestra sin reposición *= 4 (es lo que se extrae sin reposición)*
+
+"En una caja hay 5 bolillas, de las cuales 2 son Azules y 3 son Blancas. Se extrae 4 bolillas al azar y se desea saber cual es la probabilidad de hallar ahí 1 bolita Azul"
+
+**PROBLEMA 1:**
+
+A\) En una urna hay 10 bolitas, de las cuales 4 son negras y el resto blancas. Se extrae 5 bolitas **sin reposición** ¿cuál es la probabilidad de tener a lo mas 2 bolitas blancas?
+
+**SOLUCIÓN:**
+
+N=10 bolitas, con 4 negras y 6 blancas (éxitos). muestra: k=5 (**muestra sin reposición**)
+
+se pide ¿P(**a lo más 2 blancas**)? ==\> éxito: sacar bolitas blancas ==\> **m=6 blancas** , n= 4 negras.
+
+K=5 es la muestra.
+
+*X=# de bolitas blancas en la muestra (EXITOS: BLANCAS)*
+
+==\> Hipergeometrica (N=10, **m=6**, n=4, k=5)
+
+Se desea **P(X\<=2)** ("a lo más"= "como máximo"= menor o igual)
+
+```{r}
+phyper(2, 6, 4, 5)  # 6: cantidad de éxitos; 4: cantidad de fracasos ; 5: muestra.
+```
+
+La probabilidad pedida es 0.2619.
+
+LA YAPITA:
+
+¿Cuál es la probabilidad de encontrar como mínimo 3 blancas? ==\> P(X\>=3)=P(x\>2)
+
+```{r}
+phyper(2,6, 4, 5, lower.tail = FALSE)
+```
+
+B\) ¿cuál es la probabilidad de que al extraer 3 bolitas \*sin reposición\*, todas estas sean negras?
+
+SOLUCIÓN:
+
+Y=# de bolitas negras en la muestra ==\> N=10 bolitas, **m=4 negras (éxitos)**, n=6 blancas, k= 3 (muestra sin reposición)
+
+==\> hipergeométrica (N=10,**m=4,**n=6, k=3)
+
+Se desea: P(Y=3)
+
+```{r}
+dhyper(3, 4, 6, 3)
+```
+
+La probabilidad pedida es 0,0333.
+
+&&&&&&&&&&&&&&&&&&&&&
+
+&&&&&&&&&&&&&&&&&&&&&
+
+**Observación:**
+
+Cuando se tiene *población y muestra* sacada **sin reposición** se usa: HIPERGEOMÉTRICA.
+
+Cuando se tiene *población y muestra* **con reposición**, se usará....BINOMIAL(n,p)
+
+y en esta binomial: **n=muestra** **k** y **p=m/N = (# de éxitos de población)/ Tamaño de población.**
+
+PROBLEMA 4.c:
+
+Resolver el problema 1.b, considerando que la muestra extraida es \*con reposición\*:
+
+En una urna hay 10 bolitas, de las cuales 4 son negras y el resto blancas. Se extrae 3 bolitas **con reposición** ¿cuál es la probabilidad de que al extraer las 3 bolitas con reposición, todas estas sean negras?
+
+SOLUCIÓN:
+
+Porque hay población y muestra, pero ahora se extrae la muestra **con reposición,** entonces se usará Binomial.
+
+Z= **\# de bolitas negras** en la muestra de tamaño 3==\> Binomial **(n=3** (muestra), p=m/N = 4/10=0.4)
+
+se desea: P(Z=3).
+
+```{r}
+dbinom(3, 3, 0.4)  # binomial  solo necesita  el valor de X, el tamaño de muestra (n) y la probabilidad (p) del éxito.
+```
+
+## 
+
+### **Última distribución discreta.**
+
+**7) POISSON:**
+
+*Aquí se puede contar los Éxitos*, pero *no se puede contar los Fracasos*.
+
+Aqui lo que interesa es contar **un número de éxitos en *alguna medida*** (*de tiempo, de longitud, de área, de volumen, etc*).
+
+**DATO: L=LAMBDA=** promedio de éxitos en una medida: $\lambda$.
+
+Variable: ***X**=# de exitos **en una medida M*** ( L deberá tener la misma medida que X)
+
+Probabilidad:
+
+$$
+P(X=xo)=\frac{e^{-L}.L^{xo}}{xo!}
+$$
+
+Esperado: **E(X)= L** (pero L debe llegar a tener la misma medida que X)
+
+Varianza: **V(X)= L**
+
+Con R:
+
+probabilidad 𝑷(X=**xo**)=??==\> dpois(**xo**,L)
+
+probabilidad acumulada 𝑷(X≤**xo**)=?? ppois(**xo**,L)
+
+**No es tan usado:**
+
+inversa acumulada 𝑷(X≤t)=po, t=?? qpois(po,L)
+
+\##############################################################################################
+
+**PROBLEMA 5:**
+
+Se sabe que a una empresa le llegan llamadas telefónicas a razón de 6 llamadas en promedio **en 2 minutos.**
+
+a\) ¿cuál es la probabilidad de que \***en 1 minuto**\* lleguen 2 llamadas?
+
+b\) ¿cual es la probabilidad de que \***en 3 minutos**\* lleguen 5, 6 ,7 u 8 llamadas?
+
+c\) ¿cuál es la probabilidad de que en \***10 minutos**\* llegue máximo 20 llamadas?
+
+SOLUCIÓN
+
+**Dato:** 6 llamadas en promedio ===\> en 2 min.
+
+A\) Se desea que P("**en 1 minuto** lleguen *2 llamadas*").
+
+Variable: X= \# de llamadas **en 1 minuto**.
+
+Cálculo de su lambda:
+
+**dato:** en 2 minutos ===\> 6 llamadas en promedio.
+
+====\> ***en 1 minuto** ===\> ¿**L**?*
+
+*En 1 min llega **3 llamadas*** ==\> Landa: $\lambda$ = **L= 3.**
+
+se pide P(X=2 llamadas)
+
+```{r}
+dpois(2,3)
+```
+
+P(X=2)=0.2240418.
+
+B\) *¿cual es la probabilidad de que \***en 3 minutos**\* lleguen 5, 6 ,7 u 8 llamadas?*
+
+Variable: Y=# de llamadas en **3 minutos.**
+
+dato: **en 2 minutos** ==\>llegan **6 llamadas** en promedio
+
+==\> ***en 3 minutos** ==\> L=?? :* ==\> landa: **L= 9.**
+
+Se desea: P(en 3 min: Y=5 o Y=6 o Y=7o Y=8)=P(Y=5)+P( Y=6)+ P(Y=7)+P(Y=8)
+
+o también:
+
+```{r}
+dpois(5:8, 9)
+#la probabilidad total será:
+sum(dpois(5:8, 9))
+```
+
+P(5\<= y \<= 8)=0.400689.
+
+C\) ¿cuál es la probabilidad de que en \***10 minutos**\* llegue máximo 20 llamadas?
+
+Se pide P(**en 10 min**: máx 20 llamadas)
+
+Z= \# de llamadas **en 10 minutos.**
+
+dato: **en 2 minutos** ==\> llegan **6 llamadas** en promedio
+
+==\> ***en 10 minutos ==\> ¿L? ==\>*** landa: **L= 30**
+
+se pide P(Z\<=20)
+
+```{r}
+ppois(20,30)
+```
+
+La probabilidad pedida es 0.03528.
+
+**Adicionales: La yapita**
+
+Dato: Llegan en promedio 6 llamadas en 2 minutos.
+
+d\) ¿cuál es el número esperado de llamadas \*en 1 hora\*?
+
+e\) ¿cuál es el coeficiente de variación del número de llamadas \*en 5 minutos\*?
+
+SOLUCIÓN d:
+
+W=# de llamadas en **60 minutos** (1 hora)
+
+Dato: En 2 minutos ==\> 6 llamadas en promedio
+
+==\> *En 60 minutos ==\> L=?? ==\> 180 llamadas* ==\> Landa: L=180.
+
+**E(W)=L=180.**
+
+Se espera tener en promedio 180 llamadas en 1 hora.
+
+e\) *¿cuál es el coeficiente de variación del número de llamadas \***en 5 minutos**\*?*
+
+SOLUCIÓN :
+
+U=# de llamadas **en 5 minutos**
+
+Dato: En 2 minutos ==\>6 llamadas en promedio
+
+==\> *En 5 minutos ==\>L=?? ==\>* L=15
+
+Coeficiente de Variación: CV=(desviación estándar / media ) .100%
+
+$$
+CV(X)=\frac{\sqrt{V(X)}}{E(X)}*100\text{%}
+$$
+
+**Media** = Esperado(U)=L=15
+
+**Varianza** = V(U)=L=15
+
+**Desviación** =S= sqrt(V(U))=sqrt(15)=3.873
+
+CV= (3.873/ 15).100%= 26.336%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\*Entrenamiento:\*
+
+Identificando variables:
+
+1\) se quiere obtener el \# de intentos **hasta ganar** la tinka.==\> Geométrica
+
+2\) se cuentan los alumnos que llegan al aula **en 10 minutos** ==\> Poisson
+
+3\) **de 20 alumnos** se cuenta la cantidad de aprobados ==\>Binomial
+
+4\) Se cuentan los vehiculos que pasan por una avenida **hasta obtener 3** que cometen infracciones ==\> binomial negativa
+
+5\) **de 20 alumnos se selecciona 8** (sin reposición) y se cuenta el \# de mujeres que hay ==\> Hipergeométrica
+
+6\) "ohhh... lancé 10 veces el dado y no salía el 6 y en la siguiente por fin"==\> Geométrica
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+**HASTA AQUI POR HOY LUNES 10/11**
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%
+
+PROBLEMA 6:
+
+En una empresa donde producen rollos de tela, saben que **por cada 10 metros** se puede tener en promedio **6 defectos.**
+
+a\) ¿cuál es la probabilidad de que **al comprar 5 metros** de dicha tela, no haya defectos?
+
+b\) ¿cual es la probabilidad de que en 25 metros se tenga mas de 10 defectos?
+
+c\) ¿cuál es la probabilidad de que en 8 metros de tela se tenga **por lo menos 5 defectos?**
+
+**SOLUCIÓN:**
+
+A\) Se pide P(**en 5m**: no haya defectos).
+
+*X= \# de defectos **en 5 m** de tela.*
+
+Dato: En 10m ==\>6 defectos en promedio
+
+==\> En 5m ==\> 3 defectos en promedio ==\> L=3.
+
+Se desea: P(X=0 defectos)
+
+```{r}
+dpois(0,3)
+```
+
+B\) *¿cual es la probabilidad de que **en 25 metros** se tenga **mas de 10** defectos?*
+
+Y= \# de defectos **en 25 m** de tela.
+
+Dato: En 10m ==\> 6 defectos
+
+==\> *En 25m ==\> 15 defectos en promedio* ==\> **L=15**
+
+Se pide **P(Y\>10 defectos)**
+
+```{r}
+ppois(10,15,lower.tail=F)
+```
+
+C\) ¿cuál es la probabilidad de que **en 8 metros** de tela se tenga **por lo menos 5 defectos?**
+
+Z=# de defectos **en 8m** de tela
+
+Dato: En 10m ==\> 6 defectos.
+
+==\> *En 8m ==\> **4.8 defectos en promedio*** ==\> L=4.8
+
+Se pide: P(**por lo menos 5 defectos**)=P(Z**\>=**5) esto no lo halla Rstudio.
+
+Solo se halla P(Z\> k) ==\> P(Z \>4)
+
+```{r}
+ppois(4,4.8, lower.tail=F)
+```
+
+\####################################################
+
+PROBLEMA 7:
+
+En la central telefónica de una empresa de cable, contrataran personal adicional y el sueldo de cada uno, será establecido así:
+
+Si en 15 minutos atienden menos de 5 llamadas, su sueldo mensual será 1000 soles.
+
+Si atienden en dicho tiempo mas de 10 llamadas, su sueldo será 2000 soles.
+
+En otros casos su sueldo es 1500 soles.
+
+Si la empresa sabe que el promedio de llamadas que entran es de 2 llamadas por cada 5 minutos, determine:
+
+a)  El sueldo esperado del nuevo personal.
+
+b)  El coeficiente de variación de este nuevo sueldo.
+
+Los pagos al personal en esta empresa, se pueden hacer en Efectivo o mediante Depósito en una cuenta. Si el sueldo es de 1000 soles, el 90% cobra en efectivo. De los que tienen sueldo de 1500 soles el 60% lo recibe en Efectivo, pero cuando el sueldo es mayor, el 80% lo recibe mediante Depósito en su cuenta.
+
+c)  ¿Qué porcentaje de su personal recibe su sueldo en Efectivo?
+
+d)  María Perez es una trabajadora de la empresa y recibe su sueldo mediante Depósito. Calcule la probabilidad de que tenga un sueldo de 1500 soles.
+
+En Recursos Humanos están interesados en encuestar al personal que recibe su sueldo mediante Depósito en su cuenta. Para ello comienzan a revisar los expedientes de cada trabajador de la empresa.
+
+e)  ¿Cuál es la probabilidad de que el quinto expediente sea el primero que corresponde a uno que recibe su sueldo mediante Depósito.
+
+f)  ¿Cuantos expedientes de trabajadores que reciben sueldo en efectivo se espera revisar, hasta obtener 3 expedientes de trabajadores que reciben sueldo mediante Depósito?
+
+g)  De 10 expedientes seleccionados ¿cuál es la probabilidad de que mas de la mitad corresponda a trabajadores con sueldo de 2000 soles?
+
+h)  Varias empresas del mismo rubro usan el mismo criterio para los pagos. Juntando al personal de estas empresas se ha obtenido en total 1000 trabajadores. Si se selecciona sin reposición 100 trabajadores, ¿Cuál es la probabilidad de tener por lo menos la mitad de ellos con un sueldo de 1000 soles?
+
+**SOLUCIÓN A:**
+
+*En la central telefónica de una empresa de cable, contrataran personal adicional y el sueldo de cada uno, será establecido así:*
+
+*Si **en 15 minutos** atienden menos de 5 llamadas, su sueldo mensual será 1000 soles.*
+
+*Si **atienden en dicho tiempo** mas de 10 llamadas, su sueldo será 2000 soles.*
+
+*En otros casos su sueldo es 1500 soles.*
+
+*Si la empresa sabe que el promedio de llamadas que entran, es de **2 llamadas por cada 5 minutos**, determine:*
+
+a)  ***El sueldo esperado del nuevo personal.***
+
+Dato: *en 5 min, hay 2 llamadas* en promedio
+
+==\> *en 15 min, habrá 6 llamadas* en promedio (L=6)
+
+Variables
+
+***X:** \# de llamadas en 15 min.* ==\> Poisson (L=6)
+
+***SU***: Sueldo del operador telefónico (1000, 1500, 2000 soles) No es variable conocida. No tiene distribución conocida ==\> hacer tablita.
+
+| X: \# de llamadas en 15 min | SU: sueldo | P(X)                         |
+|-----------------------------|------------|------------------------------|
+| X=0,1,2,3,4                 | S/ 1000    | **P(X\<=4)**=0.2850565       |
+| X=5,6,7,8,9,10              | S/ 1500    | **P(5\<=X\<=10)** =0.6723226 |
+| X=11,12,13,14,...           | S/ 2000    | **P(X\>=11)**=0.04262092     |
+|                             |            | Suma=1                       |
+
+```{r}
+ppois(4,6)     # P(X<=4)
+```
+
+```{r}
+sum(dpois(5:10,6))
+```
+
+```{r}
+ppois(10,6,lower.tail=F)  # P(X>=11)=P(X>10)
+```
+
+Comprobando que suma es 1:
+
+```{r}
+Suma<- 0.2850565+ 0.6723226+ 0.04262092
+Suma
+```
+
+Se pide : ¿El sueldo esperado? $E(X)=\sum (X*P(X)$ .
+
+Para el problema será:
+
+$$
+E(SU)=\sum(SU*PSU)
+$$
+
+Calculando el esperado del sueldo:
+
+```{r}
+SU<-c(1000, 1500, 2000)
+PSU<-c(0.2850565,0.6723226,0.04262092)
+
+ESU<- SU%*%PSU
+print(paste("El sueldo promedio esperado es ", ESU))
+```
+
+El salario esperado por los trabajadores es de S/1378.782
+
+**Nota:** Si *U=(a,b,c)* y *V=(d,e,f)*
+
+==\> U**%\*%**V=ad+be+cf (producto escalar)
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**SOLUCIÓN B:**
+
+b\) Hallar el coeficiente de variación de este nuevo sueldo.
+
+Hallando el coeficiente de variación.
+
+Coeficiente de Variación: ***CV=(Desviación/Esperado)***
+
+***Esperado de SU**: E(SU)= S/. 1378.782*
+
+**Varianza:** V(SU)= 𝑬(SU\^𝟐 )−(𝑬(SU))\^𝟐
+
+$$
+V(SU)=E(SU^{2})-(E(SU))^{2}
+$$
+
+Cálculo de E(SU\^𝟐)
+
+$$
+E(SU^{2})=\sum(SU^{2}.P(SU))
+$$
+
+```{r}
+ESU2<-(SU^{2})%*%PSU
+ESU2
+```
+
+Ahora se calcula la varianza:
+
+```{r}
+VSU<-ESU2-(ESU)^{2}
+VSU
+```
+
+**Desviación estandar:** es raiz cuadrada de la varianza
+
+```{r}
+desv<-sqrt(VSU)
+desv
+```
+
+Coeficiente de variación:
+
+```{r}
+CV<-(desv/ESU)*100
+print(paste(" el coeficiente de variación es:", CV, "%"))
+```
+
+El coeficiente de variación es de 18.80%
+
+**Nota:**
+
+Varianza de una X que es Poisson ==\> **V(X)=L** (lambda)
+
+varianza de una X binomial ==\> V(X)=n.p.q
+
+Varianza de una variable T, que no se de que tipo es ==\>
+
+$$
+V(T)=E(T^{2})-(E(T))^{2}
+$$
+
+\######################################################
+
+*Los pagos al personal en esta empresa, se pueden hacer en Efectivo o mediante Depósito en una cuenta. Si el sueldo es de 1000 soles, el 90% cobra en efectivo. De los que tienen sueldo de 1500 soles el 60% lo recibe en Efectivo, pero cuando el sueldo es mayor, el 80% lo recibe mediante Depósito en su cuenta.*
+
+c)  *¿Qué porcentaje de su personal recibe su sueldo en Efectivo?*
+
+**SOLUCIÓN C:**
+
+Hacemos UN ARBOL O TABLA:
+
+**Usaremos ARBOL:**
+
+-   si el pago=1000 ....(p1=0.2850565 ) ==\> 0.90 ... **EN EFECTIVO**
+
+-------------------------------------------==\>0.10 ... CON DEPÓSITO
+
+-   si el pago=1500 ... (p2=0.6723226) ==\> 0.6 ==\> **EN EFECTIVO**
+
+-------------------------------------------==\>0.40 ... CON DEPÓSITO
+
+-   si el pago=2000... (p3=0.04262092)==\> 0.20... **En EFECTIVO**
+
+...............................................................................==\> 0.80... EN DEPÓSITO
+
+¿QUE PROBABILIDAD SE TIENE DE COBRAR EN EFECTIVO?
+
+```{r}
+probEfect<-c(0.9,0.6,0.2)
+PSU<-c(0.2850565, 0.6723226, 0.04262092)
+```
+
+Ahora hallo el producto escalar:
+
+```{r}
+Pefectivo<-PSU %*% probEfect
+print(paste("la probabilidad de cobrar en efectivo es", Pefectivo))
+```
+
+```{r}
+# también puede ser así:
+
+PEFECT<- (0.2850565*0.9+0.6723226*0.6+0.04262092*0.2)
+
+PEFECT
+```
+
+La probabilidad de cobrar en efectivo es 0.6684686.
+
+El porcentaje es: 66.85%
+
+d\. *María Pérez es una trabajadora de la empresa y recibe su sueldo mediante Depósito. Calcule la probabilidad de que su sueldo sea de 1500 soles.*
+
+**SOLUCIÓN D:**
+
+Se usará la Probabilidad condicional $P(A|B)=\frac{P(A \cap B)}{P(B)}$
+
+Siendo **B el evento que es dato** ( ya se sabe que ha ocurrido).
+
+Entonces:
+
+**Se sabe que cobra mediante Depósito**, ¿Prob(sueldo=1500)? ==\> P(sueldo=1500\|Depósito)
+
+=\> P(Sueldo=1500 \| Depósito)
+
+$$
+P(Sueldo 1500|Depósito)=\frac{P(1500 \cap Depósito)}{P(Depósito)}
+$$
+
+\* **P(Cobrar con Depósito)=** 1 - P(Cobrar en efectivo)=1-0.6684686=**0.3315314**
+
+\* P(Sueldo=1500 y Depósito)=0.6723226\*0.4= **0.26892904**
+
+Rpta: P(Sueldo=1500 \| Depósito)= **0.268929048**/ **0.3315314** = 0.8111658.
+
+\############################################################
+
+\##########################################################
+
+En Recursos Humanos están interesados en encuestar al personal que recibe su sueldo mediante Depósito en su cuenta. Para ello comienzan a revisar los expedientes de cada trabajador de la empresa.
+
+e)  ¿Cuál es la probabilidad de que el quinto expediente sea el primero que corresponde a uno que recibe su sueldo mediante Depósito.?
+
+SOLUCIÓN E:
+
+¿Cuál es la probabilidad de tener que revisar expedientes **hasta** que, en el quinto expediente se tenga al primero que recibe su sueldo mediante Depósito?
+
+Z=# de expedientes que se revisan hasta tener uno, que recibes su sueldo con Depósito. ==\> Geométrica (p=P(**Exito**)=P(**Cobrar con Depósito**))
+
+siendo *p=P(cobrar con depósito)=0.3315314* ( **hallado en la parte (D)**).
+
+Gráficamente: E, E, E, E, D (E: efectivo, D: Depósito) **Se desea P(Z=5)**
+
+Para calcular la probabilidad con R Studio se cuenta los fracasos:
+
+Sea Y=# de expedientes de trabajadores que cobran en efectivo ( los fracasos)
+
+Se pide entonces: P(Z=5)=P(Y=4)
+
+```{r}
+dgeom(4,0.3315314)
+```
+
+La probabilidad de hallar un expediente de un trabajador que cobra con dep´´osito en el quinto expediente es 0.06619859
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+SOLUCIÓN F:
+
+¿Cuantos expedientes de trabajadores que reciben sueldo en efectivo se espera revisar, hasta obtener 3 expedientes de trabajadores que reciben sueldo mediante Depósito?
+
+W=# DE TRABAJADORES HASTA TENER 3 QUE COBRAN CON DEPÓSITO
+
+FRACASO: EN EFECTIVO,
+
+EXITO: CON DEPÓSITO
+
+W ES BNOMIAL NEGATIVA (**K=3**, **P=0.3315314**) ==\> q=0.6684686
+
+SE DESEA: ESPERADO de W ==\> En Binomial negativa:
+
+𝑬(W)=𝒌/𝒑 = (3)/0.3315314=9.049
+
+El total extraido sería 9.049 ==\> de ellos 3 son con depósito ==\> con Efectivo: 9.049-3=6.049.
+
+Se puede decir que se espera extraer 6 expedientes con efectivo.
+
+SOLUCIÓN G:
+
+De 10 expedientes seleccionados ¿cuál es la probabilidad de que mas de la mitad corresponda a trabajadores con sueldo de 2000 soles?
+
+n=10 expedientes
+
+X= \# de trabajadores con sueldo de 2000 soles
+
+==\>X: Binomial con n=10, *p=P(Sueldo=2000)=0.0426209*2 (calculado en la parte A)
+
+Se desea: P(X\>5)
+
+```{r}
+pbinom(5,10,0.04262092, lower.tail=FALSE)
+```
+
+\########################################
+
+\##########################################
+
+H\) Varias empresas del mismo rubro usan el mismo criterio para los pagos. Juntando al personal de estas empresas se ha obtenido en total 1000 trabajadores. Si se selecciona **sin reposición** 100 trabajadores, ¿Cuál es la probabilidad de tener por lo menos la mitad de ellos con un sueldo de 1000 soles?
+
+SOLUCION:
+
+población: N=1000 trabajadores
+
+n=100 sin reposición ==\>usare Hipergeométrica
+
+Se desea P(por lo menos 50 tienen sueldo 1000 soles)
+
+Variable:
+
+Z=# de trabajadores con sueldo S/ 1000 (de la muestra)
+
+==\> hipergeométrica: N=1000, n=100,
+
+M=# de Trabaj. con sueldo S/ 1000 ( éxitos de la población)
+
+hallare el porcentaje de trabajadores de la poblacion , con sueldo S/ 1000
+
+\% de trab. con sueldo 1000 = P(sueldo=1000)=P(X\<5 llamadas)=P(X\<=4) = 0.28505 (PARTE A)
+
+==\> el % de trabajadores con sueldo S/ 1000 es 28.505%
+
+M=# de trab. con sueldo S/ 1000 = 28.505%(1000)=285 trabajadores.
+
+Ahora si, ya se puede calcular P(Z\>=50)=P(Z\>49)
+
+```{r}
+phyper(49,285, 715, 100, lower.tail = FALSE)
+```
+
+es la respuesta. &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&

@@ -1,0 +1,726 @@
+---
+title: "PG1"
+format: html
+editor: visual
+---
+
+### INTRODUCCIÓN
+
+## I.1. Relevancia
+
+La vida universitaria suele estar asociada con un aumento en el consumo de café y otras bebidas que contienen cafeína. Esto ocurre principalmente por la mayor carga académica que enfrentan los estudiantes, la cual exige dedicar más horas al estudio y a la realización de trabajos, reduciendo el tiempo disponible para el descanso.
+
+No obstante, un consumo excesivo y frecuente de cafeína puede resultar perjudicial para la salud. De acuerdo con la Organización Mundial de la Salud (OMS), se recomienda no consumir más de cuatro tazas de café al día, lo que equivale aproximadamente a 400 mg de cafeína. Superar este límite puede asociarse con alteraciones en los patrones de sueño, incremento de los niveles de estrés y ansiedad, así como una disminución del bienestar general.
+
+En el contexto de los estudiantes de la Universidad de Ingeniería y Tecnología (UTEC), resulta relevante analizar cómo se manifiestan los hábitos de consumo de café durante el periodo académico 2024-2 y de qué manera se relacionan con aspectos clave de la vida académica, como el rendimiento académico, los niveles de estrés y los patrones de sueño. Este análisis permitirá comprender mejor el impacto del consumo de café en la experiencia universitaria.
+
+## I.2. Planificación
+
+El estudio se basa en una base de datos obtenida mediante una **encuesta estructurada** aplicada a estudiantes de la Universidad de Ingeniería y Tecnología (UTEC) durante el periodo académico **2024-2**. El procesamiento y análisis se realizará en **RStudio**, usando paquetes como *tidyverse, dplyr, readr y ggplot2* para organizar, depurar y visualizar los dato
+
+La planificación del proyecto contempla las siguientes etapas:
+
+1.  **Importación del data frame reducido** (formato CSV) en RStudio y verificación de su estructura general.
+
+2.  **Revisión y tipificación de variables**, asegurando que las variables cuantitativas y cualitativas estén correctamente definidas (numéricas y categóricas).
+
+3.  **Evaluación de calidad de datos**, revisando consistencia, rangos razonables, valores faltantes y duplicados.
+
+4.  **Construcción de la base final para análisis**, eliminando observaciones incompletas en variables clave y confirmando que se cumple el tamaño mínimo de observaciones limpias solicitado.
+
+5.  **Análisis descriptivo**: elaboración de resúmenes estadísticos para variables numéricas y tablas de frecuencia para variables categóricas.
+
+6.  **Elaboración de tablas y gráficos** alineados con cada objetivo específico.
+
+7.  **Interpretación de resultados** y **redacción de conclusiones**, considerando el tipo de muestreo y sus limitaciones.
+
+    ```{mermaid}
+    gantt
+        title Planificación del Proyecto (PG1 + PG2)
+        dateFormat  DD/MM/YYYY
+        axisFormat  %d/%m/%Y
+
+        section Semana 02 - PG1 Avance 1 (Oral)
+        Diseño del estudio + objetivos                 :done, pg1_1, 12/01/2026, 3d
+        Presentación Oral 1                            :done, pg1_o1, 15/01/2026, 1d
+
+        section Semana 03 - PG1 Avance 2 (Oral)
+        Depuración + preparación de datos              :done, pg1_3, 19/01/2026, 3d
+        Estadística descriptiva + análisis de relaciones :done, pg1_4, 22/01/2026, 3d
+        Presentación Oral 2                            :done, pg1_o2, 25/01/2026, 1d
+
+        section Semana 05 - PG1 Informe 1 (Entrega)
+        Redacción y entrega del Informe 1              :active, pg1_i1, 26/01/2026, 4d
+
+        section Semana 06-07 - PG2 Probabilidad y Modelos (Orales)
+        Probabilidades + variables aleatorias          :pg2_1, 02/02/2026, 9d
+        Presentaciones orales PG2                      :pg2_o, 03/02/2026, 9d
+
+        section Semana 08 - PG2 Cierre Final
+        Integración del Informe 2 + preparación final  :pg2_2, 16/02/2026, 2d
+        Oral final + entrega Informe 2                 :pg2_final, 18/02/2026, 2d
+
+    ```
+
+## I.3. Objetivos
+
+### Objetivo general
+
+Analizar los hábitos de consumo de café de los estudiantes de la UTEC durante el periodo académico **2024-2** y su relación con indicadores académicos y percepción del bienestar general (estrés y patrones de sueño).
+
+Objetivos específicos:
+
+-   **Analizar la relación entre el consumo de café y los niveles de estrés percibidos** en los estudiantes de UTEC encuestados durante el periodo académico 2024-2.
+
+-   **Evaluar la asociación entre el consumo de café y los patrones de sueño** y **su relación con el rendimiento académico** en los estudiantes de UTEC encuestados durante el periodo académico 2024-2.
+
+-   **Describir cómo el ingreso a la universidad ha influido en los hábitos de consumo de café** y **examinar los efectos físicos y mentales percibidos** (energía y bienestar general) en los estudiantes de UTEC encuestados durante el periodo académico 2024-2.
+
+**Unidad muestral:** cada **estudiante encuestado** de la UTEC en el periodo 2024-2 (cada fila del data frame representa a un estudiante).
+
+## Datos
+
+### 1. Población objetivo
+
+Estudiantes de la Universidad de Ingeniería y Tecnología (UTEC) encuestados durante el periodo académico **2024-2** que reportan consumir café.
+
+### 2. Tipo de muestreo
+
+Se empleó un muestreo **no probabilístico por conveniencia** (Encuesta)
+
+### 3. Recolección de datos
+
+Los datos provienen de una **encuesta estructurada** aplicada a estudiantes de la UTEC durante el periodo académico **2024-2**. El instrumento incluyó preguntas sobre características sociodemográficas, información académica, hábitos de consumo de café, patrones de sueño, estrés percibido y percepción del bienestar general. La información fue registrada en una base digital (Excel) y posteriormente exportada a formato CSV para su análisis en RStudio.
+
+Perfecto, esta sección se presta **exactamente** para justificar decisiones metodológicas 👌 Aquí tienes la tabla con la **columna “Análisis disruptivo” agregada antes del rango**, y la justificación **fila por fila**, en un tono académico pero claro (ideal para entrega).
+
+------------------------------------------------------------------------
+
+#### 4. Variables:
+
+| Variable (en R) | Tipo | ¿Qué mide? | Análisis disruptivo | Rango / restricción recomendada |
+|----|----|----|----|----|
+| sexo | Cualitativa nominal | Sexo del estudiante | Variable de control que permite identifica r posibles diferencias en patrones de consumo y efectos del café. Se trata como nominal al no existir orden entre categorías. | Valores válidos: “femenino”, “masculino” (u otros si existieran). Sin NA. |
+| ciclo | Cuantitativa discreta (u ordinal) | Ciclo académico del estudiante | Aproxima el nivel de carga académica y exigencia, factores relacionados con el consumo de café. Es discreta y naturalmente ordenada. | Entero ≥ 1 (normalmente 1–10). Sin negativos. |
+| consume_cafe | Cualitativa nominal | Si consume café | Define el universo de análisis para las variables de consumo. Es dicotómica y funciona como filtro lógico. | Solo “Sí/No”. |
+| tazas_dia | Cuantitativa discreta | Tazas de café por día (promedio) | Mide la intensidad habitual del consumo. El rango evita valores implausibles que distorsionen el análisis. | Entero ≥ 0 (recomendado 0–10). |
+| tazas_antes | Cuantitativa discreta | Tazas por día antes de ingresar a UTEC | Permite evaluar cambios en el consumo asociados al ingreso a la universidad. | Entero ≥ 0 (recomendado 0–10). |
+| tazas_examen | Cuantitativa discreta | Tazas consumidas en día de exámenes | Captura un consumo excepcional asociado a estrés académico, admitiendo un rango mayor. | Entero ≥ 0 (recomendado 0–20). |
+| frec_diaria | Cualitativa ordinal | Frecuencia diaria de consumo | Resume el patrón de consumo sin depender del número exacto de tazas; posee orden natural. | Nunca \< Rara vez \< A veces \< Frecuentemente \< Siempre. |
+| pp_2024_1 | Cuantitativa continua | Promedio ponderado 2024-1 | Indicador de rendimiento académico para analizar su relación con el consumo de café. | Rango típico 0–20. |
+| limite_dormir | Cuantitativa discreta | Máx. horas antes de dormir en que tomaría café | Mide tolerancia al consumo de café respecto al sueño; rango acotado por horas del día. | Entero ≥ 0 (recomendado 0–24). |
+| efecto | Cualitativa nominal | Percepción del efecto del café | Captura la percepción subjetiva del impacto del café, sin orden entre categorías. | Categorías como “No me afecta”, “Efecto positivo/negativo”. |
+| cafe_noche | Cualitativa ordinal | Frecuencia de consumo por la noche | Variable clave para analizar efectos del café sobre el sueño nocturno. | Nunca \< Rara vez \< A veces \< Frecuentemente \< Siempre. |
+| sueno_noche | Cuantitativa discreta | Horas de sueño por la noche | Permite evaluar el impacto del consumo nocturno en el descanso. | Recomendado 1–12 horas. |
+| estres | Cualitativa nominal | Si el estrés cambia al consumir café | Identifica si existe un cambio percibido en el nivel de estrés. | “Sí/No”, valores normalizados. |
+| estres_cambio | Cualitativa ordinal | Dirección del cambio del estrés | Indica el sentido del cambio del estrés cuando este existe. | Disminuye / Neutro / Aumenta (NA si no cambia). |
+| energia_1_a_5 | Cuantitativa discreta (ordinal) | Energía percibida (1 a 5) | Escala ordinal tipo Likert para medir energía subjetiva. | Solo valores 1–5. |
+| bienestar | Cualitativa nominal (u ordinal) | Efecto en bienestar físico/mental | Resume el impacto general del café en el bienestar del estudiante. | No afecta / físico / mental / ambos. |
+| cambio_utec | Cualitativa ordinal | Cambio de consumo al ingresar a la U | Variable central para evaluar el efecto del entorno universitario en el consumo de café. | Disminuyó mucho \< Disminuyó \< No cambió \< Aumentó \< Aumentó mucho. |
+
+### 4.5 Justificación de las de variables
+
+Las variables seleccionadas permiten describir de forma integral los hábitos de consumo de café en estudiantes de la UTEC durante el periodo 2024-2, a la vez, evaluar cómo estos hábitos se relacionan con aspectos clave de la vida universitaria. Especificamente, se incluyen variables que representan la intensidad y frecuencia del consumo en general pero tambíen en contextos específicos (noches o fechas de exámenes), lo que ayuda a caracterizar los patrones de consumo.
+
+Asimismo, el estrés, las horas de sueño y el rendimiento académico, además de indicadores de efectos físicos y mentales percibidos (energía y bienestar) en relacion al objtivo general y especificos. Estas variables permiten analizar asociaciones entre consumo y bienestar como también explorar posibles diferencias según características sociodemográficas básicas (como sexo y ciclo que tambíen estan incluidas).
+
+Finalmente, la combinación de las variables cuantitativas y cualitativas hace posible realizar un análisis descriptivo y generar visualizaciones estadísticas claras (gráficos de barras, gráficos en porcentaje y comparaciones por categorías) alineadas con los objetivos específicos del estudio.
+
+#### 5. Limpieza de datos
+
+**5.1 Leer archivo**\
+Importar la base reducida en RStudio desde un archivo CSV y verificar que se haya cargado correctamente.
+
+**5.2 Revisar estructura inicial**\
+Revisar los nombres de columnas y la estructura general del data frame para confirmar que las variables se leen con el formato esperado.
+
+**5.3 Filtrar población de interés**\
+Conservar únicamente los registros correspondientes a estudiantes que **sí consumen café**, de acuerdo con la pregunta de consumo.
+
+**5.4 Renombrar variables**\
+Cambiar los nombres originales (largos y de encuesta) por nombres cortos y claros para facilitar el trabajo y reducir errores en el código.
+
+**5.5 Tipificar variables**\
+Ajustar los tipos de variables según su naturaleza:
+
+-   Categóricas nominales y ordinales (definiendo orden cuando corresponda).
+
+-   Cuantitativas discretas y continuas (conversión a formato numérico adecuado).
+
+**5.6 Revisar consistencia**\
+Verificar coherencia de respuestas y rangos razonables en variables cuantitativas, corrigiendo o excluyendo valores atípicos evidentes si fuera necesario.
+
+**5.7 Verificar valores faltantes y duplicados**\
+Identificar valores faltantes y filas duplicadas; eliminar duplicados y construir una base final sin datos faltantes en las variables necesarias para el análisis.
+
+**5.8 Base final para el análisis**\
+Generar el data frame final “limpio”, listo para elaborar tablas, gráficos e interpretar resultados según los objetivos del estudio.
+
+**Limpiea de datos:**
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+## LEER ARCHIVO
+
+```{r}
+CAFE<-read_csv("DATACAFE.csv")
+CAFE
+```
+
+## LEER LOS NOMBRES
+
+```{r}
+names(CAFE) # muestra todos los nombres de las columnas
+```
+
+## FILTRAMOS POR QUIENES SI TOMAN CAFE
+
+```{r}
+unique(CAFE$`¿Consume café?`)
+```
+
+```{r}
+SI_CAFE<- filter(CAFE, `¿Consume café?`  == "Sí"  | `¿Consume café?`  == "si")
+SI_CAFE
+```
+
+## CAMBIAR LOS NOMBRES
+
+```{r}
+SI_CAFE <- rename(
+  SI_CAFE,
+  sexo          = "Sexo",
+  ciclo         = "Ciclo:",
+  consume_cafe  = "¿Consume café?",
+  tazas_dia     = "En promedio ¿Cuántas tazas de café consumes en un día?",
+  tazas_antes   = "Antes de ser alumno de UTEC, ¿cuántas tazas de café consumías al día aproximadamente?",
+  tazas_examen  = "Durante un día de exámenes, ¿Cuántas tazas de café consumes?",
+  frec_diaria   = "¿Con qué frecuencia tomas café diariamente?",
+  pp_2024_1     = "¿Cuál fue tu promedio ponderado en el ciclo 2024-1? (Tal cual aparece en tu intranet de estudiante).",
+  limite_dormir = "¿Cuál es la cantidad máxima de horas antes de dormir en la que consumirías café?",
+  efecto        = "¿Cómo crees que te afecta el consumo de café?",
+  cafe_noche    = "¿Con qué frecuencia consumes café por la noche?",
+  sueno_noche   = "¿Cuántas horas duermes por la noche en promedio cuando consumes café?",
+  estres        = "¿Tu nivel de estrés cambia cuándo consumes café?",
+  estres_cambio = "Si la respuesta anterior fue sí. ¿Cómo ha cambiado tu nivel de estrés después de consumir café?",
+  energia_1_a_5 = "En una escala del 1 al 5, ¿Cómo calificarías el nivel de energía que sientes después de consumir café?\n1: No me brinda nada de energía\n3: Neutral\n5: Me brinda mucha energía",
+  bienestar     = "¿Consideras que el consumo de café tiene algún efecto en tu bienestar físico o mental?",
+  cambio_utec   = "¿Tu consumo de café cambió al ingresar a la universidad?"
+)
+```
+
+## VER QUE TIPO DE VARIBLE
+
+```{r}
+glimpse(SI_CAFE)
+```
+
+## CAMBIAR LOS TIPOS DE VARIABLES
+
+```{r}
+# SOLO VARIABLES DE CAFE_OFICIAL (incluye estudio_extra)
+# =========================
+
+# NOMINALES
+SI_CAFE$sexo <- factor(tolower(trimws(SI_CAFE$sexo)))
+SI_CAFE$estres       <- factor(SI_CAFE$estres)
+SI_CAFE$bienestar    <- factor(SI_CAFE$bienestar)
+SI_CAFE$efecto       <- factor(SI_CAFE$efecto)
+
+# ORDINALES (factor con levels)
+SI_CAFE$frec_diaria <- factor(SI_CAFE$frec_diaria,
+  levels = c("Nunca","Rara vez","A veces","Frecuentemente","Siempre")
+)
+
+SI_CAFE$cafe_noche <- factor(SI_CAFE$cafe_noche,
+  levels = c("Nunca","Rara vez","A veces","Frecuentemente","Siempre")
+)
+
+SI_CAFE$estres_cambio <- factor(SI_CAFE$estres_cambio,
+  levels = c("Disminuye","Neutro","Aumenta")
+)
+
+SI_CAFE$cambio_utec <- factor(SI_CAFE$cambio_utec,
+  levels = c("Disminuyó mucho","Disminuyó","No cambio","Aumentó","Aumentó mucho")
+)
+
+# NUMÉRICAS (discretas -> integer)
+SI_CAFE$ciclo         <- as.integer(SI_CAFE$ciclo)
+SI_CAFE$tazas_dia     <- as.integer(SI_CAFE$tazas_dia)
+SI_CAFE$tazas_antes   <- as.integer(SI_CAFE$tazas_antes)
+SI_CAFE$tazas_examen  <- as.integer(SI_CAFE$tazas_examen)
+SI_CAFE$sueno_noche   <- as.integer(SI_CAFE$sueno_noche)
+SI_CAFE$limite_dormir <- as.integer(SI_CAFE$limite_dormir)
+SI_CAFE$energia_1_a_5 <- as.integer(SI_CAFE$energia_1_a_5)
+
+# NUMÉRICAS (continuas -> double)
+SI_CAFE$pp_2024_1 <- as.double(SI_CAFE$pp_2024_1)
+
+SI_CAFE
+```
+
+## VERIFICAR
+
+```{r}
+# 1) ¿Cuántas filas totales tienes?
+nrow(SI_CAFE)
+
+# 2) ¿Cuántas filas tienen AL MENOS un NA (en cualquier columna)?
+filas_con_NA <- sum(!complete.cases(SI_CAFE))
+filas_con_NA
+
+# 3) ¿Cuántas filas NO tienen ningún NA (en ninguna columna)?
+filas_sin_NA <- sum(complete.cases(SI_CAFE))
+filas_sin_NA
+
+
+```
+
+```{r}
+# 1) Definir variables CLAVE que se usara en el analisis 
+
+# Variables CUANTITATIVAS
+# "tazas_dia", "tazas_antes", "tazas_examen" ,"sueno_noche", "limite_dormir", "pp_2024_1", "energia_1_a_5" 
+
+# Variables CUALITATIVAS
+# "frec_diaria", "cafe_noche", "estres", "estres_cambio","bienestar", "efecto","cambio_utec", "sexo", "ciclo", 
+
+CAFE_OFICIAL <- SI_CAFE %>%
+  select(
+    # Factores demográficos
+    sexo, ciclo,
+
+    # Consumo de café
+    tazas_dia, frec_diaria, cafe_noche, tazas_antes, tazas_examen,
+
+    # Sueño
+    sueno_noche, limite_dormir,
+
+    # Estrés
+    estres, estres_cambio,
+
+    # Rendimiento académico
+    pp_2024_1,
+
+    # Efectos percibidos (físicos/mentales)
+    energia_1_a_5, bienestar, efecto,
+
+    # Cambio al ingresar a la U
+    cambio_utec
+  )
+
+
+
+#REVISAMOS LA DATA (ANTES)
+
+summary(CAFE_OFICIAL , useNA = "always")
+
+#HAY DATOS QUE NO TIENEN NIGUNA LOGICA como tener un PONDERARO MAYOR A 20)
+
+#FILTRAMOS PONIENDO RESTRICIONES
+CAFE_OFICIAL <- CAFE_OFICIAL %>%
+  filter(
+    ciclo >= 1 & ciclo <= 10,
+    tazas_dia >= 0 & tazas_dia <= 15,
+    tazas_antes >= 0 & tazas_antes <= 20,
+    tazas_examen >= 0 & tazas_examen <= 20,
+    sueno_noche >= 1 & sueno_noche <= 12,
+    limite_dormir >= 0 & limite_dormir <= 24,
+    pp_2024_1 >= 0 & pp_2024_1 <= 20,
+    energia_1_a_5 >= 1 & energia_1_a_5 <= 5
+  )
+
+"DATA DESPUES DE PONER RESTRICCIONES"
+
+#REVISAMOS LA DATA (DESPUES)
+
+summary(CAFE_OFICIAL , useNA = "always")
+
+
+colSums(is.na(CAFE_OFICIAL))
+
+```
+
+```{r}
+# 1) ¿Cuántas filas totales tienes?
+nrow(CAFE_OFICIAL)
+
+# 2) ¿Cuántas filas tienen AL MENOS un NA (en cualquier columna)?
+filas_con_NA <- sum(!complete.cases(CAFE_OFICIAL))
+filas_con_NA
+
+# 3) ¿Cuántas filas NO tienen ningún NA (en ninguna columna)?
+filas_sin_NA <- sum(complete.cases(CAFE_OFICIAL))
+filas_sin_NA
+
+#4 Cuantos NA hay por filas 
+barplot(table (rowSums (is.na(CAFE_OFICIAL))),las=3)
+
+#5 EN CUANTAS COLUMNAS NO HAY NA EN CADA VARIABLE
+barplot (colSums (!is.na (CAFE_OFICIAL)), las=3 , cex.names = 0.6)
+```
+
+# **OBJETIVO 1**
+
+-   **Analizar la relación entre el consumo de café y los niveles de estrés percibidos** y diferenciar de acuerdo al contexto sociodemográfico, en los estudiantes de la UTEC encuestados durante el periodo académico 2024-2.
+
+```{r}
+# OBJETIVO 1: Consumo vs Estrés + diferenciando por sexo y ciclo
+OBJ1 <- CAFE_OFICIAL %>%
+  select(sexo, ciclo, cafe_noche, estres, estres_cambio, tazas_dia, frec_diaria) %>%
+  filter(complete.cases(.))
+
+nrow(OBJ1)  # n final del objetivo 1
+```
+
+```{r}
+# 1) TABLA PRINCIPAL: consumo nocturno vs cambio de estrés (porcentajes por fila)
+tab_obj1 <- table(OBJ1$cafe_noche, OBJ1$estres_cambio)
+tab_obj1
+round(prop.table(tab_obj1, 1) * 100, 2)
+```
+
+```{r}
+# 2) GRÁFICO GENERAL 
+OBJ1 %>%
+  count(cafe_noche, estres_cambio) %>%
+  group_by(cafe_noche) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(x = cafe_noche, y = porc, fill = estres_cambio)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Cambio del estrés según consumo de café por la noche (UTEC, 2024-2)",
+    x = "Frecuencia de consumo de café por la noche",
+    y = "Porcentaje (%)",
+    fill = "Cambio del estrés"
+  )
+```
+
+```{r}
+# 3) POR SEXO 
+OBJ1 %>%
+  count(sexo, cafe_noche, estres_cambio) %>%
+  group_by(sexo, cafe_noche) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(x = cafe_noche, y = porc, fill = estres_cambio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ sexo) +
+  labs(
+    title = "Cambio del estrés según consumo nocturno de café, por sexo (UTEC, 2024-2)",
+    x = "Frecuencia de consumo de café por la noche",
+    y = "Porcentaje (%)",
+    fill = "Cambio del estrés"
+  )
+
+```
+
+```{r}
+# 4) POR CICLO 
+OBJ1 %>%
+  count(ciclo, cafe_noche, estres_cambio) %>%
+  group_by(ciclo, cafe_noche) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(x = cafe_noche, y = porc, fill = estres_cambio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ ciclo) +
+  labs(
+    title = "Cambio del estrés según consumo nocturno de café, por ciclo (UTEC, 2024-2)",
+    x = "Frecuencia de consumo de café por la noche",
+    y = "Porcentaje (%)",
+    fill = "Cambio del estrés"
+  )
+```
+
+Para analizar la relación entre el consumo de café y los niveles de estrés percibidos en estudiantes de la UTEC durante el periodo académico 2024-2, se comparó la **frecuencia de consumo de café por la noche** con el **cambio de estrés reportado** (Disminuye / Neutro / Aumenta). El análisis se realizó con una base depurada solo con las variables necesarias para este objetivo y se trabajó con **n = 933** estudiantes (filas completas para estas variables). Primero se construyó una tabla de contingencia y se calcularon porcentajes **por cada categoría de consumo nocturno** (por fila), y luego se complementó con gráficos de barras apiladas en porcentaje. Finalmente, se repitió el análisis **diferenciando por sexo y por ciclo** para evaluar si el patrón cambia según el contexto sociodemográfico.
+
+Los resultados muestran que, en general, el **resultado “Neutro”** tiende a ser más frecuente cuando el consumo nocturno es menor, mientras que al aumentar la frecuencia aparecen con mayor fuerza los extremos (“Aumenta” y “Disminuye”). Por ejemplo, en el grupo que consume café por la noche **Rara vez**, el cambio de estrés fue **Neutro (44.32%)**, seguido de **Aumenta (32.20%)** y **Disminuye (23.48%)**. En **A veces**, el patrón se mantiene similar: **Neutro (40.00%)**, **Aumenta (33.33%)** y **Disminuye (26.67%)**. En cambio, cuando el consumo nocturno es **Frecuentemente**, la proporción “Neutro” baja a **32.24%**, mientras que “Aumenta” sube a **38.37%** y “Disminuye” a **29.39%**. En **Siempre**, se observa un perfil todavía menos “Neutro” (**26.47%**) y con mayor peso relativo de cambios marcados: **Disminuye (38.24%)** y **Aumenta (35.29%)**.
+
+Al desagregar por **sexo** y por **ciclo**, los gráficos permiten ver si este mismo patrón se mantiene dentro de cada grupo. En términos generales, lo más importante de esta comparación sociodemográfica es identificar si el aumento de consumo nocturno se asocia con un desplazamiento hacia “Aumenta” o “Disminuye” en todos los grupos o solo en algunos. También es clave notar que en ciertos ciclos (o en categorías como “Siempre”) puede haber **pocas observaciones**, por lo que las diferencias visuales deben interpretarse con cautela: cuando el grupo es pequeño, un cambio de pocas personas puede mover bastante el porcentaje. Aun así, el análisis cumple con el objetivo porque muestra de forma clara **cómo cambia la distribución del estrés percibido conforme cambia la frecuencia de consumo nocturno**, y además permite contrastar ese patrón **según sexo y ciclo**.
+
+OOOOOOOOOOOOOOOOOOOOOO
+
+Con 933 encuestas válidas, se ve que cuando el café por la noche es **rara vez** o **a veces**, la mayoría dice que su estrés queda **neutro** (≈40–44%). Pero cuando el consumo nocturno es **frecuente**, baja el “neutro” y sube el “**aumenta**” (hasta ≈38%). En “**siempre**” casi no hay respuestas neutras y se reparten más entre “aumenta” y “disminuye”, aunque ese grupo es pequeño, así que se interpreta con cuidado. Además, se revisó el mismo patrón por **sexo** y **ciclo** para ver si cambia según el contexto del estudiante.
+
+# **OBJETIVO 2**
+
+-   **Evaluar la asociación entre el consumo de café y los patrones de sueño** y **su relación con el rendimiento académico** en los estudiantes de la UTEC encuestados durante el periodo académico 2024-2.
+
+```{r}
+# OBJETIVO 2: Sueño + Cercanía antes de dormir + Rendimiento
+# =========================
+
+OBJ2 <- CAFE_OFICIAL %>%
+  select( tazas_dia, cafe_noche, sueno_noche, limite_dormir, pp_2024_1) %>%
+  # rangos razonables para evitar valores raros 
+  filter(
+    sueno_noche >= 1, sueno_noche <= 12,
+    limite_dormir >= 0, limite_dormir <= 24,
+    pp_2024_1 >= 0, pp_2024_1 <= 20
+  ) %>%
+  filter(complete.cases(.)) %>%
+  mutate(
+    # Cercanía del consumo antes de dormir (a partir de limite_dormir)
+    cercania_cafe = case_when(
+      limite_dormir <= 2 ~ "Cerca (≤2h)",
+      limite_dormir <= 4 ~ "Media (3–4h)",
+      TRUE               ~ "Lejos (≥5h)"
+    ),
+    cercania_cafe = factor(cercania_cafe, levels = c("Cerca (≤2h)", "Media (3–4h)", "Lejos (≥5h)")),
+
+    # Grupo de horas de sueño
+    grupo_sueno = case_when(
+      sueno_noche <= 5 ~ "≤5 horas",
+      sueno_noche <= 7 ~ "6–7 horas",
+      TRUE             ~ "≥8 horas"
+    ),
+    grupo_sueno = factor(grupo_sueno, levels = c("≤5 horas","6–7 horas","≥8 horas")),
+
+    # Grupo de PP (rendimiento)
+    grupo_pp = case_when(
+      pp_2024_1 <= 12 ~ "Bajo (≤12)",
+      pp_2024_1 <  15 ~ "Medio (12–15)",
+      TRUE           ~ "Alto (≥15)"
+    ),
+    grupo_pp = factor(grupo_pp, levels = c("Bajo (≤12)","Medio (12–15)","Alto (≥15)"))
+  )
+
+nrow(OBJ2)  # n del Objetivo 2
+```
+
+```{r}
+# 1) Gráfico 1 : Cercanía del café antes de dormir ↔ Grupo de sueño
+OBJ2 %>%
+  count(cercania_cafe, grupo_sueno) %>%
+  group_by(cercania_cafe) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = cercania_cafe, x = porc, fill = grupo_sueno)) +
+  geom_col() +
+  labs(
+    title = "Horas de sueño según cercanía del consumo de café antes de dormir (UTEC, 2024-2)",
+    x = "Porcentaje (%)",
+    y = "Cercanía del consumo antes de dormir",
+    fill = "Grupo de horas de sueño"
+  ) +
+  scale_x_continuous(limits = c(0, 100)) +
+  theme_minimal()
+```
+
+```{r}
+# 2) Gráfico 2 : Grupo de sueño ↔ Grupo de rendimiento (PP)
+OBJ2 %>%
+  count(grupo_sueno, grupo_pp) %>%
+  group_by(grupo_sueno) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = grupo_sueno, x = porc, fill = grupo_pp)) +
+  geom_col() +
+  labs(
+    title = "Rendimiento académico según horas de sueño (UTEC, 2024-2)",
+    x = "Porcentaje (%)",
+    y = "Grupo de horas de sueño",
+    fill = "Nivel de promedio ponderado"
+  ) +
+  scale_x_continuous(limits = c(0, 100)) +
+  theme_minimal()
+
+```
+
+```{r}
+# 3) Gráfico 3 : Cercanía del consumo ↔ Grupo de rendimiento (PP)
+OBJ2 %>%
+  count(cercania_cafe, grupo_pp) %>%
+  group_by(cercania_cafe) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = cercania_cafe, x = porc, fill = grupo_pp)) +
+  geom_col() +
+  labs(
+    title = "Rendimiento académico según cercanía del consumo de café antes de dormir (UTEC, 2024-2)",
+    x = "Porcentaje (%)",
+    y = "Cercanía del consumo antes de dormir",
+    fill = "Nivel de promedio ponderado"
+  ) +
+  scale_x_continuous(limits = c(0, 100)) +
+  theme_minimal()
+```
+
+### Texto largo (para tu informe)
+
+Para el **Objetivo 2**, se analizaron **1246 estudiantes de UTEC (2024-2)** y se compararon tres cosas: Qué tan cerca toman café antes de dormir, cuántas horas duermen, y cómo se distribuye su **rendimiento académico (PP)**.
+
+En el **Gráfico 1 (cercanía del café ↔ horas de sueño)** se observa un patrón claro: cuando el consumo de café ocurre **más cerca de la hora de dormir (≤2 h)**, aumenta la proporción de estudiantes que cae en el grupo de **≤5 horas de sueño**, y disminuye ligeramente la presencia de quienes logran **≥8 horas**. En cambio, cuando el café se toma **con mayor anticipación (≥5 h)**, se aprecia una **mejor distribución del sueño**, con mayor presencia relativa de estudiantes en **6–7 horas** y también un pequeño aumento del grupo de **≥8 horas**. En otras palabras, **mientras más lejos del sueño se consume café, más “favorecido” sale el descanso** en términos de horas.
+
+En el **Gráfico 2 (horas de sueño ↔ nivel de PP)**, la distribución del rendimiento académico se mantiene bastante **estable** entre los tres grupos de sueño. En todos, predomina el rendimiento **medio y alto**, mientras que el grupo **bajo** es minoritario. Esto sugiere que, al menos de forma descriptiva, **dormir más o menos no está mostrando un cambio fuerte en la categoría de rendimiento** dentro de esta muestra.
+
+Finalmente, el **Gráfico 3 (cercanía del café ↔ nivel de PP)** refuerza la misma idea: el rendimiento académico por categorías se ve **muy parecido** entre quienes consumen café cerca, a una distancia media o lejos de dormir. Si hay diferencias, son **pequeñas**, por lo que con estos resultados descriptivos se concluye que **la cercanía del consumo de café sí se asocia con las horas de sueño**, pero **el rendimiento académico (PP) no presenta variaciones marcadas** según las horas de sueño ni según qué tan cerca se tomó café antes de dormir (al menos en la comparación por porcentajes).
+
+### Texto corto y humano
+
+En los datos, **tomar café más cerca de dormir se asocia con dormir menos** (aparecen más personas en el grupo de **≤5 horas**). En cambio, si lo tomas **con más horas de anticipación**, es más común dormir **6–7 horas o incluso 8+**.\
+Pero cuando miras el **promedio ponderado**, **no cambia mucho entre grupos**: el rendimiento sale bastante parecido aunque duerman más/menos o aunque el café esté más cerca/lejos de la hora de dormir.
+
+# **OBJETIVO 3**
+
+-   **Describir cómo el ingreso a la universidad ha influido en los hábitos de consumo de café** y **examinar los efectos físicos y mentales percibidos** (energía y bienestar general) en los estudiantes de la UTEC encuestados durante el periodo académico 2024-2.
+
+```{r}
+# OBJETIVO 3: Cambio UTEC + Energía + Bienestar
+
+
+# 0) Base limpia SOLO para este objetivo (no pierdes filas por otras variables)
+OBJ3 <- CAFE_OFICIAL %>%
+  select(cambio_utec, tazas_antes, tazas_dia, energia_1_a_5, bienestar) %>%
+  filter(complete.cases(.))
+
+nrow(OBJ3)  # n del objetivo 3
+```
+
+```{r}
+# 1) GRÁFICO 1: Cambio en consumo al ingresar a la U (barras en %)
+
+OBJ3 %>%
+  count(cambio_utec) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = cambio_utec, x = porc)) +
+  geom_col() +
+  labs(
+    title = "Cambio en el consumo de café al ingresar a la universidad (UTEC, 2024-2)",
+    x = "Porcentaje de estudiantes (%)",
+    y = "Cambio reportado"
+  )
+```
+
+```{r}
+# 2) Crear grupo de energía (para gráfico más claro)
+
+OBJ3 <- OBJ3 %>%
+  mutate(
+    energia_grupo = case_when(
+      energia_1_a_5 %in% c(1,2) ~ "Baja (1–2)",
+      energia_1_a_5 == 3        ~ "Media (3)",
+      energia_1_a_5 %in% c(4,5) ~ "Alta (4–5)",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(energia_grupo))
+
+OBJ3$energia_grupo <- factor(OBJ3$energia_grupo, levels = c("Baja (1–2)","Media (3)","Alta (4–5)"))
+
+```
+
+```{r}
+# 3) GRÁFICO 2: Energía según cambio en consumo 
+
+OBJ3 %>%
+  count(cambio_utec, energia_grupo) %>%
+  group_by(cambio_utec) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = cambio_utec, x = porc, fill = energia_grupo)) +
+  geom_col() +
+  labs(
+    title = "Nivel de energía percibida según cambio en consumo de café (UTEC, 2024-2)",
+    x = "Porcentaje de estudiantes (%)",
+    y = "Cambio reportado",
+    fill = "Energía (1–5)"
+  )
+
+
+```
+
+```{r}
+# 4) GRÁFICO 3: Bienestar según cambio en consumo
+
+OBJ3 %>%
+  count(cambio_utec, bienestar) %>%
+  group_by(cambio_utec) %>%
+  mutate(porc = n / sum(n) * 100) %>%
+  ggplot(aes(y = cambio_utec, x = porc, fill = bienestar)) +
+  geom_col() +
+  labs(
+    title = "Bienestar percibido según cambio en consumo de café (UTEC, 2024-2)",
+    x = "Porcentaje de estudiantes (%)",
+    y = "Cambio reportado",
+    fill = "Bienestar"
+  )
+  
+```
+
+```{r}
+# 5) TABLA RESUMEN: cambio real (antes vs ahora) + energía promedio
+
+tabla_obj3 <- OBJ3 %>%
+  group_by(cambio_utec) %>%
+  summarise(
+    n = n(),
+    tazas_antes_prom = round(mean(tazas_antes),2),
+    tazas_ahora_prom = round(mean(tazas_dia),2),
+    delta_prom = tazas_ahora_prom - tazas_antes_prom,
+    energia_prom = round(mean(energia_1_a_5),2),
+    .groups = "drop"
+  )
+
+tabla_obj3
+```
+
+### Texto largo (más “académico”)
+
+Para cumplir el **Objetivo 3** (describir cómo el ingreso a la universidad influyó en el consumo de café y examinar los efectos percibidos en energía y bienestar), se trabajó con una base limpia de **n = 1246** estudiantes.
+
+**1) Cambio en el consumo al ingresar a la universidad (Gráfico 1)**\
+Los resultados muestran que **la mayoría reporta un aumento** en su consumo de café desde que ingresó a la universidad:
+
+-   **Aumentó:** 607 estudiantes (**48.7%**)
+
+-   **Aumentó mucho:** 200 estudiantes (**16.1%**)
+
+-   **No cambió:** 381 estudiantes (**30.6%**)
+
+-   **Disminuyó:** 43 estudiantes (**3.5%**)
+
+-   **Disminuyó mucho:** 15 estudiantes (**1.2%**)
+
+En conjunto, **\~64.8%** (Aumentó + Aumentó mucho) indica que la vida universitaria se asocia con un incremento del consumo.
+
+**2) Evidencia del cambio**\
+La tabla refuerza el patrón anterior comparando el promedio de tazas “antes” vs “ahora”:
+
+-   **Aumentó mucho:** pasa de **1.08** a **2.90** tazas/día (**+1.82**)
+
+-   **Aumentó:** de **1.09** a **2.09** (**+1.00**)
+
+-   **No cambió:** de **1.69** a **1.90** (**+0.21**, variación pequeña)
+
+-   **Disminuyó:** de **2.72** a **2.60** (**–0.12**)
+
+-   **Disminuyó mucho:** de **5.27** a **3.87** (**–1.40**)
+
+Esto sugiere que el “aumento” reportado no es solo percepción: también aparece como **un incremento promedio claro** en el consumo actual, especialmente en quienes marcaron “Aumentó mucho”.
+
+**3) Energía percibida según el cambio en consumo (Gráfico 2)**\
+El gráfico de energía (baja 1–2, media 3, alta 4–5) muestra una tendencia consistente: en los grupos que reportan **aumento** del consumo, se observa **mayor proporción de energía alta (4–5)**. Esto también se refleja en el promedio de energía:
+
+-   **Aumentó mucho:** **3.90** (el más alto)
+
+-   **Aumentó:** **3.65**
+
+-   **No cambió:** **3.25**
+
+-   **Disminuyó:** **3.12**
+
+-   **Disminuyó mucho:** **3.40**
+
+En resumen, **a mayor aumento del consumo**, suele aparecer **mayor energía percibida** (sobre todo en “Aumentó mucho”).
+
+**4) Bienestar percibido según el cambio en consumo (Gráfico 3)**\
+Respecto al bienestar, en todos los grupos aparece una fracción importante que indica que **“no afecta mi bienestar”**, pero también se observa que una parte relevante reporta afectación **mental**, **física**, o **ambas**. El gráfico permite describir cómo cambia esa composición de respuestas dependiendo de si el consumo aumentó, se mantuvo o disminuyó. En otras palabras: **el aumento del consumo no solo se asocia a energía**, también se acompaña de **percepciones mixtas sobre bienestar**, donde hay estudiantes que no reportan impacto y otros que sí identifican efectos (especialmente en el ámbito mental o combinado).
+
+**Conclusión del objetivo 3:**\
+Durante el periodo 2024-2 en estudiantes UTEC encuestados, el ingreso a la universidad se asocia principalmente con **un aumento del consumo de café** (casi 2 de cada 3). Además, quienes reportan mayor incremento tienden a mostrar **mayor energía percibida**, mientras que el bienestar presenta **resultados heterogéneos** (muchos no perciben afectación, pero una proporción importante sí reporta algún impacto).

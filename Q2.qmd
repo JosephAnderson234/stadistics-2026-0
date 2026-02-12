@@ -1,0 +1,217 @@
+---
+title: "Q2"
+format: html
+editor: visual
+---
+
+# Quiz 2
+
+Loading utils:
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+permutacion <- function(n, k) {
+  factorial(n) / factorial(n - k)
+}
+complemento <- function(n){
+  1 - n
+  }
+```
+
+# Loading file:
+
+```{r}
+DATA <- read_csv("autosseminuevos.csv")
+DATA
+```
+
+# Pregunta 1
+
+```{r}
+table(DATA$Moneda, useNA = "always")
+table(DATA$`Modalidad de Venta`, useNA = "always")
+```
+
+Como vemos
+
+La probabilidad de ser pagado en dólares es 872/967
+
+La probabilidad de salir con venta directa es 711/967
+
+Entonces la respuesta es, por propiedad de multiplicación
+
+```{r}
+round((872/967)*(711/967), 2)
+```
+
+# Problema 2
+
+11 lugares: L1, L2, L3L, L4, L5, L6, L7, L8, L9, L10, L11
+
+Vehículos: 1, 2, 3, 4, 5 (diferentes colores)
+
+Camionetas: 1, 2, 3, 4, 5,
+
+Se desea: desde L1 hasta L5 con 5 vehículos
+
+Es es un factorial clásico
+
+Sin embargo tenemos que debemos usar permutación en la sección de camionetas para poder permutar entre los diferentes posiciones
+
+```{r}
+ways_vehi <- factorial(5)
+ways_camio <- permutacion(6, 5)
+ways_camio * ways_vehi
+```
+
+# Problema 3
+
+```{r}
+smrz <- table(DATA$Color, useNA = "always")
+verdes <- as.numeric(smrz["VERDE METALICO"])
+dorado <- as.numeric(smrz["DORADO METALICO"])
+
+verdes
+dorado
+```
+
+Seleccionando 2 de cada uno:
+
+Se selecciona un verde = 4
+
+y luego el otro verde = 3
+
+Y en el cazo de los dorados = 5
+
+y luego de su seleccion quedan = 4
+
+Entonces:
+
+```{r}
+4*5*3*4
+```
+
+# Problema 4
+
+```{r}
+sumrz<- table(DATA$Genero, useNA = "always")
+nMasculino = as.numeric(sumrz["Masculino"])
+nFemenino = as.numeric(sumrz["Femenino"])
+nMasculino
+nFemenino
+```
+
+| na   | Muj | Hombre | total |
+|------|-----|--------|-------|
+| Auto | 100 | 350    | 450   |
+| Mec  | 107 | 400    | 507   |
+| na   | 207 | 750    | 957   |
+
+Donde A = Cliente hombre
+
+Donde B = Vehiculo automático
+
+$$
+P(A | B) = \frac{P(A\cap B)}{P(B)} =\frac{\frac{350}{957}}{\frac{450}{957}}=\frac{350}{450}
+$$
+
+La respuesta es:
+
+```{r}
+round(350/450, 2)
+```
+
+# Pregunta 5
+
+F, la fórmula corresponde a eventos independientes
+
+F, porque al reemplazar en la fórmula el término final es P(A), no P(B), pues este mismo se cancela
+
+V, ya que al reemplazar la fórmula se logra despejar P(A), tanto en el numerador como en el denominador, dejando libre la fórmula de $P(A\cap B)$
+
+# Pregunta 6
+
+Prefieren autos electricos = 0.4 (a) P(A)
+
+Prefieren autos mecánicos = 0.5 (c) P(B)
+
+No prefiren esos tipos = 0.15 (d)}
+
+Donde b = P(A $\cap$ B)
+
+De la ecuación sabemos que: a + c + d -b = 1 =\>0.4+0.5+0.15-b = 1
+
+```{r}
+b = 0.4+0.5+0.15-1
+b
+```
+
+Entoncnes b =0.05
+
+P(B \| A) = P(A $\cap$ B) / P(A)
+
+Reemplazando en la fórmula = 0.05/0.4
+
+```{r}
+round(0.05/0.4, 3)
+```
+
+# Pregunta 7
+
+pa paga en dolares = 0.2
+
+pb paga en dolares = 0.4
+
+pc paga en dolares = 0.5
+
+pd paga en dolares = 0.6
+
+```{r}
+p_a_c<-0.2
+p_a_nc <- complemento(p_a_c)
+p_b_c<-0.4
+p_b_nc <- complemento(p_b_c)
+p_c_c<-0.5
+p_c_nc <- complemento(p_c_c)
+p_d_c<-0.6
+p_d_nc <- complemento(p_d_c)
+
+# Para hello podemos sacar el complemento de la probabilidad de que nadie page en dólares (significa que al menos uno pagará así)
+
+round(1 - (p_a_nc*p_b_nc*p_c_nc*p_d_nc), 3)
+```
+
+# Pregunta 8
+
+P (a \| b) = 2 \*P(b \| a ) =\> P(a inter b) / P(b) = 2 \* P(a inter b) / P(a) —\> p(a)/p(b) = 1/2
+
+P(B-A) = 1/10 = P(B)- P(B int A )
+
+P(A-B) = 2/5 = P(A) - P(A int B
+
+K (inter) (2K)
+
+2/5 = 2k - inter (-)
+
+1/10 = k - inter
+
+------------------------------------------------------------------------
+
+2/5-1/10 = k
+
+```{r}
+k <- (2/5)-(1/10)
+
+intersection <- (2*k) - (2/5)
+a <-  (1/10) + intersection
+b <- (2/5) + intersection
+
+respuesta <- a + b - intersection
+round(respuesta, 2)
+```
