@@ -1,0 +1,90 @@
+---
+title: "DISTRIBUCIONES"
+author: "Orlando Galarza"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: flatly        
+    highlight-style: tango
+    code-fold: false
+    code-tools: false
+    df-print: paged
+    smooth-scroll: true
+    link-external-newwindow: true
+    embed-resources: true
+editor: visual
+---
+
+```{r}
+#install.packages("readr")
+```
+
+```{r}
+#install.packages("fitdistrplus")
+```
+
+```{r}
+library(readr)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(fitdistrplus)
+```
+
+descargamos FAMOSOS
+
+```{r}
+fam<-read_csv("FAMOSOS1.xlsx - Hoja1 (7).csv")
+fam
+```
+
+DISTRIBUCIÓN PARA CONTINUAS: ESTATURA:
+
+```{r}
+fdN<-fitdist(fam$Estatura, "norm")
+fdN
+fdE<-fitdist(fam$Estatura, "exp")
+fdE
+fdU<-fitdist(fam$Estatura, "unif")
+fdU
+```
+
+```{r}
+gofstat(list(fdN, fdE, fdU))
+```
+
+```{r}
+plotdist(fam$Estatura, histo=TRUE, demp=TRUE)
+```
+
+Considerando que la estatura es normal, calcule
+
+```{r}
+media_real<-mean(fam$Estatura)
+sd_real<-sd(fam$Estatura)
+X1 <- 170
+prob_mas_170 <-pnorm(X1, mean = media_real, sd = sd_real, lower.tail = FALSE)
+
+cat("P(X > 170):", round(prob_mas_170, 4), "\n")
+
+# Gráfico del caso
+x_val <- seq(media_real - 4*sd_real, media_real + 4*sd_real, length = 1000)
+df_norm <- data.frame(x = x_val, y = dnorm(x_val, media_real, sd_real))
+df_norm
+
+ggplot(df_norm, aes(x, y)) +
+  geom_line(size = 1.2, color = "#2c3e50") +
+  geom_area(data = subset(df_norm, x >= X1), aes(y=y), fill = "#e74c3c", alpha = 0.6) +
+  geom_vline(xintercept = X1, linetype = "dashed", color = "#c0392b") +
+  annotate("text", x = X1 + 1, y = 0.10, 
+           label = paste0("P(X > 170)\n= ", round(prob_mas_170 * 100, 2), "%"), 
+           color = "#c0392b", fontface = "bold") +
+  labs(title = "Probabilidad de estatura mayor a 170cms",
+       subtitle = paste0("X ~ N(", round(media_real, 2), ", ", round(sd_real, 2), ")"),
+       x = "Estaturas de famosos", y = "Densidad") +
+  theme_minimal()
+```

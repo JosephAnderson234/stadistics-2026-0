@@ -1,0 +1,195 @@
+---
+title: "TS2"
+format: html
+editor: visual
+---
+
+## T2
+
+```{r}
+library(dplyr)
+library(readr)
+```
+
+```{r}
+
+Alb <- read_csv("Album.csv")
+Fig <- read_csv("Figuritas.csv")
+
+# Convertir Id a factor con niveles 1:1048
+Alb$Id <- factor(Alb$Id, levels = 1:1048)
+Fig$Id <- factor(Fig$Id, levels = 1:1048)
+
+# Dimensiones
+dim(Fig)  # 1028 x 3
+dim(Alb)  # 1048 x 8
+
+# Conteo de sobres por tipo
+table(Fig$Tipo)
+
+# Minutos de propaganda
+19*1 + 159*3 + 850*10
+```
+
+```{r}
+# ===============================
+# Cargar datos
+# ===============================
+Alb <- read_csv("Album.csv")
+
+# ===============================
+# 1) Promedio y desviación estándar
+#    de pokemones por generación
+# ===============================
+
+pok_por_gen <- Alb %>%
+  group_by(Generation) %>%
+  summarise(cantidad = n())
+
+promedio_gen <- mean(pok_por_gen$cantidad)
+desv_gen <- sd(pok_por_gen$cantidad)
+
+# Resultados:
+promedio_gen   # Pregunta en blanco 1
+desv_gen       # Pregunta en blanco 2
+
+# ===============================
+# 2) Total de pokemones tipo Grass
+# ===============================
+
+grass <- Alb %>%
+  filter(T1 == "Grass" | T2 == "Grass")
+
+total_grass <- nrow(grass)
+
+total_grass  # Pregunta en blanco 3
+
+# ===============================
+# 3) P(Color = Green | Tipo = Grass)
+# ===============================
+
+prob_green_dado_grass <-
+  sum(grass$Color == "Green") / total_grass
+
+prob_green_dado_grass  # Pregunta en blanco 4
+```
+
+```{r}
+# =========================
+# 1) ASEGURAR FORMATO DE Id
+# =========================
+Fig <- Fig %>%
+  mutate(Id = factor(Id, levels = 1:1048))
+
+Alb <- Alb %>%
+  mutate(Id = factor(Id, levels = 1:1048))
+
+# =========================
+# 2) CONTAR CUÁNTAS VECES APARECE CADA FIGURITA
+# =========================
+conteo <- Fig %>%
+  group_by(Id, .drop = TRUE) %>%
+  summarise(Veces = n())
+
+# =========================
+# 3) BOXPLOT Y ESTADÍSTICOS
+# =========================
+boxplot(conteo$Veces,
+        main = "Veces que aparece cada figurita",
+        ylab = "Veces")
+
+mediana_veces <- median(conteo$Veces)
+maximo_veces  <- max(conteo$Veces)
+
+cat("RESPUESTA 1: La mediana es =", mediana_veces, "\n")
+cat("RESPUESTA 2: El máximo es =", maximo_veces, "\n")
+
+# =========================
+# 4) JOIN CON INFORMACIÓN DEL ÁLBUM
+# =========================
+DF <- inner_join(conteo, Alb, by = "Id")
+
+# =========================
+# 5) BANETTE
+# =========================
+banette_veces <- DF %>%
+  filter(Name == "Banette") %>%
+  pull(Veces)
+
+cat("RESPUESTA 3: Banette aparece", banette_veces, "veces\n")
+
+# =========================
+# 6) POKEMONES COLOR GREY
+# =========================
+grey_total <- DF %>%
+  filter(Color == "Grey") %>%
+  summarise(total = sum(Veces)) %>%
+  pull(total)
+
+cat("RESPUESTA 4: Pokemones color Grey =", grey_total, "\n")
+```
+
+```{r}
+# =========================
+# 1) NÚMERO DE ESCUADRONES
+# =========================
+# Un escuadrón se forma con 6 figuritas distintas
+total_figuritas_distintas <- n_distinct(DF$Id)
+
+escuadrones <- floor(total_figuritas_distintas / 6)
+
+cat("RESPUESTA 1: Se pueden formar", escuadrones, "escuadrones\n")
+
+
+# =========================
+# 2) GENERACIÓN A LA QUE MENOS FIGURITAS LE FALTAN
+# =========================
+# Total por generación según el álbum completo
+total_por_gen <- Alb %>%
+  group_by(Generation) %>%
+  summarise(Total = n())
+
+# Figuritas distintas que ya tenemos por generación
+tenemos_por_gen <- DF %>%
+  group_by(Generation) %>%
+  summarise(Tenemos = n())
+
+# Figuritas que faltan por generación
+faltan_por_gen <- inner_join(total_por_gen, tenemos_por_gen, by = "Generation") %>%
+  mutate(Faltan = Total - Tenemos)
+
+gen_menos_faltan <- faltan_por_gen %>%
+  filter(Faltan == min(Faltan))
+
+cat("RESPUESTA 2: La generación a la que menos figuritas le faltan es la",
+    gen_menos_faltan$Generation, "\n")
+
+cat("RESPUESTA 3: En esa generación faltan",
+    gen_menos_faltan$Faltan, "figuritas\n")
+
+
+# =========================
+# 3) VALOR ESPERADO DE SOBRES S03 HASTA OBTENER
+#    UNA FIGURITA NUEVA DE GENERACIÓN 3
+# =========================
+# Total de figuritas de generación 3 en el álbum
+total_gen3 <- Alb %>%
+  filter(Generation == 3) %>%
+  nrow()
+
+# Figuritas distintas de generación 3 que ya tenemos
+tenemos_gen3 <- DF %>%
+  filter(Generation == 3) %>%
+  nrow()
+
+# Probabilidad de que una figurita sea NUEVA de gen 3
+p <- (total_gen3 - tenemos_gen3) / nrow(Alb)
+
+# Cada sobre S03 trae 3 figuritas independientes
+p_sobre <- 1 - (1 - p)^3
+
+esperanza_sobres <- 1 / p_sobre
+
+cat("RESPUESTA 4: El valor esperado es",
+    round(esperanza_sobres, 2), "sobres\n")
+```

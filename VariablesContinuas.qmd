@@ -1,0 +1,1733 @@
+---
+title: "Variable continua y distribuciones muestrales."
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+# VARIABLE ALEATORIA CONTINUA
+
+Si recordamos, **variable discreta**: $P(X\le a) \ne P(X<a)$ .
+
+En discreta, se puede calcular: $P(X=4)$ ==\> se halla con *`dpois`* o *`d binom`* o *`dgeom`* o... etc.
+
+En discreta: $P(3\le X \le 9)=P(X\le 9)-P(X \le 2)$
+
+En discreta: $P(3<X<9)=  P(X \le 8) - P(X \le 3)$
+
+En **variables continuas**: $P(X \le a) = P(X< a)$
+
+En continuas: $P(X=4)=0$ , $P(X=7)=0$, $P(X=100)=0$, $P(X=0.2)=0$
+
+Las variables continuas por lo general provienen de mediciones.
+
+Su principal característica es que los valores que toma **se da siempre en Intervalos**.
+
+$$
+P(a<X<b)=P(a\le X\le b)= P(X\le b) - P(X\le a)
+$$
+
+$P(3\le X \le 9)=P(X\le 9)-P(X \le 3)$
+
+$P(3<X<9)=P(X≤9)−P(X≤3)$
+
+## MODELOS DE CONTÍNUAS:
+
+Aqui solo vemos: Uniforme, Exponencial , Normal.
+
+Una ventaja: En continuas , en sus problemas, siempre te van a decir, que tipo de variable continua es.
+
+En cambio en Discreta, no te dicen que tipo de variables es.
+
+### DISTRIBUCION UNIFORME:
+
+Si $X$ es uniforme, te deben dar un intervalo que sera los valores que toma $X$. Así por ejemplo:
+
+$X: U[a;b]$ entonces $a\le x \le b$
+
+Esto quiere decir que existe una función que se llama "función de densidad"
+
+$$
+f(x)=\frac{1}{b-a}, ... a\le x \le b \\
+f(x)=0, ... \text{x toma otros valores, afuera del intervalo}
+$$
+
+Ejemplo:
+
+Si $X=\text{notas en el final}: U[3; 17]$
+
+su función de densidad será:
+
+$$
+f(x)=\frac{1}{14}, ... 3\le x \le 17 \\
+f(x)=0, ... \text{x toma otros valores, afuera del intervalo}
+$$
+
+La densidad $f(x)$ es una función que sirve para calcular probabilidades de un intervalo, integrandola a $f(x)$.
+
+En un proyecto, se puede hacer un histograma de una variable continua y se puede considerar aproximadamente Uniforme cuando todas los rectángulos del histograma están casi a la misma altura. También se puede subdividir a una variable en una muestra mas pequeña, donde si sea uniforme.
+
+**Probabilidad de uniforme:**
+
+Si $X : U[a;b]$ entonces
+
+Siempre que $[c;d] \text{esté incluido en} [a,b]:$
+
+**Rango total: a**--------------*c//////////////d*---------------**b**
+
+$P(c \le x \le d)=\frac{d-c}{b-a}$
+
+Por ejemplo:
+
+1\) Si $X: U[0;8]$ calcule:
+
+P(**2 \<= X \<= 6**) = $\frac{6-2}{8-0}=\frac{4}{8}=1/2$
+
+2\) Si $X:U[1;11]$ calcule:
+
+P(**3\<=X\<=6**)= $\frac{6-3}{11-1}=\frac{3}{10}= 0,3$
+
+3\) Si $X:U[2;10]$ calcular P(6\<=X\<=12)
+
+**2-**----------6 ////////////////**10**-----f(x)=0----12
+
+$$
+P(6\le x\le 12)=P(6\le X \le 10)=\frac{10-6}
+{10-2}=0.5
+$$
+
+y si aqui pidieran $P(15\le X \le 20)$ =0
+
+**Esperado de X** ==\> $\mu=E(X)=\frac{a+b}{2}$
+
+**Varianza de X**==\> $\sigma^2 =V(X)=\frac{(b-a)^2}{12}$
+
+*Ejemplo 1:*
+
+Las notas de PC1 en una sección de Física tienen distribución Uniforme 𝑼(𝟔,𝟏𝟖).
+
+a\) Si Carlos estudia en esa sección ¿qué probabilidad tiene de obtener una nota entre 11 y 15?
+
+b\) ¿Cuál es la nota que espera tener Carlos?
+
+c\) ¿Cuál es su coeficiente de variación?
+
+d\) Si en la sección hay 30 alumnos ¿cuál es la probabilidad de tener 5 alumnos con nota mínima 15?
+
+**SOLUCIÓN:**
+
+VARIABLE ==\> ***X=Nota en PC1*** **....que es *U\[6;18\]*** ==\> $6 \le x\le 18$
+
+a\) se desea P(**11\<=X\<=15**)=$\frac{15-11}{18-6}=4/12=0.333$ . **Respuesta.**
+
+**Con R:**
+
+(en continuas no se usa d. Sin embargo si se usa p y q) ==\> $P(c<X<d)=P(c\le x \le d)= P(X<d) - P(X<c)$ esto para R studio.
+
+==\>**P(11\<=X\<=15)= P(X\<=15)-P(X\<=11)**
+
+```{r}
+punif(15,6,18)- punif(11,6,18) #Nota: P(11<=X<=15)=P(X<=15)-P(X<=11)
+
+```
+
+b\) *¿Cuál es la nota que espera tener Carlos?*
+
+se pide su valor esperado o media
+
+**E(X)=(a+b)/2=(6+18)/2=12**
+
+La nota que espera tener Carlos es 12.
+
+c\) Coeficiente de Variación: CV=(Desviación / Media) ==\> $CV(X)=\frac{S}{E(X)}$
+
+\+ Media o Esperado= E(X)=12
+
+\+ Varianza=V(X)=(b-a)\^2/12 =144/12=12
+
+```{r}
+
+
+"Desviación"
+
+s<- sqrt(12)
+
+s
+```
+
+CV=(3.464102/12)=0.2887
+
+d\) **Problema Fijazo:**
+
+*Si en la sección hay 30 alumnos ¿cuál es la probabilidad de tener 5 alumnos con nota mínima 15?*
+
+n=30 (total de alumnos) ==\> P(5 alumnos con **nota** mínima **15**)=P(5 alumnos con X\>=15)
+
+**X=Nota en PC1 ....que es U\[6;18\]** ( es Uniforme por dato) ==\> $6 \le x\le 18$
+
+Esta pregunta origina una nueva variable (*sera una variable contadora*)
+
+***Y=# de alumnos con X\>=15*** ==\>**Y** tiene un TOTAL: 30 alumnos ==\> por eso **Y es binomial** con *(**n=30**, **p=P(éxito)=P(X\>=15)**)* pero ahora debo calcular p=???????
+
+cálculo de **p=P(X\>=15)** usando *Uniforme \[6,18\]*
+
+(Nota: en contínuas es lo mismo P(X\>15) y P(X\>=15))= (18-15)/(18-6)=3/12=0.25
+
+Con R studio será:
+
+```{r}
+punif(15,6,18, lower.tail=FALSE) # P(X >=15) = P(X>15) solo en continuas.
+```
+
+*p=P(X\>=15)= 0.25* para la binomial.
+
+Y ya se puede calcular lo que se pide: **P(Y=5)** que se halla con binomial
+
+```{r}
+dbinom(5,30,0.25)
+```
+
+P(5 alumnos con nota mínimo 15)=0.10473.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**ESQUEMA PARA PROBLEMAS COMBINADOS.**
+
+1.  La variable nueva que va aparecer es siempre una discreta (binomial, Poisson, hipergeométrica, geométrica, Pascal).
+
+2.  Se reconoce que habrá una nueva variable, porque tse requiere que cuentes algo.
+
+3.  Si la variable nueva , fuera binomial ==\> se necesita n y p.
+
+4.  n: es el total y p=P(éxito) en la binomial.
+
+5.  p=P(éxito) se calcula haciendo uso de la variable continua original (Uniforme, Exponencial, Normal)
+
+6.  Ya se podrá hallar la probabilidad de la discreta usando Binomial.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**PROBLEMA 2:**
+
+*Se sabe que el peso X de ciertos bloques de acero, es una variable aleatoria continúa distribuida **uniformemente en el intervalo \[50,70\]** toneladas. Encontrar:*
+
+a\) La función de densidad de la variable.
+
+b\) La función de distribución.
+
+c\) La probabilidad de que un bloque pese por lo menos **el peso medio**, mas 4 toneladas.
+
+d\) El mínimo peso para que el bloque se encuentre en el quinto superior.
+
+e\) El peso máximo del bloque, que supera a 54 ton con una probabilidad igual a 0.40.
+
+**SOLUCION:**
+
+**X=peso de bloques de acero.** ==\> ***U\[50,70\]*****...**. (Rango de X: 50\<=X\<=70)toneladas
+
+a\) función de densidad para ***x: U\[a;b\]***
+
+$$
+f(x)=\frac{1}{b-a}, ...x\in [a;b]\\
+f(x)=0, ...............x \text{  no está en  }[a;b]
+$$
+
+Nota: Una función de densidad no es una probabilidad. Para obtener una probabilidad se debe integrar en el intervalo pedido.7
+
+$f(x)=1/20,.... 50<=x<=70$
+
+$f(x)=0, .... e.o.c.$
+
+**b) Función de distribución acumulada: F(xo)=P(X\<=xo) por teoría de la ppt:**
+
+La función de distribución (F(x)) de una continua es el resultado de integrar a la densidad.
+
+$$
+F(xo)= P(x\le xo)=\int_{-\infty}^{xo} f(x)dx
+$$
+
+Solo para el caso de una Uniforme, se halla fácil la función de distribución.
+
+Si x es U\[a;b\]
+
+$$
+F(x)=0, ......si:   x<a\\
+F(x)=\frac{x-a}{b-a}, ... x\in [a;b]\\
+F(x)= 1, .... Si:  x>b
+$$
+
+Como x es U\[50; 70\]:
+
+F(X)= 0 , cuando X\<50
+
+F(X)= (X-50)/20 , cuando 50\<=X\<=70
+
+F(X)= 1 , cuando X\>70.
+
+**F(x))\> función de distribución.**
+
+Observación:
+
+Esta funcion F(X) ya es una probabilidad. No se le integra. Ya está integrada.
+
+¿para que sirve F(X)==\> sirve para calcular probabilidades.
+
+Ejemplo:
+
+P(X\<=k) = F(k)
+
+P(X\<=60)=F(60)=(60-50)/20=0.5
+
+P(x\<=80)=F(80)= 1
+
+P(x\<=30)=F(30)= 0
+
+P(55\<= X \<= 100)= P(X\<=100) - P(X\<=55)= **F(100)** - **F(55)**= **1** - (55-50)/20 = 1- 1/4 = 0.75.
+
+c)  ¿*Cuál es* *La probabilidad de que un bloque pese por lo menos **el peso medio**, mas 4 toneladas ?*
+
+¿**P**( X sea por lo menos **(\>=)** **el peso medio** mas 4)?
+
+Hallemos el **peso medio = E(X)**=*(50+70)/2= 60* ton. (peso promedio es 60 ton)
+
+Se desea: **P(X\>=60+4)**=***P(X\>=64)=??***
+
+***Recordar que en Uniforme:***
+
+$$ P(c<x<d)=P(c\le x\le d)=\frac{d-c}{b-a}....\text{esto es cierto si <c,d> incluido en [a;b]} $$
+
+P(**X\>=64**)=P(**64\<=X\<=70**)=(70-64)/(70-50)=0.3.
+
+*Con R:*
+
+```{r}
+punif(64,50,70, lower.tail=F)
+```
+
+**Nota:**
+
+**En contínuas:** P(x\>64)=P(x\>=64)= 0.3.
+
+%%%%%%%%%%%%%
+
+Una uniforme siempre viene en un intervalo: $U[a;b]$ . si se quiere calcular una probabilidad, de un intervalo, tiene que estar metido en $[a;b]$
+
+$$
+P(c\le x \le d)= \frac{d-c}{b-a}
+$$
+
+%%%%%%%%%%%%
+
+d\) LA very FIJAZA PARA EL FINAL:
+
+*¿Cuál es el mínimo peso para que el bloque se encuentre en el quinto superior?*
+
+Solución:
+
+Recordar que aquí **X=peso de bloques de acero.** ==\> ***`U[50,70]` (dato)***
+
+**Pesos:** *`50 ton(min)`*--------------------------***`m`*****====*`20%`*===** *`70 ton(max)`*
+
+........................................................................................... *`m`*: el minimo del quinto sup.
+
+Todo porcentaje representa una probabilidad.
+
+$P(X \ge m)=0.20$ ==\> **m=????** ===\> cuando se conoce la probabilidad y se desea hallar algo que está adentro de la probabilidad, se usa de R: ***qunif*** o ***qexp*** o ***qnorm***.
+
+==\>aqui se usa *`qunif ==>`* calcula el valor de m, para tener una probabilidad 0.20
+
+```{r}
+qunif(0.20, 50,70, lower.tail=F)
+```
+
+***`m`**`=66 ton`*.
+
+El peso mínimo de los bloques para estar en el quinto superior es 66 ton.
+
+***Otra forma:*** *Manual*
+
+**P(X\>=m)=0.2** ==\> p(m \<= X \<= 70)=0.20 ===\> **(70-m)**/**20**=0.2 ==\> 70-m=4 ==\> **m=66.**
+
+e\) *Halle el peso máximo (k) del bloque, que supera a 54 ton con una probabilidad igual a 0.40.*
+
+**solución:**
+
+Del texto: *P( 54\< **X \<=k** ) =0.40*
+
+Como X es U\[50;70\], entonces:
+
+$P(54<x\le k)=\frac {k-54}{70-50}=0.40 \rightarrow k-54=8 \rightarrow k=62 ton.$
+
+**Con R:**
+
+P(54\<X\<=k)=P(X\<=k) - P(X\<=54)=0.4 ==\> **P(X\<=k)=*P(X\<=54)*+0.4**
+
+```{r}
+punif(54,50,70)
+```
+
+**P(X\<=k)=0.2+0.4=0.6 ==\> *P(X\<=k)=0.6***
+
+ya se puede hallar k.
+
+Cuando se conoce la probabilidad y se quiere hallar algo que está adentro dela probabilidad se usa ***q*** ==\> en nuestro caso es ***qunif.***
+
+```{r}
+qunif(0.6,50, 70)
+```
+
+*k=62 ton.*
+
+\#####################################################
+
+## **DISTRIBUCIÓN EXPONENCIAL**
+
+Para tener una exponencial, un primer requisito es que $x \ge 0$.
+
+La variable Exponencial necesita el valor de $\beta$ .
+
+$X:  Exp(\beta)$
+
+Función de densidad:
+
+$$
+f(x)=\frac{1}{\beta}e^{-\frac{x}{\beta}}, ...x\ge 0\\
+f(x)=0 , ... \text{en otros casos}
+$$
+
+Como X es variable continua:
+
+$$
+P(a<x<b)=P(a\le x \le b)=P(x\le b)- P(x\le a)
+$$
+
+Debe tenerse como dato un valor **Beta,** que representa al promedio de las X.
+
+$$ \mu = E(X)= \beta  $$
+
+$\beta$ y X tienen las mismas unidades.
+
+Además, se puede calcular su varianza:
+
+$$ \sigma^{2}=V(X)=\beta^{2} $$
+
+Desviación :
+
+$$
+\sigma= \beta
+$$
+
+**En R** se usará
+
+$$ \lambda = \frac{1}{\beta} $$
+
+Con R:
+
+```{r}
+xo= 6
+beta= 5
+# se quiere hallar P(x<= 6)
+pexp(xo, 1/beta)  # P(x<= xo)=P(x<= 6)???
+```
+
+```{r}
+P=0.86465
+beta=5
+# m=?? para que : P(x<= m) = 0.86465
+qexp(P, 1/beta)  # P(x<=¿xo?)=0.86465
+```
+
+m=9.999456 aprox 10.
+
+RESUMIENDO:
+
+-   P(x \<= 8) =???? ==\> *`pexp(8, 1/ beta)`*
+
+-   P(x\<= ???)= 0.3 ==\> *`qexp(0.3, 1/beta)`*
+
+**PROBLEMA 1:**
+
+El ingeniero de planta de una línea aérea sabe que **la duración promedio de los neumáticos de las avionetas es de 1,5 años**. Si *la duración de los neumáticos tiene una distribución exponencial:*
+
+a\. ¿Cuál es la probabilidad de que los neumáticos duren a lo más 1,6 años? 
+
+b\. ¿Cuál es la probabilidad de que los neumáticos duren entre dos y tres años?
+
+c\. La gerencia de la línea aérea está evaluando la posibilidad de cambiar de proveedor si el tiempo mínimo del 25% de los neumáticos que tienen una mayor duración, resulta ser menor a 1,8 años. ¿Cuál es la decisión?
+
+**SOLUCIÓN:**
+
+***X:** tiempo en años, de duración de los neumáticos de avionetas* ==\> **Exponencial** $(\beta=??)$
+
+**Tiempo Promedio de duración =E(x)= BETA= *B = 1.5 años* =3/2 años** ==\>
+
+\
+$$ \lambda = \frac{1}{\beta}=\frac{2}{3} $$
+
+a\) *¿Cuál es la probabilidad de que los neumáticos duren a lo más 1,6 años?* 
+
+$$ P(X\le 1.6 años)=?? $$
+
+**Con R:**
+
+```{r}
+pexp(1.6,2/3)
+```
+
+La probabilidad de que los neumáticos duren a lo mas 1.6 años es 0.65584.
+
+**NOTA:** Toda probabilidad es un porcentaje, por tal motivo, tambien se puede decir así:
+
+*El 65.584% de todos los neumáticos dura a lo mas 1.6 años.*
+
+b\) *¿Cuál es la probabilidad de que los neumáticos duren entre dos y tres años?*
+
+Solución:
+
+*P(2 años \< X \< 3 años)= **P(X \< 3) - P(X \< 2)***
+
+**RECORDAR que, para variables continuas se cumple lo siguiente.**
+
+$$ P(a<X<b)=P(a\le X \le b)=P(x\le b)- P(x\le a) $$
+
+```{r}
+pexp(3,2/3)-pexp(2,2/3)
+```
+
+La probabilidad de que los neumáticos duren de 2 a 3 años es 0.1283.
+
+o también:
+
+"El 12.83% de los neumáticos duran entre 2 y 3 años".
+
+c\) La gerencia de la línea aérea está evaluando la posibilidad de cambiar de proveedor **si el tiempo mínimo del 25% de los neumáticos que tienen una mayor duración,** resulta ser menor a 1,8 años. ¿Cuál es la decisión?
+
+**Solución:**
+
+**Duración:** *0 años*---------------***`T`*****:\>\>\>\>\>(25%)-\>\>\>\>\>\>*infinito***
+
+**T**: mínimo tiempo de las mayores duraciones
+
+Si T es menor de 1.8 años ==\> se cambiaría de proveedor.
+
+**Pasando T se tiene al 25%** de las mayores duraciones.
+
+**P(X\>=*T*)=25% = 0.25** ==\> T=????
+
+```{r}
+qexp(0.25,2/3, lower.tail=F)
+```
+
+***T*****=2.0794 años**
+
+*Los neumáticos que duran por lo menos 2.0794 años pertenecen al 25% del grupo de los de mayor duración.*
+
+Como 2.0794 años es un tiempo superior a 1.8 años, **no es necesario que cambien de proveedor.**
+
+Adicional:
+
+¿Que porcentaje excede a una duración minima de 1.8 años?
+
+P(x\>=1.8) = ????
+
+```{r}
+pexp(1.8, 2/3, lower.tail= F)
+```
+
+El porcentaje de neumáticos que duran mas de 1.8 años es 30.12%
+
+**NOTA:**
+
+Se usa ***pexp*** cuando deseo calcular una probabilidad.
+
+Se usa ***qexp*** cuando conozco la probabilidad y deseo hallar el número que va adentro de la probabilidad.
+
+**PROBLEMA 2:**
+
+La duración, en kilómetros, para cierto tipo de neumáticos de bicicletas, se consideran como una variable aleatoria con la siguiente función de densidad:
+
+$$ f(x)=\frac{1}{300}.e^{-\frac{x}{300}} ; x\ge 0 $$
+
+$$ f(x)=0 ;  \text{en otros casos} $$
+
+A\) Halle la Función de distribución de la duración de estos neumáticos.
+
+B\) Algunos clientes afirman que estos neumáticos en su mayoría duran menos que 250 km. ¿Será cierto?
+
+C\) ¿Cuál es la probabilidad de que al evaluar los neumáticos, recién al quinto, se obtenga el primero que dura menos del promedio?
+
+D\) Calcule la mediana de las duraciones.
+
+**SOLUCIÓN:**
+
+Densidad de exponencial:
+
+$$
+f(x)=\frac{1}{\beta}* e^{-\frac{x}{\beta}}
+$$
+
+Por teoría la función de densidad dada aquí es muy similar a la Exponencial y por eso, se puede comparar: **BETA=B=300 km**. ==\> L = 1/ 300 (lambda) ... en R.
+
+*X: Duración en Km de las llantas de una bicicleta.* ==\> **Exponencial(B=300 km)**
+
+A\) Función de distribución en Exponencial es
+
+$$
+F(x)=1- e^{- \frac{x}{\beta}}
+$$
+
+$$ F(x)=1-e^{-\frac{x}{300}} ;  x\ge 0 $$
+
+$F(x)=0 \text{ en otros casos}$
+
+B\) *Algunos clientes afirman que **estos neumáticos en su mayoría** duran menos que 250 km. ¿Será cierto?*
+
+Se debe hallar: P(x\<250).
+
+```{r}
+pexp(250, 1/300)
+```
+
+Se observa que un 56.54% de todos los neumáticos de bicicletas, efectivamente duran menos de 250 km . Por lo tanto , **lo que se afirma es correcto,** es decir la mayoría de los neumáticos dura menos de 250Km.
+
+Mas de la mitad dura menos de 250km.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+C\) **Problema very fijazo:**
+
+¿Cuál es la probabilidad de que al evaluar los neumáticos, recién al quinto, se obtenga el primero que **dura menos del promedio?**
+
+**Solución:**
+
+Promedio de duración = E(x)=Beta = 300km
+
+Se tiene: *X= duración de los neumáticos* ==\> Exponencial (Beta =300km)
+
+**Promedio de duración = E(X)=Beta=300 km**
+
+*sea Y: \# de neumáticos revisados hasta tener **uno con X\<300km** =*=\> *Geométrica (p=P(éxito))*
+
+se requiere: *p=P(exito)=P(X\<**300**)*=... (con exponencial)
+
+```{r}
+pexp(300, 1/300)
+```
+
+La probabilidad de que un neumatico dure menos de 300km es 0.6321206
+
+*p=0.6321206 (*esto será **la p de la geométrica**)
+
+Finalmente se desea: **P(Y=5)** ...en el quinto se ha obtenido el primero con x\<300km en teoría
+
+pero para R studio: se halla P(tener 4 fracasos)
+
+(recordar que R studio en una geométrica, cuenta los fracasos)
+
+```{r}
+dgeom(4,0.6321206)
+```
+
+La probabilidad de obtener una rueda con duración menor al promedio, en la quinta revision es 0.0115777.
+
+D\) Hallemos la mediana de las duraciones
+
+Duracion minima**=0-------50%-----*`m`****`-`*-----50%--\>\>infinito.
+
+==\> **P(X\<=M)=0.5** (probabilidad de que la duración sea menor q la mediana es 0.5)
+
+```{r}
+qexp(0.5,1/300)
+```
+
+La mediana de la duración de los neumáticos es 207.9442km.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
+NOTA: en este problema tenemos -----------Me=207.9---------Media=300------
+
+Es **asimétrica a la derecha** cuando : Moda \< **Mediana \< Media.**
+
+## **DISTRIBUCIÓN NORMAL**
+
+La variable Normal es una de las mas usadas en la realidad.
+
+Será dato el conocer que es Normal o no.
+
+La Normal necesita dos valores:
+
+$$
+\mu : \text{la media de X}\\
+\sigma: \text{la desviación de X}
+$$
+
+Variable aleatoria:
+
+$$ x\rightarrow N(\mu, \sigma) $$
+
+Función de densidad:
+
+$$
+f(x)=\frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2}\frac{(x-\mu)^2}{\sigma ^2}}, ...-\infty <x<\infty.
+$$
+
+Parámetros: En una normal **se necesita dos valores**: la media y la desviación.
+
+$$ \mu = E(x)=  \text{media de x} $$
+
+$$ \sigma = Desviación = \sqrt{V(x)} $$
+
+*Rango:* −∞\<𝑋\<∞
+
+Características de esta variable:
+
+Necesariamente se debe indicar en el texto que la variable es Normal. Debe ser un dato.
+
+Las probabilidades se hallan con R
+
+```{r}
+# ¿que porcentaje de alumnos obtendran nota de a lo mas 16??
+xo= 16
+mu= 15     # Esperado o media o promedio
+sigma= 2   # desviación estándar
+# P(x <= 16)=??
+pnorm(xo, mu, sigma)  # P(x<=xo=) = P(x<=16)=??
+```
+
+La probabilidad de que la nota sea a lo mas 16 es 0.6914625.
+
+también es:
+
+El 69.14% de los alumnos obtendrá notas de a lo más 16.
+
+```{r}
+# si se conoce la probabilidad se debe usar  qnorm.
+p=0.8
+mu=15
+sigma=2
+# p(x<= m)=0.8 ==> m=??
+qnorm(p, mu, sigma)   # P(x<= ¿xo???) =0.8 ==> xo=??
+```
+
+La nota máxima que tendrán los alumnos para estar en 80 % de las menores notas es 16.683.
+
+Función de densidad: $f(x)=\frac{1}{σ*\sqrt{2π}}.𝑒^{−1/2 *(\frac{(𝑥−μ)}{σ})^2}$
+
+Hay problemas donde **mu** y/o **sigma** no se conocen ==\>se estandariza y se usa la siguiente variable normal:
+
+**NORMAL ESTANDAR:**
+
+Se obtiene haciendo:
+
+$$ z=\frac{x-\mu}{\sigma} $$
+
+Ventajas de Z:
+
+$$ \mu_{z}=E(z)=0 $$
+
+$$ \sigma_{z}=\sqrt{V(x)}=1 $$
+
+```{r}
+zo=2.5
+#P(z<= 2.5)
+# como es Z, no se necesiat la media ni la desviación, ya que se asuem que son 0 y 1.
+pnorm(zo,0,1) #  P(z<=2.5)=???
+```
+
+```{r}
+p=0.95
+# P(z<= m)=0.95 ==> m=??
+qnorm(p,0, 1) # P(Z<= ¿zo?)=0.95
+```
+
+m=1.6448
+
+\###############
+
+Hasta aqui hoy viernes 13
+
+\###############
+
+**PROBLEMA 1:**
+
+La cantidad de dinero destinada al ahorro mensual de los clientes de un banco es una variable aleatoria con distribución normal, siendo su media 400 soles y su desviación estándar igual a 80 soles.
+
+A\) Calcule la probabilidad de que un cliente ahorre más de 360 soles mensuales.
+
+B\) Sabiendo que un cliente ahorró mas de 360 soles, calcule la probabilidad de que sea no mas de 500 soles.
+
+C\) ¿Cuál es el ahorro mínimo mensual para estar en el 25% de los clientes que más ahorran?
+
+D\) ¿Cuál es el ahorro máximo mensual para estar en el primer decil de los clientes que menos ahorran?
+
+E\) Si se elige al azar a 2000 clientes, ¿que cantidad de clientes se espera que ahorren más de 500 soles?.
+
+**SOLUCIÓN:**
+
+*X=cantidad de dinero ahorrado* ==\> Normal (mu= S/ 400; sigma= S/ 80)
+
+A\) *Calcule la probabilidad de que un cliente ahorre más de 360 soles mensuales.*
+
+P(Ahorrar mas de S/ 360)= ***P(X\>360)***
+
+```{r}
+pnorm(360,400, 80,lower.tail=F)
+```
+
+La probabilidad de ahorrar mas de 360 soles es 0.6914.
+
+Pero:
+
+También significa que: *el 69.14% de los clientes del banco, ahorran mas de 360 soles al mes.*
+
+Adicionalmente: Si quisiera estandarizar: (solo por cultura)
+
+$$
+P(X>360)=P(\frac{x-\mu}{\sigma}>\frac{360-400}{80})=P(Z>-0.5)
+$$
+
+```{r}
+pnorm(-0.5,0,1, lower.tail = F)
+```
+
+&&&&&&&&
+
+&&&&&&&&
+
+B\) *Sabiendo que un cliente ahorró mas de 360 soles, calcule la probabilidad de que sea no mas de 500 soles.*
+
+Se sabe que X\>S/ 360 y se desea: X\<=500 ==\> es una probabilidad condicional.
+
+***P(X\<=500 / X\>360)** = P(X\<=500 y X\>360)/P(X\>360) =P(360 \< X \<=500)/P(X\>360)*
+
+*=**\[P(X\<=500)-P(x\<360)\]**/P(x\>360)*
+
+```{r}
+(pnorm(500,400,80)-pnorm(360,400,80))/pnorm(360,400,80,lower.tail=F)
+```
+
+Respuesta: 0.8472082.
+
+NOTA:
+
+**EN CONTINUAS SE CUMPLE QUE**
+
+***P(A\<X\<B)=P(A\<=x\<=B)=P(X\<B) - P(X \<A)***
+
+C\) ¿Cuál es el ahorro mínimo mensual para estar en el 25% de los clientes que más ahorran?
+
+Ahorros (X): ------75% ----**-M\>\>\>-----25%--Clientes con mayores ahorros..**
+
+*P(X\>=M)=0.25*
+
+```{r}
+qnorm(0.25, 400,80, lower.tail=F)
+```
+
+El 25% de los clientes que mas ahorran, lo hace con mínimo S/ 453.9592.
+
+**NOTA:**
+
+También puede ser: P(X\<= M)=0.75
+
+```{r}
+qnorm(0.75, 400, 80)
+```
+
+D\) *¿Cuál es el ahorro máximo mensual para estar en el primer decil de los clientes que menos ahorran?*
+
+Ahorros: **-----10%---\<\<\<--M** -----------------90%----------
+
+*P(X\<=M)=10% = 0.1*
+
+```{r}
+round(qnorm(0.1,400, 80),2)
+```
+
+Para estar en el primer decil de los que menos ahorran, será como maximo S/297.48
+
+**\*la Yapita: hallar la mediana de las cantidades ahorradas???**
+
+*P(X\<= Me) = 50% = 0.5*
+
+```{r}
+qnorm(0.5, 400, 80)
+```
+
+E\) *La cantidad de dinero destinada al ahorro mensual de los clientes de un banco es una variable aleatoria con distribución normal, siendo su media 400 soles y su desviación estándar igual a 80 soles.*
+
+*Si se elige al azar a 2000 clientes, ¿que cantidad de clientes se espera que ahorren más de 500 soles?.*
+
+DATOS:
+
+$$
+\mu=400 soles
+$$
+
+$$
+\sigma= 80 soles
+$$
+
+X: Cantidad de dinero ahorrado mensualmente, por cada cliente \~Normal
+
+Se tiene 2000 clientes
+
+¿Cantidad de clientes que **ahorran mas de S/ 500** ?
+
+Se desea clientes con X\>500
+
+==\> **P(X\>500)**=????
+
+( es la probabilidad de q un cliente cualquiera ahorre mas de 500 )
+
+```{r}
+pnorm(500, 400, 80, lower.tail=F)
+```
+
+Cuando se halla la probabilidad de que un individuo cualquiera cumpla con una condición, entonces también se está hallando, el porcentaje de clientes que cumplen con esa condición.
+
+==\> *El 10.565% de los clientes ahorrarán mas de 500 soles.*
+
+==\> De 2000 clientes ==\> 10.565%(2000)= 211.3 clientes aproximado, tiene ahorrado mas de 500 soles ==\> **aproximado 211 personas.**
+
+**PROBLEMA 2:**
+
+Las estaturas de los estudiantes en una sección de estadística 1 de 50 alumnos, se distribuyen como normal con una estatura promedio igual a 1.70m y varianza 0.04 m\^2.
+
+a\) ¿Cuántos alumnos tienen una estatura superior a 160 cm ?
+
+b\) ¿Cuál es la estatura mínima para estar en el cuarto superior?
+
+c\) Cuál es la estatura máxima de los alumnos que miden mas de 1.65 m y que conforman un 30% de todos.
+
+d\) Calcule el cuartil 1 de las estaturas. ==\> para estudiante y que se levante la moral.
+
+e\) Se llama alumnos uno por uno ( con reposición) ¿cúal es la probabilidad de que el quinto sea el tercero de estatura menor a 1.72?
+
+f\) en otra sección se conoce que la estatura promedio es 1.72m. Considere normalidad. Si el 28% supera 1.80m ¿cuál es la desviación de las estaturas?
+
+SOLUCION
+
+DATOS:
+
+50 alumnos.
+
+X: estatura de los alumnos \~ Normal
+
+mu= 1.70
+
+Desviación = raíz(0.04) = 0.2
+
+a)Las estaturas de los estudiantes en una sección de estadística 1 de 50 alumnos, se distribuyen como normal con una estatura promedio igual a 1.70m y varianza 0.04 m\^2. ¿Cuántos alumnos tienen una estatura superior a 160 cm ?
+
+*X: estatura de alumnos ==\> Normal con mu= 1.70 y sigma = 0.2*
+
+Se calculará la probabilidad de que X \> 160 cms.
+
+P(X\>1.60)
+
+```{r}
+pnorm(1.60, 1.70, 0.2, lower.tail=F)
+```
+
+Es decir el 69.146% del salon mide mas de 1.60
+
+===\>Como el total es de 50 alumnos, entonces:
+
+0.6914625x**50**= 34.57 ==*Aprox: 35 alumnos.*
+
+b\) *¿Cuál es la estatura mínima para estar en el cuarto superior?*
+
+mínima estatura---------\|---------\|---------\|**M\|------25% superior------máxima estatura**
+
+P(X\>=M)=0.25
+
+```{r}
+qnorm(0.25, 1.70, 0.2, lower.tail=F)
+```
+
+Los alumnos que pasan de 1.8349m estarán en el cuarto superior de los mas altos.
+
+c\) Cuál es la estatura máxima de los alumnos que miden mas de 1.65 m y que conforman un 30% de todos.
+
+mínima estatura---------**\|1.65m\|=====30% ====\|m\|**---------\|------máxima estatura
+
+P(1.65\<X \<=M)= 0.30
+
+P(x\<= M) - **P(X\<1.65)**=0.30.... (\*)
+
+```{r}
+pnorm(1.65, 1.70, 0.2)
+```
+
+Se reemplaza en (\*):
+
+P(X\<=M) - **0.4012937** = 0.30
+
+P(X\<=M)= 0.30 + **0.4012937**
+
+P(X\<=M)= 0.7012937
+
+```{r}
+round(qnorm(0.7012937, 1.70, 0.2),2)
+```
+
+M=1.805625 metros
+
+e\) *Si llamamos alumnos uno por uno ( con reposición) ¿cúal es la probabilidad de que el quinto alumno llamado, sea el tercero de estatura menor a 1.72?*
+
+sea *Y= \# de estudiantes seleccionados hasta tener 3 con estatura \< 1.72* ==\> **Y es PASCAL (K=3, p)**
+
+***p= P(EXITO)= P(X\<1.72)*** ==\> se debe calcular usando la normal
+
+```{r}
+pnorm(1.72, 1.70, 0.2)
+```
+
+Ahora ya se puede calcular con la pascal:
+
+**p de Pascal será:** p= P(ÉXITO)=0.5398278
+
+finalmente se desea:
+
+***P(Y=5)*** ==\> con R: P(w=Y-k)=*P(2 llamados, donde se fracasa).*
+
+*NOTA: En R studio se cuenta el número de fracasos, cuando se use Geométrica o en Pascal.*
+
+```{r}
+dnbinom(2, 3, 0.5398278)
+```
+
+f\) E*n otra sección se conoce que la estatura promedio es 1.72m. Considere normalidad. Si el 28% supera 1.80m ¿cuál es la desviación de las estaturas?*
+
+Cuando no se conoce mu o sigma , se debe estandarizar:
+
+mu= 1.72m (conocido)
+
+*Sigma es desconocido*
+
+$$ z=\frac{y-\mu}{\sigma} $$
+
+Una variable normal estándar Z, tiene mu=0 y sigma = 1.
+
+Y: estatura de alumnos de la otra seccion ==\> Normal con mu= 1.72 m y sigma es desconocido.
+
+dato: El 28% supera 1.80m ==\> *0.28=P(Y\>1.80)*
+
+como no se conoce sigma , se debe estandarizar: ( $\mu=1.72$ )
+
+$$ P(Y>1.80)=0.28\rightarrow P(Y-\mu>1.8-\mu)=P(\frac{y-\mu}{\sigma}>\frac{1.80- \mu}{\sigma})=0.28 $$
+
+==\>P(Z\>**0.08/sigma**)=0.28
+
+```{r}
+qnorm(0.28, 0, 1, lower.tail=F) # cuando esta estandarizado: mu=0, sigma=1
+```
+
+finalmente: 0.5828415=**0.08/ sigma** ==\> sigma = 0.137 m
+
+**Problema 3:**
+
+Las notas de una sección de estadística son normales y se conoce que el 60% tiene mas de 14. Además un 60% tiene también notas menores que 16.
+
+a\) Calcule la probabilidad de que las notas superen a la media en mas de media desviación estándar.
+
+$$
+P(x>\mu+0.5\sigma)=P(x-\mu>0.5\sigma)=P(\frac{x-\mu}{\sigma}>0.5)=P(Z>0.5)
+$$
+
+```{r}
+pnorm(0.5,0,1, lower.tail = F)
+```
+
+b\) Calcule el coeficiente de variación de las notas.
+
+c\) Si en la sección hay 50 alumnos, ¿Qué cantidad aproximada de alumnos tienen notas que superan a la media en 2 puntos?
+
+**Solución:**
+
+Variable: *X= notas de los alumnos ==\> Normal ( mu =??, sigma =??)*
+
+SOLUCIÓN B:
+
+**Dato 1:**
+
+-   *P(X \>14) = 0.60 ( 60% tiene nota mas de 14)*
+
+$$
+P(\frac{x-\mu}{\sigma}>\frac{14-\mu}{\sigma})=0.60
+$$
+
+$$
+P(Z>\frac{14-\mu}{\sigma})=0.60
+$$
+
+```{r}
+qnorm(0.60, 0, 1, lower.tail=F)
+```
+
+$$
+\frac{14-\mu}{\sigma}=-0.25335 \rightarrow 14-\mu =-0.25335\sigma...(*)
+$$
+
+**Dato 2:**
+
+*P(X\<16) = 0.60 (60% tiene nota menos de 16)*
+
+$$
+P(\frac{x-\mu}{\sigma}<\frac{16-\mu}{\sigma})=0.60
+$$
+
+$$
+P(Z<\frac{16-\mu}{\sigma})=0.60
+$$
+
+```{r}
+qnorm(0.60, 0,1)
+```
+
+$$
+\frac{16-\mu}{\sigma}=0.25335 \rightarrow  16-\mu= 0.25335\sigma ..(**)
+$$
+
+Restando (\*\*) - (\*):
+
+$$
+2=0.5067\sigma \rightarrow \sigma= 3.947
+$$
+
+Reemplazando en (\*\*):
+
+$$
+16-\mu=0.25335*3.947 \rightarrow \mu= 15
+$$
+
+a\) Calcule la probabilidad de que las notas superen a la media en media desviación estandar
+
+P(X\>mu + 0.5 sigma)
+
+$$
+P(x>\mu+0.5\sigma)=P(x- \mu > 0.5\sigma)= P(\frac{x-\mu}{\sigma}>0.5)=P(z>0.5)=??
+$$
+
+```{r}
+pnorm(0.5, 0, 1, lower.tail=F)
+```
+
+La probabilidad pedida es 0.3085375.
+
+b\) *Calcule el coeficiente de variación de las notas.*
+
+$$
+CV(x)=\frac{\sigma}{\mu}
+$$
+
+Coeficiente de variación = (sigma/ media)=(3.947/ 15) = 0.2631
+
+**HASTA AQUI HOY LUNES 17/11**
+
+c\) *Si en la sección hay 50 alumnos, ¿Qué cantidad aproximada de alumnos tienen notas que superan a la media en 2 puntos?*
+
+n=50 alumnos.
+
+Se desea alumnos con notas mayores que $\mu+2=17$
+
+```{r}
+pnorm(17, 15, 3.947, lower.tail=F)   #Se halla P(X>17)
+```
+
+El 30.61778% de todos los alumnos, tienen nota superior a 17.
+
+Respuesta: 30.61778%(50)= 15.30 ==\> aproximadamente 15 alumnos.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+**PROBLEMA 4: (VARIABLE NORMAL)**
+
+Un fabricante de televisores asegura que el tiempo medio de funcionamiento sin fallas de los aparatos es de 2 años con una desviación estándar de 3 meses. Considere que el tiempo de vida de los aparatos sigue una distribución normal.
+
+A\) Ha llegado a la empresa, las quejas de varios clientes argumentando que sus televisores tienen poco tiempo de vida ¿Cuál es la probabilidad de que la cuarta queja revisada sea la primera con duración menor a 2 años?
+
+B\) El fabricante garantiza que remplazará gratis cualquier aparato de TV cuya duración sin fallas sea menor que k años. Aproximar k de tal modo que sólo el 1% de los aparatos vendidos tenga que ser reemplazado.
+
+C\) Si cada TV que dura menos de K años generan un costo para la empresa de 2000 soles y los que duran mas de K años, generan un costo de solo 400 soles, ¿Cuál es el costo esperado para la empresa por TV?
+
+SOLUCIÓN:
+
+*X=Tiempo de duración (sin fallar) de los TV* ==\> Variable Normal:
+
+*N(**media=mu= 2 años**, **desviación= sigma=3 meses** = **0.25 años** )*
+
+**A)** P(la cuarta queja sea la primera con *X \< 2 años)*=P(revisar quejas **hasta** tener una con *X\<2años*)
+
+sea *Y=# de quejas **hasta** tener una con **X\< 2 años.*** ==\> Geométrica(**p**)
+
+Se pide: P(Y = 4)=???
+
+Pero necesito formar una geométrica, que requiere un valor **p.**
+
+**p=P(éxito)= P(X \< 2años)**
+
+Pero X es normal:
+
+```{r}
+pnorm(2, 2, 0.25)
+```
+
+Para la geométrica: **p=0.5**
+
+Ahora ya se puede calcular P(Y=4) (en teoría)
+
+*Con R se debe calcular **P(W=3)*** (W=# de fracasos anteriores al primer exito)
+
+==\> W = Y - 1
+
+P(W=3) ...es la geométrica calculada con R:
+
+```{r}
+p=0.5
+dgeom(3, p)
+
+```
+
+*La probabilidad de revisar 4 quejas hasta encontrar la primera con X\<2 años es 0.0625.* **Respuesta.**
+
+b)  El fabricante garantiza que remplazará gratis cualquier aparato de TV cuya duración sin fallas sea menor que k años. Aproximar k de tal modo que sólo el 1% de los aparatos vendidos tenga que ser reemplazado.
+
+SOLUCION:
+
+Se Reemplazaran cualquier TV con *X\<k años*.
+
+**Dato:** *P(x\<k)= 1% = 0.01*
+
+```{r}
+qnorm(0.01, 2, 0.25)
+```
+
+K= 1.418413
+
+Entonces se va a cambiar gratis a todos los TV que ***duren a lo mas 1.418 años***
+
+C\) LA VERY FIJAZA: El fabrivante asegura que los TV funcionan correctamente hasta dos años. Si cada TV que dura menos de K años generan un costo para la empresa de 2000 soles y los que duran mas de K años, generan un costo de solo 400 soles, ¿Cuál es el costo esperado para la empresa por TV?
+
+**Solución:**
+
+| Duración         | Costo   | Probabilidad                       |
+|------------------|---------|------------------------------------|
+| X \<= k          | S/ 2000 | 0.01 (con el K de arriba)          |
+| k\< x \<= 2 años | S/ 400  | q=?? 0.49 (por diferencia: suma 1) |
+| X\> 2            | 0       | P(X\>2)=0.5 (calculado abajo)      |
+
+```{r}
+pnorm(2,2, 0.25, lower.tail=FALSE)
+```
+
+Entonces se halla q: 0.01 + q + 0.5 = 1 ==\> q= 0.49
+
+Luego:
+
+E(Costo)=2000\*0.01+400\* 0.49+0\*0.5= 216 soles.
+
+El costo esperado para la empresa es de 216 soles.
+
+**Problema 5:**
+
+Un detector de partículas ionizadas se puede activar a cualquier hora del día sin ninguna preferencia particular marcando una detección, por ello la variable **Hora del día en que se detecta una partícula** tiene una distribución Uniforme.
+
+Sea ***H= Hora del día en que detecta alguna partícula*** **==\>** **U\[0,24\] horas**
+
+Supongamos que *sabemos que en un día particular se podrían detectar 3 partículas.*
+
+a\) ¿Cuál es la probabilidad de detectar exactamente dos de las tres partículas si el detector está en mantenimiento preventivo de 13:00 a 14:30?
+
+**Solución:**
+
+a\)
+
+El detector no labora de 1 a 2:30pm.
+
+**Son 3 partículas:** p1, p2, p3 ==\> *n=3 partículas.*
+
+Nos dicen que hay 3 partículas y *se desea solo detectar 2 particulas*
+
+Declaramos **X= \# de partículas detectadas en un día** ==\> Binomial *(n=3, p=??)*
+
+Se necesita
+
+***p=P(exito)=**P(detectar alguna partícula en el día, menos de 13:00 a 14:30)*
+
+*p=P(H no suceda de 13:00 a 14:30)=* 1 - P( H si suceda de 13 a 14:30) =
+
+1- P(13 \< H \< 14.5)=
+
+1- (14.5-13)/(24-0) = 1- **0.0625**= 0.9375. ***Es la p que necesita la Binomial.***
+
+Otra forma sería así:
+
+Hallare P(13\<H\<14.5) = P(H \< 14.5) - P(H\<13)
+
+```{r}
+punif(14.5, 0, 24) - punif(13, 0, 24)
+```
+
+luego: **p= 1 - 0.0625 = 0.9375.**
+
+Finalmente se calcula la probabilidad pedida **P(X=2)** \[probabilidad de detectar 2 partículas de las 3 que se tienen\]
+
+```{r}
+dbinom(2, 3, 0.9375)
+```
+
+La probabilidad pedida es 0.164749.
+
+b\) Si ahora *el número de partículas EMITIDAS diarias* sigue una *distribución poisson **con media 6*** **,** ¿Cuál es la probabilidad que en un día se emitan exactamente tres partículas y que se detecte solo una?
+
+SOLUCION:
+
+Se pide: P( emitir 3 partículas en un día y que se detecte solo 1)=
+
+**P(emitir 3 partículas en un día)**\**P(detectar solo 1 partícula)*
+
+Recordar:
+
+X==\> \# de partículas detectadas.
+
+sea *W= \# de partículas emitidas al día ==\> Poisson (L=6)*
+
+se pide P(emitir 3 partículas)= P(W= 3)... con Poisson
+
+```{r}
+dpois(3, 6)
+```
+
+Ahora se halla la probabilidad de detectar solo a una partícula de las tres que se han emitido.
+
+T: \# de partículas detectadas ==\> Binomial (n= 3, p=P(detectar alguna partícula)=0.9375 ) Esta probabilidad ya se halló en la parte A.
+
+Ahora se halla P(X=1)
+
+```{r}
+dbinom(1, 3, 0.9375)
+```
+
+**Respuesta**: 0.08923508\* 0.01098633 = 0.00098.
+
+**HASTA AQUI POR HOY LUNES.**
+
+**Problema 6:**
+
+*Una marca de focos LED de 4.9 W anuncia que sus productos tienen una vida promedio de 25000 h.*
+
+*a) Si suponemos que el foco tiene un tiempo de vida exponencial, ¿Cuál es la probabilidad que dure más de 180 días?*
+
+**SOLUCIÓN:**
+
+Sea *X=tiempo de vida **en horas** de los focos* ==\> *Exponencial (**Beta=25000h**)*
+
+**Para R:** *Exponencial (lambda: L=1/25000)*
+
+Se pide **P(X\>180 días)=**P(X\>180\*24h)=P(X\>4320h )
+
+```{r}
+pexp(4320, 1/25000, lower.tail= F)
+```
+
+La probabilidad de durar mas de 180 dias es 0.8413.
+
+NOTA: $P(a<X<b)=P(a\le X \le b)$ ... solo en las continuas.
+
+b\) *Si un ambiente tiene cuatro de esos focos, y se ponen todos nuevos hoy, ¿cuál es la probabilidad que en 180 días solo se haya quemado uno de los focos originales?*
+
+Solución:
+
+sea *F=# de focos que **duran mas de 180 dias*** ==\> *Binomial (n=4, **p=0.8413**)*
+
+Dado que se pide que un solo foco se haya quemado en 180 dias, esto equivale a decir, que los otros 3 focos siguen funcionando después de 180 días
+
+Se pide: P( que 1 foco falle en 180 dias )=P(Los otros 3, no se han quemado en mas de 180 días)=***P(F=3)***
+
+```{r}
+dbinom(3, 4, 0.8413)
+```
+
+Sería la respuesta.
+
+c)  *Se dispone de 1000 de esos focos y se selecciona 100. ¿Cuál es la probabilidad de que al menos 10 de los focos muestreados dure menos que la duración promedio?*
+
+SOLUCIÓN:
+
+Hay población *N=1000 y muestra k=100.*
+
+*Y= \# de focos que duran menos que el promedio. =*=\> **Hipergeométrica** (# de éxitos, \# de fracasos, tamaño de muestra=100)
+
+Se desea focos que duran menos del promedio ==\> $Promedio=E(X)=\beta= 25000$
+
+Ahora se calcula: *P(X\<25000)* Probabilidad de durar menos que el promedio.
+
+```{r}
+pexp(25000, 1/25000)
+```
+
+Esta probabilidad representa un porcentaje. El porcentaje de focos que duran menos del promedio ==\> este porcentaje se saca a 1000, para hallar la cantidad de focos que duran menos del promedio,
+
+Es decir el 63.212% dura menos del promedio ==\> Los focos q duran menos del promedio son 0.6321206\*1000=632.12 ===\> **son aprox 632 focos** que duran menos del promedio.
+
+Entonces los que duran mas del promedio será el resto: 368 focos. (lo que falta para 1000)
+
+luego para la hipergeométrica: m=632 éxitos (focos que duran menos del promedio), n= 368 fracasos, k= 100 focos (muestra).
+
+Se desea: *P(Y \>= 10)= **P(Y\>9)***
+
+```{r}
+phyper(9,632, 368, 100, lower.tail= F)
+```
+
+La probabilidad es 1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+d\) los focos que duran mas de la duración promedio se venden a 10 soles cada uno, mientras que el resto se remata a 6 soles.¿Cuál es la venta total promedio que se obtendría teniendo 1000 focos?
+
+SOLUCIÖN:
+
+```{r}
+pexp(25000,1/25000,lower.tail=F)
+```
+
+| Col1                  | Probabilidad | Costo    |
+|-----------------------|--------------|----------|
+| mas del promedio      | 0.3678794    | S/ 10.00 |
+| menos que el promedio | 0.6321206    | S/ 6.00  |
+|                       |              |          |
+
+$$
+E(X)=\sum (X*P(X))
+$$
+
+**Venta promedio** = **E(venta)** = **10(0.3678794)+6(0.6321206)**=......(Calculadora)
+
+e\) La empresa llama "Focos económicos" a aquellos que duran menos del promedio, "Focos Regulares" al resto de focos que dura a lo mas dos veces el promedio y "Focos Ahorradores" a aquellos que exceden a 2 veces el promedio de duración.
+
+Se sabe que de los Económicos el 70% que se comercializa es de de luz amarilla y el resto de luz blanca. En los Regulares el 50% es de luz amarilla y en los Ahorradores, el 40% es de luz amarilla y el resto de luz blanca.
+
+Se ha seleccionado al azar un foco y resultó de luz blanca ¿cuál es la probabilidad de que sea un "Foco Regular"?
+
+**SOLUCIÓN:**
+
+P(focos ahorradores)=P(X\> 50000)
+
+\`\`\`{r}
+
+pexp(50000,1/25000,lower.tail= FALSE)
+
+\`\`\`
+
+P(Economicos)= 0.632106 ..... (ya se tenía calculado arriba)
+
+P(Regulares) =P(25000\<X\<50000) =P(X\< 50000) - P(X\< 25000)
+
+```{r}
+pexp(50000, 1/25000)-pexp(25000, 1/25000)
+```
+
+P(ahorradores)=P(X\>50000)
+
+```{r}
+pexp(50000, 1/25000, lower.tail=F)
+```
+
+**De todos los focos:**==0.6321206===\>**FEconómicos** ===0.70====\>Amarilla
+
+............................................................................................................===0.30====\>\*\*Blanca\*\*
+
+**De todos los focos:**==0.2325441===\>**FRegulares** ===0.50====\>Amarilla
+
+..............................................................................................................===0.50====\>\*\*Blanca\*\*
+
+**De todos los focos:**==0.1353353===\>**FAhorradores** ===0.40====\>Amarilla
+
+...............................................................................................................===0.60====\>\*\*Blanca\*\*
+
+$P( FRegular / Blanca)= \frac{P(\text{FRegular y Blanca})}{P(Blanca)}$
+
+$P( FRegular / Blanca)= \frac{0.2325441*0.5}{0.6321206*0.30+0.2325441*0.5+0.1353353*0.60}= Calculadora$
+
+**Problema 7:**
+
+La variable X tiene distribución normal. Se conoce que
+
+P(X\>8)= 0.40
+
+P(X\<10)= 0.80
+
+Calcular P(X\>9)
+
+**Solución:**
+
+Una normal necesita dos valores: $\mu$ y $\sigma$.
+
+Recordar que, si no se tiene uno de ellos o los dos, se debe de **ESTANDARIZAR**: $Z=\frac{x- \mu}{\sigma}$
+
+Al estandarizar, la variable Z tiene: **media= 0** y **desviación =1**. Los cuales se colocan en R, al calcular la probabilidad.
+
+P(X\>8)= 0.40 ==\> $P(\frac{x- \mu}{\sigma}>\frac{8- \mu}{\sigma})= 0.4$
+
+tendría: $P(Z>\frac{8- \mu}{\sigma})= 0.4$
+
+```{r}
+qnorm(0.4, 0, 1, lower.tail= F)
+```
+
+$\frac{8- \mu}{\sigma}=0.2533471$
+
+Primera Ecuación $8-\mu= 0.2533471.\sigma$ ....(1)
+
+P(X\<10)= 0.80 ==\> $P(\frac{x- \mu}{\sigma}<\frac{10- \mu}{\sigma})= 0.8$
+
+tendría: $P(Z<\frac{10- \mu}{\sigma})= 0.8$
+
+```{r}
+qnorm(0.8,0,1)
+```
+
+$\frac{10- \mu}{\sigma}=0.8416212$
+
+Segunda Ecuación: $10-\mu= 0.8416212.\sigma$.....(2)
+
+Resolvemos el sistema de ecuaciones, restando la segunda menos la primera ecuación:
+
+$2= 0.5882741.\sigma$
+
+==\> $\sigma=3.58247$
+
+Reemplazando en la segunda: $10-\mu=0.8416212(3.58247)$
+
+==\> $\mu=6.985$
+
+Se desea: P(X\>9)
+
+```{r}
+pnorm(9,6.985,3.58247, lower.tail = F)
+```
+
+P(X\>9)= 0.286901
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+**PROBLEMA 8: LA VERY VERY VERY VERY FIJAZA**
+
+Las ventas diarias en miles de soles, en una empresa, están dadas por una variable continua X, con función de densidad:
+
+$$
+f(x)=k(x+1) , .... 1\le x\le 5\\
+f(x) = 0, .......\text{en otros casos}
+$$
+
+a\) Calcule la constante k
+
+b\) Calcule la probabilidad de que las ventas diarias superen a la venta promedio.
+
+c\) Calcule el coeficiente de variación de X.
+
+d\) Calcule el cuartil 3 de las ventas.
+
+e\) El administrador considera que un dia de ventas ha sido bueno, cuando las ventas superan a la media. ¿Cuál es la probabilidad de que en el quinto día se obtenga el primer dia bueno en ventas.
+
+**Solución:**
+
+a\) Por ser Densidad: $\int_1 ^5 f(x)dx=1$
+
+Entonces: $\int_1 ^5 k(x+1)dx=1\rightarrow k\int_1 ^5 (x+1)dx=1$ ==\> k= 1/16
+
+Cálculo de la integral (sin el valor de k)
+
+```{r}
+g<-function(x)(x+1)
+integrate(g,1,5)
+
+```
+
+Tenemos entonces. $k*16=1 \rightarrow k=1/16$
+
+b\) *Calcule la probabilidad de que las ventas diarias superen a la venta promedio.*
+
+Se pide: $P(X> \mu)=P(X>E(X))$
+
+$\mu=E(X)=\int_1^5 x*f(x)dx$
+
+$$
+\mu = \int_1 ^5 x*\frac{1}{16}(x+1)dx
+$$
+
+```{r}
+h<-function(x) x*(x+1)/16
+mu<-integrate(h,1, 5)
+mu
+```
+
+Y se halla la probabilidad pedida:
+
+$$
+P(x>\mu)=\int_\mu ^5 \frac{(x+1)}{16}dx
+$$
+
+```{r}
+j<-function(x)(x+1)/16
+Probab<-integrate(j,3.333333,5)
+Probab
+```
+
+c\) *Calcule el coeficiente de variación de X.*
+
+$$
+CV(X)=\frac{\sigma}{\mu}
+$$
+
+Necesito
+
+$$
+V(X)=E(X^2) - (E(X))^2
+$$
+
+^hallemos:^
+
+$$
+E(X^2 )=\int_1^5 x^2*f(x)dx=\int_1^5 x^2*(x+1)/16 dx
+$$
+
+```{r}
+I<-function(x)((x^3+x^2)/16)
+
+A<-integrate(I,1, 5)
+A
+```
+
+```{r}
+Vari<-12.3333-3.33333*3.33333
+Vari
+```
+
+```{r}
+sigma<-sqrt(Vari)
+sigma
+```
+
+```{r}
+CV=sigma/3.3333333
+CV
+```
+
+d\) *Calcule el cuartil 3 de las ventas.*
+
+P(X\<=Q3)=0.75
+
+$$
+\int_1^{Q3} (x+1)/16 dx =0.75
+$$
+
+Resolviendo se obtiene que $Q=\sqrt{28}-1$
+
+e\) El administrador considera que un dia de ventas ha sido bueno, cuando las ventas superan a la media. ¿Cuál es la probabilidad de que en el quinto día se obtenga el primer día bueno en ventas.
+
+Solución:
+
+B: Día bueno : ventas \> media ==\> ventas\> 3.3333.
+
+B´: Día malo
+
+Se desea: P(B' B' B' B' B) ==\> D: \# de días hasta obtener un día bueno
+
+P(éxito) = (Día bueno) = P(X\> mu) = 0.538 ... hallado en parte (b)
+
+D: geométrica.
+
+==\> Y: \# de días malos hasta tener un día exitoso.
+
+P(D=5)=P(Y=4)
+
+```{r}
+dgeom(4,0.538)
+```
+
+FINNNNNN del problema.
+
+**PROBLEMA 9:**
+
+Las utilidades semanales en miles de soles en una empresa están modeladas mediante una variable aleatoria X, cuya función de densidad es
+
+$$
+f(x)=\frac{-2}{4-k},....2\le x\le 6 \\
+f(x)=0....\text{en otros casos}
+$$
+
+a\) Calcule la constante k.
+
+Respuesta: k=12.
+
+b\) Identifique que Distribución conocida tiene la variable X.
+
+Respuesta: Uniforme de 2 a 6.
+
+**HASTA AQUI POR HOY LUNES 24/12.**
+
+c\) Si en la semana las utilidades están en el intervalo $[\mu -\sigma ; \mu + \sigma]$ , se dice que es una **semana normal** en ventas. ¿Cuál es la probabilidad de que una semana sea normal?
+
+Solución:
+
+Por ser Uniforme:
+
+$$
+\mu=E(X)=\frac{2+6}{2}=4\\
+\sigma ^2 = V(X)=\frac{(6-2)^2}{12}=1.333333\rightarrow \sigma=1.1547
+$$
+
+$$
+P(\mu-\sigma <x<\mu+ \sigma)=\frac{(\mu+\sigma)-(\mu-\sigma)}{6-2}=\frac{\sigma}{2}=0.57735 
+$$
+
+d\) Cuando las ventas están por debajo de una semana normal a los empleados no se les da ninguna bonificación. En una semana normal reciben S/ 200 y en otro caso reciben S/ 300. ¿Cual es la bonificación esperada por los empleados?
+
+Solución:
+
+$Ventas<\mu-\sigma$ ==\> B:Bonificación = 0 soles
+
+$\text{Ventas normales}$ ==\> B:Bonificación = 200 soles
+
+$Ventas>\mu+\sigma$ ==\> B:Bonificación = 300 soles
+
+¿E(B)?
+
+| ventas                 | Bonificación | P(B)                                   |
+|------------------------|--------------|----------------------------------------|
+| X: Ventas\<μ−σ         | B=0          | P(B=0)=P(X\<μ−σ)=P(X\<2.8453)=0.211325 |
+| X: Ventas normales     | B=200        | 0.57735 ... (Parte (C))                |
+| X: $Ventas>\mu+\sigma$ | B=300        | 0.211325 (restando de 1)               |
+
+$$
+E(B)=0*0.211325+200*0.57735+300*0.211325=178.8675 soles
+$$
+
+# THE END.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+```{r}
+# install.packages("rriskDistributions")
+```
+
+```{r}
+library(rriskDistributions)
+```
+
+```{r}
+fit.cont(cars$speed )
+```
+
+```{r}
+fit.cont(cars$dist )
+```
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&

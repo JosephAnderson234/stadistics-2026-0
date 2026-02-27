@@ -1,0 +1,471 @@
+---
+title: "Lab- Cuytopia"
+author: "EyP1"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## Librerias cargadas
+
+```{r}
+install.packages("fitdistrplus")
+```
+
+```{r, echo = FALSE, results = 'hide'}
+library(readr)
+library(dplyr)
+library(fitdistrplus)
+
+r <- function(x){
+  return (round(x, digits = 2))
+}
+```
+
+## Ver como esta la base de datos
+
+```{r, echo = FALSE}
+DF <- read_csv("CuyX.csv")
+```
+
+```{r}
+ncol(DF) #cantidad de variables
+nrow(DF) #cantidad de filas u observaciones
+```
+
+```{r}
+DF
+```
+
+## Pregunta 1
+
+#Probabilidad #o #y
+
+Supongamos que la muestra es  representativa de la población. Sea A el evento un cuy tomado al azar es híbrido. Sea B el evento un cuy tomado al azar es abisinio.\
+Sea C el evento un cuy tomado al azar es abisinio o no es peruano. Sea D el evento un cuy tomado al azar ni es peruano ni es andino.
+
+```{r}
+Prob<-table(DF$Raza)/nrow(DF)
+r(Prob)
+```
+
+1era forma, con probabilidad clasica P(A)
+
+```{r}
+P_A<- sum(DF$Raza == "híbrido")/nrow(DF)
+r(P_A)
+```
+
+2da forma, con promedio
+
+```{r}
+P_A <- mean(DF$Raza == "híbrido")
+r(P_A)
+```
+
+P(B)
+
+```{r}
+P_B<- sum(DF$Raza == "abisinio")/nrow(DF)
+r(P_B)
+```
+
+P(A∪B) 1era forma #union #interseccion #union de conjuntos
+
+```{r}
+# Unión y intersección de eventos (A ∪ B y A ∩ B)
+P_A_union_B <- P_A + P_B - (sum(DF$Raza == "híbrido" & DF$Raza == "abisinio") / nrow(DF))
+r(P_A_union_B)
+#P_A_inter_B <- sum(DF$Raza == "andino" & DF$Raza == "peruano") / nrow(DF)
+```
+
+2da forma
+
+```{r}
+P_a_b<-sum(DF$Raza == "híbrido" | DF$Raza == "abisinio")/ nrow(DF)
+r(P_a_b)
+```
+
+P(A∪C)\
+Hallando C
+
+Sea C el evento un cuy tomado al azar es abisinio o no es peruano.
+
+```{r}
+P_C <- sum(DF$Raza =="abisinio" | DF$Raza !="peruano")/nrow(DF)
+r(P_C)
+```
+
+P(AUC)=P(A)+P(C)−P(A∩C)
+
+```{r}
+#P(A∩C)
+P_A_inter_C <- sum(DF$Raza == "híbrido" & (DF$Raza == "abisinio" | DF$Raza != "peruano")) / nrow(DF)
+```
+
+```{r}
+#P(AUC)
+P_A_union_C <- P_A + P_C - P_A_inter_C
+r(P_A_union_C)
+```
+
+```{r}
+P_au_c<-sum(DF$Raza == "híbrido" | DF$Raza =="abisinio" | DF$Raza !="peruano")/ nrow(DF)
+r(P_au_c)
+```
+
+P(D∣C)=P(C∩D)/ P(C)\
+Sea D el evento un cuy tomado al azar ni es peruano ni es andino.
+
+```{r}
+#hallando P(D)
+P_D <- sum(DF$Raza != "peruano" & DF$Raza != "andino") / nrow(DF)
+P_D
+```
+
+```{r}
+#hallando P(C∩D)
+P_C_inter_D <- sum((DF$Raza == "abisinio" | DF$Raza != "peruano") & (DF$Raza != "peruano" & DF$Raza != "andino")) / nrow(DF)
+P_C_inter_D
+```
+
+```{r}
+#hallando P(D∣C)
+P_D_given_C <- P_C_inter_D / P_C
+r(P_D_given_C)
+```
+
+## Pregunta 2
+
+Supongamos que la muestra es representativa de la población. Recuerde que es el espacio de resultados y que es la diferencia de conjuntos, es decir, el conjunto de los elementos en que no están en .
+
+Sea G el evento un cuy tomado tiene marrón en el pelaje.
+
+Sea H el evento un cuy tomado tiene negro en el pelaje.
+
+Sea K el evento un cuy tomado tiene blanco en el pelaje.
+
+Sea L el evento un cuy tomado tiene más de un color en el pelaje.
+
+```{r}
+#Probabilidades
+P_G <- sum(DF$Color == 'marrón' | DF$Color == 'tricolor' | DF$Color == 'pintado')/nrow(DF)
+r(P_G)
+```
+
+```{r}
+P_H <-sum(DF$Color == 'negro' | DF$Color == 'tricolor')/nrow(DF)
+r(P_H)
+```
+
+```{r}
+P_K <- sum(DF$Color == 'blanco' | DF$Color == 'tricolor' | DF$Color == 'pintado')/nrow(DF)
+r(P_K)
+```
+
+```{r}
+P_L <- sum(DF$Color == 'tricolor' | DF$Color == 'pintado')/nrow(DF)
+r(P_L)
+```
+
+Se considera que un cuy tiene marrón en el pelaje si:
+
+-   Es "marrón" puro
+-   Es "tricolor"
+-   Es "pintado" Porque tanto "tricolor" como "pintado" contienen marrón además de otros colores. Por eso, todos estos entran en el evento G.
+
+```{r}
+DF$Marron <- (DF$Color == 'marrón' | DF$Color == 'tricolor' | DF$Color == 'pintado')
+DF$Negro <- (DF$Color == 'negro' | DF$Color == 'tricolor')
+DF$Blanco <- (DF$Color == 'blanco' | DF$Color == 'tricolor' | DF$Color == 'pintado')
+DF$Multicolor <- (DF$Color == 'tricolor' | DF$Color == 'pintado')
+```
+
+P(HUL)
+
+```{r}
+P_H_uniom_L <-sum(DF$Multicolor | DF$Negro)/nrow(DF)
+r(P_H_uniom_L)
+```
+
+```{r}
+P_Ω_menos_L<-1-sum(DF$Multicolor)/nrow(DF)
+r(P_Ω_menos_L)
+```
+
+E=(G∪K)∩(Ω−H)
+
+```{r}
+P_E<- sum((DF$Marron | DF$Blanco) & (!DF$Negro))/nrow(DF)
+r(P_E)
+```
+
+F=L∣(G∪H∪K)
+
+```{r}
+P_F<-sum(DF$Multicolor & (DF$Marron | DF$Negro | DF$Blanco))/sum((DF$Marron | DF$Negro | DF$Blanco))
+r(P_F)
+```
+
+### Pregunta 3
+
+#teoria de probabildiades #VoF
+
+Considere dos eventos cualesquiera $A$ y $B$ de $\Omega$, el espacio de resultados de un experimento.
+
+Marque todas las que apliquen:
+
+-   [x] No existe ningún evento que sea independiente, al mismo tiempo, de todos los otros eventos.
+-   [x] Si $A$ y $B$ son disjuntos entonces $P(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$.
+-   [x] Si se cumple que $\mathbb{P}(A \mid B) = \mathbb{P}(A)$ entonces los eventos $A$ y $B$ son independientes y $\mathbb{P}(B) > 0$.
+-   [ ] La suma de dos probabilidades cualesquiera siempre es menor o igual a 1.
+-   [x] Para que el experimento sea equiprobable es necesario que $\Omega$ sea finito.
+-   [ ] Si A y B son independientes entonces $\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$.
+
+### Pregunta 4
+
+##### Cuyes peruanos
+
+```{r}
+p_peruano <- sum(DF$Raza == 'peruano')/nrow(DF)
+r(p_peruano)
+
+#Otraforma
+1462/2960
+```
+
+#encontar #valor esperado
+
+```{r}
+# Promedio o valor esperado
+r(6/p_peruano)
+```
+
+##### Cuyes de color blanco
+
+#probabilidad condicional
+
+```{r}
+p_peruano_dado_blanco <- sum(DF$Color == 'blanco' & DF$Raza == 'peruano')/sum(DF$Color == 'blanco')
+#blanco intersecc peruano / blanco
+r(p_peruano_dado_blanco)
+```
+
+#valor esperado
+
+```{r}
+# valor esperado
+6/p_peruano_dado_blanco
+r(6/p_peruano_dado_blanco)
+```
+
+#cuantil binomial negativa
+
+```{r}
+qnbinom(0.90, prob = p_peruano_dado_blanco, size = 6)
+
+#Clacula el núimero de fracasos esperado antes de alcanzar 6 éxitos
+#con probabilidad p_peruano_dado_blanco
+#en percentil 900%
+
+"con 90% de confianza, se necesitarán como máximo ese número de intentos para obtener 6 cuyes peruanos blancos."
+
+#Respuesta = 7 + r éxitos , con r=6
+7+6
+
+#se calcula el total de intentos, el qnbiom result + éxitos
+```
+
+```{r}
+qnbinom(0.90, prob = p_peruano, size = 6)
+
+#- Aquí se repite el cálculo, pero usando la probabilidad general de ser peruano (p_peruano), no condicionada al color blanco.
+
+
+#- El resultado muestra que se necesitan más intentos en promedio (11 fracasos + 6 éxitos = 17 intentos), lo que indica que dentro de los cuyes blancos la proporción de peruanos es mayor y por eso se requieren menos intentos.
+
+
+#Respuesta = 11 + r éxitos , con r=6
+11+6
+```
+
+## Pregunta 5
+
+```{r}
+hist(DF$Tiempo, breaks = 40)
+#muestra la distribución del tiempo
+```
+
+#exponencial
+
+```{r}
+tiempo_mean <- mean(DF$Tiempo, na.rm = TRUE)
+#promedio de tiempos
+r(tiempo_mean)
+1/tiempo_mean
+#distribución exponencial donde la tasa (lambda) es el inverso de la media
+r(1/tiempo_mean)
+```
+
+```{r}
+#library(fitdistrplus)
+```
+
+#ajuste #distribucion exponencial
+
+```{r}
+#ajusta la distribución exp
+fit_exp <- fitdist(DF$Tiempo[!is.na(DF$Tiempo)], "exp")
+plot(fit_exp)
+#la gráfica muestra como se ajusta la distirbución teorica a los datos obeservados
+```
+
+Se pide P(X \> 3) = 1 -P(X \<= 3)
+
+#equivalencia en probabilidades
+
+```{r}
+#1era forma
+pexp(3,1/tiempo_mean, lower.tail = FALSE)
+r(pexp(3,1/tiempo_mean, lower.tail = FALSE))
+```
+
+```{r}
+#2da forma
+1-pexp(3,1/tiempo_mean )
+r(1-pexp(3,1/tiempo_mean ))
+```
+
+```{r}
+qexp(0.90, 1/tiempo_mean)
+r(qexp(0.90, 1/tiempo_mean))
+```
+
+## Pregunta 6
+
+```{r}
+#subconjunto con cutes hembras y raza peruano
+DF1 <- filter(DF, Sexo == "hembra" & DF$Raza == "peruano")
+hist(DF1$Peso, breaks = 20)
+```
+
+```{r}
+#promedio
+media_peso <- mean(DF1$Peso, na.rm=TRUE)
+r(media_peso)
+```
+
+```{r}
+#desviacion estandar
+desviacion <- sd(DF1$Peso, na.rm=TRUE)
+round(desviacion,2)
+```
+
+```{r}
+hist(DF1$Peso, breaks = 20, probability = T)
+valores_x <- seq(1:2000)
+valores_y <- dnorm(1:2000, mean = mean(DF1$Peso, na.rm = TRUE), sd = sd(DF1$Peso, na.rm = TRUE))
+lines(valores_x, valores_y, col = "red", lwd = 2)
+
+#grafica de hisitopgrama con densidad (probability = T)
+#Se superpone una curva de distribución normal con la misma medias y desviación estardar que los dtoas
+```
+
+\`
+
+SI te dice un kilo = 1000 g
+
+```{r}
+# Probabilidad teórica:
+prob_hembra1 <- 1-pnorm(1000, mean(DF1$Peso, na.rm = T), sd(DF1$Peso, na.rm = T))
+round(prob_hembra1,2)
+
+#Se calcula la probabilidad de que una hermba peruana pese más de 1000g 1kg bajo el supuesto de normalidad
+```
+
+#probabilidad empirica
+
+```{r}
+peso_hembra <- DF1$Peso # contiene NA
+
+```
+
+```{r}
+peso_hembra <- peso_hembra[!is.na(peso_hembra)] # no contiene NA
+```
+
+```{r}
+# Probabilidad empírica:
+prob_hembra2 <- sum(peso_hembra > 1000)/length(peso_hembra)
+round(prob_hembra2,2)
+#- Este valor es la probabilidad empírica, basada en los datos observados.
+```
+
+✅ Comparación
+
+-   **Probabilidad teórica (`prob_hembra1`)**: se basa en el modelo normal ajustado.
+
+-   **Probabilidad empírica (`prob_hembra2`)**: se basa en la frecuencia real observada en los datos.
+
+Si ambas son similares, significa que la normal es un buen modelo para los pesos. Si difieren mucho, la distribución real de los pesos no se ajusta bien a la normal.
+
+## Pregunta 7
+
+Verificar como esta definida la variable Talla en el HTML.
+
+```{r}
+DF$Talla<-factor(DF$Talla, levels=c("flaco","sano","gordo","obeso"), ordered = TRUE)
+#Se convierte la columna Talla en un factor odernado con niveeles flaco < sano < gordo < obeso
+```
+
+```{r}
+#DF$Talla <- addNA(DF$Talla)
+op <- par(mfrow = c(2,2))
+par(mar = c(2.5,4,1,0.5))
+colores <- c(rep("gray", 4), "magenta")
+boxplot(DF$Largo ~ DF$Talla, varwidth = TRUE
+        , cex.axis = 0.8, xlab = "Talla"
+        , ylab = "largo (cm)", col = colores
+        )
+#compara el largo por talla
+boxplot(DF$Cintura ~ DF$Talla, varwidth = TRUE
+        , cex.axis = 0.8, xlab = "Talla"
+        , ylab = "cintura (cm)", col = colores
+        )
+#compara la cintura por talla
+boxplot(DF$Peso ~ DF$Talla, varwidth = TRUE
+        , cex.axis = 0.8, xlab = "Talla"
+        , ylab = "peso (g)", col = colores
+        )
+#....
+barplot(table(DF$Talla, useNA = "ifany"), cex.axis = 0.8
+        , xlab = "Talla", ylab = "cantidad"
+        , col = colores, cex.names = 0.8
+        )
+#muestra la frecuencia de cada categoria de talla, incliyendo los casos donde falta, o sea NA
+par(op)
+```
+
+La respuesta correcta son:
+
+-El peso y talla en egenral parecen crecer juntos.\
+-Hay mas de 1000 observacionbes donde la Talla falta.\
+-Los expertos no parecen ser muy buenos juzgando la talla.
+
+Interpretación de los resultados
+
+De acuerdo con lo que observas en los gráficos y conteos:
+
+-   **El peso y la talla parecen crecer juntos**: los boxplots muestran que a medida que aumenta la categoría de talla, también aumentan las medidas de peso, cintura y largo.
+
+-   **Más de 1000 observaciones tienen la talla faltante**: el barplot revela una gran cantidad de valores `NA` en la variable `Talla`.
+
+-   **Los expertos no parecen ser muy buenos juzgando la talla**: la alta proporción de valores faltantes sugiere que la clasificación subjetiva de talla no fue consistente o confiable.
+
+✅ **Conclusión:**\
+La variable `Talla` está definida como un factor ordenado, pero en la práctica presenta problemas: muchos datos faltantes y una clasificación poco confiable. Aun así, cuando está presente, se observa una relación clara entre talla y peso/medidas corporales.

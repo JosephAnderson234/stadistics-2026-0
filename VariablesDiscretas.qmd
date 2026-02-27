@@ -25,7 +25,7 @@ $$
 $$
 
 |   | ccc | ccs | csc | css | sss | ssc | scs | scc |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **X** | **3**-**0**=3 | **2**-**1**=1 | **2-1**=1 | **1**-**2**=-1 | **0**-**3**=-3 | **1**-**2**=-1 | **1**-**2**=-1 | **2**-**1**=1 |
 
 Rango de X: (contiene solo los valores distintos que toma la variable X)
@@ -199,7 +199,7 @@ FRACASO==\> lo que no te piden.
 
 **BINOMIAL** ==\> Tiene una **n** (cantidad **total** de elementos) y **p= P(éxito).** (n y p :datos)
 
-**GEOMÉTRICA** ==\> Se hacen experimentos hasta que tobtengas un éxito: **p=P(éxito)** (p:dato)
+**GEOMÉTRICA** ==\> Se hacen experimentos hasta que obtengas un éxito: **p=P(éxito)** (p:dato)
 
 **BINOMIAL NEGATIVA (Pascal)**==\> Se hacen experimentos hasta tener **K** éxitos: **p=P(éxito)** (k, p:datos))
 

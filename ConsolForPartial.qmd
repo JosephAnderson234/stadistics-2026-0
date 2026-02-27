@@ -191,16 +191,13 @@ El sesgo es un peso desproporcionado a favor o en contra de una idea o cosa,
 
 # Codes of R to use in Rstudio
 
-```{r} #install.packages("readr") done #install.packages("plyr") done  #install.packages("dplyr") done #install.packages("tidyr") done #install.packages("ggplot2") done}
-```
+`{r} #install.packages("readr") done #install.packages("plyr") done  #install.packages("dplyr") done #install.packages("tidyr") done #install.packages("ggplot2") done}`
 
-```{r} #use library library(readr)}
-```
+`{r} #use library library(readr)}`
 
 ### Matrices
 
-```{r} A<-c(3,5,7,9) B<-c(0,2,4,6) M1<-cbind(A,B) # Uniendo por columnas M2<-rbind(A,B) # Uniendo por filas "vector A" A "vector B"  B "matríz M1: unido por columnas" M1 "matriz M2: unido por filas" M2 D<-c(2,4,6,3,5,7,0,1) matrix(D,nrow=2, ncol=4) matrix(D, nrow=4,ncol=2) E<-c(1,4,7,10,2,5,8,11,3,6,9,12) MMM<-matrix(E, nrow=4, ncol=3) MMM t(MMM)}
-```
+`{r} A<-c(3,5,7,9) B<-c(0,2,4,6) M1<-cbind(A,B) # Uniendo por columnas M2<-rbind(A,B) # Uniendo por filas "vector A" A "vector B"  B "matríz M1: unido por columnas" M1 "matriz M2: unido por filas" M2 D<-c(2,4,6,3,5,7,0,1) matrix(D,nrow=2, ncol=4) matrix(D, nrow=4,ncol=2) E<-c(1,4,7,10,2,5,8,11,3,6,9,12) MMM<-matrix(E, nrow=4, ncol=3) MMM t(MMM)}`
 
 ***matrix** necesita un vector que contenga todos los datos de la matriz, pero estos datos deben ser copiados en vertical, ya que **matrix** formara la matriz leyendo los datos en columnas.*
 
@@ -222,13 +219,11 @@ Para subir datos de un excel se usará ***read_csv(" ").***
 
 %%%%%%%%%
 
-```{r} Famosos<-read_csv("FAMOSOS1.xlsx - Hoja1 (6).csv") Famosos}
-```
+`{r} Famosos<-read_csv("FAMOSOS1.xlsx - Hoja1 (6).csv") Famosos}`
 
 \####################################################
 
-```{r} head(Famosos) #aqui las 6 primeras observaciones tail(Famosos) #aqui las 6 últimas observaciones}
-```
+`{r} head(Famosos) #aqui las 6 primeras observaciones tail(Famosos) #aqui las 6 últimas observaciones}`
 
 %%%%%%%%%%%%
 
@@ -244,29 +239,25 @@ Celdas vacías ==\> NA
 
 Halla la dimensión del data frame
 
-```{r} dim(Famosos)}
-```
+`{r} dim(Famosos)}`
 
 ***nrow***
 
 halla solo el número de filas
 
-```{r} nrow(Famosos)}
-```
+`{r} nrow(Famosos)}`
 
 ***ncol***
 
 halla el número de columnas
 
-```{r} ncol(Famosos)}
-```
+`{r} ncol(Famosos)}`
 
 **Formando tablas:**
 
 Para formar una tabla de variable cualitativa o para discretas ( que tienen pocos valores distintos), se usa *`table`*
 
-```{r} "TABLA DE ACTIVIDAD DE LOS FAMOSOS"  table(Famosos$Actividad)  "tabla de GÉNERO DE LOS FAMOSOS"  table(Famosos$Género)}
-```
+`{r} "TABLA DE ACTIVIDAD DE LOS FAMOSOS"  table(Famosos$Actividad)  "tabla de GÉNERO DE LOS FAMOSOS"  table(Famosos$Género)}`
 
 **Moda:** es lo que mas se repite ==\> Moda de actividades: ??. Frecuencia modal :??{r}
 
@@ -280,8 +271,7 @@ EJEMPLOS DE PREGUNTAS usando *Famosos.*
 
     Usamos table:
 
-    ```{r} table(Famosos$Actividad)}
-    ```
+    `{r} table(Famosos$Actividad)}`
 
     En el excel hay 25 filas, es decir son 25 encuestados.
 
@@ -319,8 +309,7 @@ EJEMPLOS DE PREGUNTAS usando *Famosos.*
 
 4.  **¿Qué porcentaje son mujeres, con seguridad, según la DATA?**
 
-    ```{r} table(Famosos$Género)}
-    ```
+    `{r} table(Famosos$Género)}`
 
     Observamos que hay 23 personas que si respondieron con seguridad su género.
 
@@ -332,8 +321,7 @@ EJEMPLOS DE PREGUNTAS usando *Famosos.*
 
     Aquí intervienen dos variables: Actividad y Género
 
-```{r} table(Famosos$Género, Famosos$Actividad)}
-```
+`{r} table(Famosos$Género, Famosos$Actividad)}`
 
 Los que cantan son 7. de ellos 2 son mujeres.
 
@@ -351,8 +339,7 @@ Los que cantan son 7. de ellos 2 son mujeres.
 
     Intervienen variables: Actividad y Edad
 
-    ```{r} table(Famosos$Edad, Famosos$Actividad)}
-    ```
+    `{r} table(Famosos$Edad, Famosos$Actividad)}`
 
 Son 7 que cantan y de ellos 3 tienen edad que pasa de 35 años.
 
@@ -360,8 +347,7 @@ Son 7 que cantan y de ellos 3 tienen edad que pasa de 35 años.
 
 3==\>\> p% ==\> p%= (3x100%)/7= 42.86%
 
-```{r} round(3*100/7, 2)}
-```
+`{r} round(3*100/7, 2)}`
 
 ## DESCRIPTORES DE POSICIÓN
 
@@ -373,29 +359,25 @@ Ingresamos datos numéricos:
 
 X= NOTAS DE UN QUIZ
 
-```{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}
-```
+`{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}`
 
 ***1) La media de x:***
 
 también llamado promedio. Es válido solo para variables numéricas y nos da un valor representativo de todo el conjunto de datos.
 
-```{r} mean(X)}
-```
+`{r} mean(X)}`
 
 aquí R no lo puede hallar debido a que X tiene NA.
 
 Se debe hacer así:
 
-```{r} mean(X, na.rm = T)   # se ignora los NA y ya se puede calcular la media.}
-```
+`{r} mean(X, na.rm = T)   # se ignora los NA y ya se puede calcular la media.}`
 
 La nota promedio en el quiz es 10.28571.
 
 Para tenerlo con dos decimales:
 
-```{r} round(mean(X, na.rm = TRUE), 2)  # con dos decimales.}
-```
+`{r} round(mean(X, na.rm = TRUE), 2)  # con dos decimales.}`
 
 La nota promedio en el Q1 es 10.29.
 
@@ -403,8 +385,7 @@ La nota promedio en el Q1 es 10.29.
 
 Es un valor representativo de todos los datos y con seguridad está en el centro de toda la cantidad de datos.
 
-```{r} median(X)   # aqui no lo hallará debido a que hay NA,s median(X, na.rm=T)  # aquí si lo halla.}
-```
+`{r} median(X)   # aqui no lo hallará debido a que hay NA,s median(X, na.rm=T)  # aquí si lo halla.}`
 
 Interpretación de la mediana:
 
@@ -418,20 +399,17 @@ menores notas---------50%--------Me=8 ———50% ———mayores notas
 
 \###################
 
-```{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}
-```
+`{r} # Una colección de notas, se pone como un vector. Dentro de  c(...)  X<- c(8, NA, 6, 6, 4, 10, 8, 20, 16, NA, 16, 8, 16, 16, 4, 6)    "Las notas del quiz 1 son:" X}`
 
 **La media:**
 
-```{r} mean(X)   # No lo halla porque hay en X, datos perdidos:NA mean(X, na.rm=T)   # Aquí si lo calcula.}
-```
+`{r} mean(X)   # No lo halla porque hay en X, datos perdidos:NA mean(X, na.rm=T)   # Aquí si lo calcula.}`
 
 La nota promedio en Q1 es 10.28
 
 **La mediana:**
 
-```{r} median(X)    # Aquí no lo calcula median(X, na.rm=T)   # Aquí si lo calcula.}
-```
+`{r} median(X)    # Aquí no lo calcula median(X, na.rm=T)   # Aquí si lo calcula.}`
 
 La mediana es 8.
 
@@ -443,8 +421,7 @@ El 50% de las mayores notas tiene como nota mínima 08.
 
 Es el dato que mas se repite.
 
-```{r} table(X)   # Aquí no se cuenta los NA.}
-```
+`{r} table(X)   # Aquí no se cuenta los NA.}`
 
 La moda es: 16 y su frecuencia modal es 4 (se repite 4 veces). Unimodal.
 
@@ -456,15 +433,13 @@ Pero se tiene 16 datos. hay dos datos perdidos (NA)
 
 **Tabla contando NA**
 
-```{r} table(X, useNA = "always")  # aqui se contará los NA.}
-```
+`{r} table(X, useNA = "always")  # aqui se contará los NA.}`
 
 Se observa que hay 2 NAs.
 
 Se obtiene diversos descriptores usando:
 
-```{r} summary(X)}
-```
+`{r} summary(X)}`
 
 **Min(4)**\_\_\_\_\_\_25%\_\_\_\_\_\_\_**Q1**\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Q2=Me**\_\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Q3**\_\_\_\_\_\_\_25%\_\_\_\_\_\_**Max(20)**
 
@@ -492,8 +467,7 @@ Cuartil 3 = 16: La mayor nota del 75% de los que tienen menores notas es 16. O t
 
 **PREGUNTAS:** Del vector X
 
-```{r} summary(X)}
-```
+`{r} summary(X)}`
 
 ¿Entre que valores está el 50% de las menores notas?: Entre 4 y 8 (Me)
 
@@ -507,8 +481,7 @@ Cuartil 3 = 16: La mayor nota del 75% de los que tienen menores notas es 16. O t
 
 Los cuantiles sirven para hallar cualquier porcentaje de una data.
 
-```{r} quantile(X, 0.1, na.rm=T )    # Calcula el 10% quantile(X, 0.3, na.rm=T )    # calcula el 30% quantile(X, 0.9, na.rm=T)     # Calcula el 90% quantile(X, 0.7, na.rm=T)     # Calcula el 70%}
-```
+`{r} quantile(X, 0.1, na.rm=T )    # Calcula el 10% quantile(X, 0.3, na.rm=T )    # calcula el 30% quantile(X, 0.9, na.rm=T)     # Calcula el 90% quantile(X, 0.7, na.rm=T)     # Calcula el 70%}`
 
 **Ejemplo:** En el conjunto X estan las notas de un alumno . Desde que nota, este alumno ingresaria a formar parte del Quinto Superior?
 
@@ -516,8 +489,7 @@ min. nota.......................................................**80%**.........
 
 p=Cuantil 80.
 
-```{r} quantile(X, 0.8, na.rm=T)}
-```
+`{r} quantile(X, 0.8, na.rm=T)}`
 
 En el archivo ***Famosos***
 
@@ -525,13 +497,11 @@ Hallare el 50% de Actividad y el 80% de los personajes.
 
 Para calcular porcentajes de variable cualitativas se debe colocar en quantile, **type=3**
 
-```{r} # Actividad y Personaje son cualitativos quantile(Famosos$Actividad, 0.5,type=3,  na.rm=T)  quantile(Famosos$Personaje, 0.8,type=3,  na.rm=T)}
-```
+`{r} # Actividad y Personaje son cualitativos quantile(Famosos$Actividad, 0.5,type=3,  na.rm=T)  quantile(Famosos$Personaje, 0.8,type=3,  na.rm=T)}`
 
 Sea el vector de letras:
 
-```{r} V<-c("b", "c", "e", "e", "h", "m") quantile(V, 0.5, type=3) quantile(V, 0.9, type=3)}
-```
+`{r} V<-c("b", "c", "e", "e", "h", "m") quantile(V, 0.5, type=3) quantile(V, 0.9, type=3)}`
 
 **Mas ejemplos**
 
@@ -541,25 +511,21 @@ De la Data de Famosos.
 
 Halle la estatura promedio de los famosos
 
-```{r} mean(Famosos$Estatura)}
-```
+`{r} mean(Famosos$Estatura)}`
 
 Halle la edad promedio redondeada a dos decimales.
 
-```{r} round(mean(Famosos$Edad, na.rm=T),2)}
-```
+`{r} round(mean(Famosos$Edad, na.rm=T),2)}`
 
 La edad promedio de los famosos es 37 años.
 
 **Mediana:** Es el dato que está en el centro, luego de ordenar a todo el conjunto de datos.
 
-```{r} median(Famosos$Edad, na.rm=T)}
-```
+`{r} median(Famosos$Edad, na.rm=T)}`
 
 **Moda de Edad:**
 
-```{r} table(Famosos$Edad, useNA ="always")}
-```
+`{r} table(Famosos$Edad, useNA ="always")}`
 
 La moda es 30 años, pues es la que mas se repite: 4 veces. (el 4: frecuencia modal)
 

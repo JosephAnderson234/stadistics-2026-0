@@ -1,0 +1,1420 @@
+---
+title: "Análisis de Consumo de Café en UTEC"
+subtitle: "Estadística y Probabilidades I · Ciclo 2026-0"
+author: 
+  - Silvera Pastor, Jose Maria
+  - Oliden Serrato, Ronald Amir
+  - Alvarez Lovera, Sandra Sofia
+  - Baquerizo Rojas, Valeria Marisol
+  - Cose Rojas, Joseph Anderson
+date: today
+lang: es
+fontcolor: black
+embed-resources: true
+format:
+  html:
+    theme: journal
+    title-block-banner: "#1A365D"
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contenido"
+    number-sections: false
+    code-copy: true
+    code-fold: false
+    code-tools: true
+    code-line-numbers: true
+    code-block-bg: true
+    code-block-border-left: "#2C3E50"
+    highlight-style: github
+    df-print: paged
+    smooth-scroll: true
+    lightbox: true
+    fig-align: center
+    fig-width: 8
+    fig-height: 5
+editor: visual
+execute:
+  warning: false
+  message: false
+  echo: true
+---
+
+```{=html}
+<style>
+  body, p, li, h1, h2, h3, h4, h5, h6 {
+    color: #000000 !important;
+  }
+  
+  p, li {
+    text-align: justify !important;
+  }
+
+  .quarto-title-banner h1, 
+  .quarto-title-banner .subtitle {
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+  }
+</style>
+```
+
+------------------------------------------------------------------------
+
+# **Hábitos de consumo de café de los estudiantes de UTEC y su relación con la vida académica durante el periodo 2024-2**
+
+# I. Introducción
+
+------------------------------------------------------------------------
+
+## I.1 Relevancia
+
+El café es una parte importante de la rutina diaria de muchos estudiantes de UTEC, ayudándoles a mantenerse despiertos y concentrados durante sus actividades académicas. Aunque su consumo puede traer beneficios, el exceso puede resultar perjudicial. La Organización Mundial de la Salud (OMS) recomienda no consumir más de cuatro tazas diarias (\~400 mg de cafeína); superarlo puede alterar el sueño, incrementar el estrés y reducir el bienestar general. Conocer los hábitos de consumo de los estudiantes es fundamental para comprender su impacto en la experiencia universitaria.
+
+## I.2 Planificación
+
+```{r}
+#| label: fig-cronograma
+#| fig-cap: "Cronograma de Actividades del Proyecto"
+#| fig-width: 11
+#| fig-height: 7
+
+library(ggplot2)
+
+datos_gantt <- data.frame(
+  Tarea = c(
+    "Objetivos y Planteamiento", "Limpieza de datos", "Avance 1 PG1",
+    "Análisis descriptivo OBJ 1", "Análisis descriptivo OBJ 2", "Análisis descriptivo OBJ 3",
+    "Revisión de Informe PG1", "Entrega Informe PG1",
+    "Probabilidad empírica Var1", "Probabilidad empírica Var2",
+    "Probabilidad condicional", "Variables Aleatorias Discretas",
+    "Variables Aleatorias Continuas", "Revisión Final PG2", "Entrega Informe PG2"
+  ),
+  Responsable = c(
+    "Equipo Completo", "Equipo Completo", "Equipo Completo",
+    "José", "Joseph", "Ronald",
+    "Valeria", "Equipo Completo",
+    "José", "Sandra",
+    "Sandra", "Ronald",
+    "José", "Equipo Completo", "Equipo Completo"
+  ),
+  Inicio = as.Date(c(
+    "2026-01-12", "2026-01-15", "2026-01-24",
+    "2026-01-16", "2026-01-16", "2026-01-20",
+    "2026-01-28", "2026-02-02",
+    "2026-02-05", "2026-02-05",
+    "2026-02-08", "2026-02-10",
+    "2026-02-12", "2026-02-16", "2026-02-18"
+  )),
+  Fin = as.Date(c(
+    "2026-01-14", "2026-01-22", "2026-01-25",
+    "2026-01-20", "2026-01-22", "2026-01-24",
+    "2026-01-30", "2026-02-04",
+    "2026-02-07", "2026-02-09",
+    "2026-02-10", "2026-02-12",
+    "2026-02-15", "2026-02-17", "2026-02-20"
+  ))
+)
+
+datos_gantt <- datos_gantt[order(datos_gantt$Inicio, datos_gantt$Fin, decreasing = TRUE), ]
+datos_gantt$Tarea <- factor(datos_gantt$Tarea, levels = unique(datos_gantt$Tarea))
+
+ggplot(datos_gantt, aes(x = Inicio, xend = Fin, y = Tarea, yend = Tarea, color = Responsable)) +
+  geom_hline(yintercept = seq_along(datos_gantt$Tarea), color = "#F8F9FA", linewidth = 4) +
+  geom_segment(linewidth = 3) +
+  geom_point(aes(x = Inicio), size = 4) +
+  geom_point(aes(x = Fin), size = 4) +
+  scale_color_manual(values = c(
+    "Equipo Completo" = "#1A365D",
+    "Estudiante 1" = "#3B82F6",
+    "Estudiante 2" = "#10B981",
+    "Estudiante 3" = "#F59E0B",
+    "Estudiante 4" = "#8B5CF6"
+  )) +
+  scale_x_date(date_breaks = "1 week", date_labels = "%d %b") +
+  labs(x = NULL, y = NULL, color = "Responsables:") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "top",
+    legend.title = element_text(face = "bold", color = "#1A365D"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_line(color = "#E2E8F0", linetype = "dashed"),
+    axis.text.y = element_text(face = "bold", color = "#2C3E50", margin = margin(r = 10)),
+    axis.text.x = element_text(face = "bold", color = "#7F8C8D")
+  )
+```
+
+## I.3 Objetivos
+
+### I.3.1 Objetivo general
+
+Analizar los hábitos de consumo de café de los estudiantes de UTEC durante el periodo académico 2024-2 y su relación con indicadores académicos y de bienestar.
+
+### I.3.2 Objetivos específicos
+
+-   **OE1:** Analizar la relación entre la frecuencia de consumo de café y los niveles de estrés percibidos, diferenciando por sexo.
+-   **OE2:** Analizar la relación entre los patrones de sueño y el rendimiento académico.
+-   **OE3:** Determinar si el ingreso a la universidad influyó en los hábitos de consumo de café.
+
+# II. Datos
+
+------------------------------------------------------------------------
+
+## II.1 Población objetivo
+
+Todos los estudiantes matriculados en la UTEC durante el periodo académico 2024-2.
+
+## II.2 Unidad muestral
+
+Cada estudiante de UTEC en el periodo 2024-2 que consume café.
+
+## II.3 Tipo de muestreo
+
+Muestreo no probabilístico por conveniencia mediante encuesta estructurada.
+
+## II.4 Tratamiento de datos
+
+Los datos provienen de una encuesta aplicada a estudiantes de UTEC durante 2024-2, exportada a CSV para análisis en RStudio.
+
+```{r}
+if (!require(readr))     install.packages("readr")
+if (!require(dplyr))     install.packages("dplyr")
+if (!require(tidyr))     install.packages("tidyr")
+if (!require(ggplot2))   install.packages("ggplot2")
+if (!require(knitr))     install.packages("knitr")
+if (!require(kableExtra))install.packages("kableExtra")
+if (!require(e1071))     install.packages("e1071")
+
+library(readr) 
+library(dplyr) 
+library(tidyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(e1071)
+```
+
+```{r, message=FALSE, warning=FALSE}
+CAFE <- read_csv("DATACAFE.csv")
+
+# Filtrar consumidores de café
+SI_CAFE <- filter(CAFE, `¿Consume café?` == "Sí" | `¿Consume café?` == "si")
+
+# Renombrar variables
+SI_CAFE <- rename(SI_CAFE,
+  sexo = "Sexo", consume_cafe = "¿Consume café?",
+  tazas_dia = "En promedio ¿Cuántas tazas de café consumes en un día?",
+  tazas_antes = "Antes de ser alumno de UTEC, ¿cuántas tazas de café consumías al día aproximadamente?",
+  tazas_examen = "Durante un día de exámenes, ¿Cuántas tazas de café consumes?",
+  frec_diaria = "¿Con qué frecuencia tomas café diariamente?",
+  pp_2024_1 = "¿Cuál fue tu promedio ponderado en el ciclo 2024-1? (Tal cual aparece en tu intranet de estudiante).",
+  limite_dormir = "¿Cuál es la cantidad máxima de horas antes de dormir en la que consumirías café?",
+  efecto = "¿Cómo crees que te afecta el consumo de café?",
+  cafe_noche = "¿Con qué frecuencia consumes café por la noche?",
+  sueno_noche = "¿Cuántas horas duermes por la noche en promedio cuando consumes café?",
+  estres = "¿Tu nivel de estrés cambia cuándo consumes café?",
+  estres_cambio = "Si la respuesta anterior fue sí. ¿Cómo ha cambiado tu nivel de estrés después de consumir café?",
+  energia_1_a_5 = "En una escala del 1 al 5, ¿Cómo calificarías el nivel de energía que sientes después de consumir café?\n1: No me brinda nada de energía\n3: Neutral\n5: Me brinda mucha energía",
+  bienestar = "¿Consideras que el consumo de café tiene algún efecto en tu bienestar físico o mental?",
+  cambio_utec = "¿Tu consumo de café cambió al ingresar a la universidad?"
+)
+
+# Tipificar variables
+SI_CAFE$sexo         <- factor(tolower(trimws(SI_CAFE$sexo)))
+SI_CAFE$estres       <- factor(SI_CAFE$estres)
+SI_CAFE$bienestar    <- factor(SI_CAFE$bienestar)
+SI_CAFE$efecto       <- factor(SI_CAFE$efecto)
+SI_CAFE$frec_diaria  <- factor(SI_CAFE$frec_diaria,
+  levels = c("Nunca","Rara vez","A veces","Frecuentemente","Siempre"))
+SI_CAFE$cafe_noche   <- factor(SI_CAFE$cafe_noche,
+  levels = c("Nunca","Rara vez","A veces","Frecuentemente","Siempre"))
+SI_CAFE$estres_cambio <- factor(SI_CAFE$estres_cambio,
+  levels = c("Disminuye","Neutro","Aumenta"))
+SI_CAFE$cambio_utec  <- factor(SI_CAFE$cambio_utec,
+  levels = c("Disminuyó mucho","Disminuyó","No cambio","Aumentó","Aumentó mucho"))
+SI_CAFE$energia_1_a_5 <- factor(SI_CAFE$energia_1_a_5, ordered = TRUE,
+  levels = c("1","2","3","4","5"))
+SI_CAFE$tazas_dia    <- as.integer(SI_CAFE$tazas_dia)
+SI_CAFE$tazas_antes  <- as.integer(SI_CAFE$tazas_antes)
+SI_CAFE$tazas_examen <- as.integer(SI_CAFE$tazas_examen)
+SI_CAFE$sueno_noche  <- as.integer(SI_CAFE$sueno_noche)
+SI_CAFE$limite_dormir <- as.integer(SI_CAFE$limite_dormir)
+SI_CAFE$pp_2024_1    <- as.double(SI_CAFE$pp_2024_1)
+```
+
+## II.5 Limpieza
+
+Se aplicaron filtros por rangos fisiológicamente válidos: tazas/día 0–15, horas de sueño 1–12, pp 0–20, energía 1–5.
+
+```{r}
+n_pre <- nrow(SI_CAFE)
+
+CAFE_OFICIAL <- SI_CAFE %>%
+  select(sexo, tazas_dia, frec_diaria, cafe_noche, tazas_antes, tazas_examen,
+         sueno_noche, limite_dormir, estres, estres_cambio,
+         pp_2024_1, energia_1_a_5, bienestar, efecto, cambio_utec) %>%
+  filter(
+    tazas_dia     >= 0 & tazas_dia     <= 15,
+    tazas_antes   >= 0 & tazas_antes   <= 20,
+    tazas_examen  >= 0 & tazas_examen  <= 20,
+    sueno_noche   >= 1 & sueno_noche   <= 12,
+    limite_dormir >= 0 & limite_dormir <= 24,
+    pp_2024_1     >= 0 & pp_2024_1     <= 20,
+    energia_1_a_5 %in% c("1","2","3","4","5")
+  )
+
+n_post <- nrow(CAFE_OFICIAL)
+cat("Obs. antes de limpieza:", n_pre, "| Después:", n_post,
+    "| Pérdida:", round((n_pre - n_post)/n_pre*100, 1), "%\n")
+cat("Filas completas (sin NA en ninguna variable):", sum(complete.cases(CAFE_OFICIAL)), "\n")
+```
+
+## II.4 Variables
+
+| Variable      | Tipo            | Restricción                             |
+|---------------|-----------------|-----------------------------------------|
+| sexo          | Cualit. nominal | femenino/masculino                      |
+| tazas_dia     | Cuant. discreta | 0–15                                    |
+| pp_2024_1     | Cuant. continua | 0–20                                    |
+| sueno_noche   | Cuant. discreta | 1–12                                    |
+| limite_dormir | Cuant. discreta | 0–24                                    |
+| frec_diaria   | Cualit. ordinal | Nunca \< ... \< Siempre                 |
+| cafe_noche    | Cualit. ordinal | Nunca \< ... \< Siempre                 |
+| estres_cambio | Cualit. ordinal | Disminuye/Neutro/Aumenta                |
+| energia_1_a_5 | Cualit. ordinal | 1–5 (Likert, no se promedia)            |
+| cambio_utec   | Cualit. ordinal | Disminuyó mucho \< ... \< Aumentó mucho |
+
+# III. Análisis Descriptivo
+
+------------------------------------------------------------------------
+
+## III.1 Organización de datos - Análisis univariado
+
+```{r}
+vars_num <- CAFE_OFICIAL %>%
+  select(tazas_dia, pp_2024_1, sueno_noche)
+
+est <- data.frame(
+  Variable = names(vars_num),
+  Media    = sapply(vars_num, mean, na.rm=TRUE),
+  Mediana  = sapply(vars_num, median, na.rm=TRUE),
+  DE       = sapply(vars_num, sd, na.rm=TRUE)
+) %>% mutate(across(where(is.numeric), ~round(., 2)))
+
+kable(est, caption = "Tabla 1. Estadísticos descriptivos", align = c("l", rep("r",3))) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+**Interpretación:** El consumo típico es de 2.20 tazas/día (mediana 2), el rendimiento académico promedio es 14.69/20, y las horas de sueño promedian 5.68 h (por debajo de las 7–8 recomendadas).
+
+```{r, fig.width=11, fig.height=3.5}
+library(gridExtra)
+
+p1 <- ggplot(CAFE_OFICIAL, aes(x=tazas_dia)) +
+  geom_histogram(binwidth=1, fill="#2C3E50", color="white") +
+  geom_vline(aes(xintercept=mean(tazas_dia, na.rm=TRUE)), color="#E74C3C", linetype="dashed", linewidth=1) +
+  labs(title="Fig 1. Consumo diario", x="Tazas/día", y="Frecuencia") + theme_minimal()
+
+p2 <- ggplot(CAFE_OFICIAL, aes(x=pp_2024_1)) +
+  geom_histogram(binwidth=1, fill="#27AE60", color="white") +
+  geom_vline(aes(xintercept=mean(pp_2024_1, na.rm=TRUE)), color="#E74C3C", linetype="dashed", linewidth=1) +
+  labs(title="Fig 2. Rendimiento académico", x="PP (0–20)", y="Frecuencia") + theme_minimal()
+
+p3 <- ggplot(CAFE_OFICIAL, aes(x=sueno_noche)) +
+  geom_histogram(binwidth=1, fill="#3498DB", color="white") +
+  geom_vline(aes(xintercept=mean(sueno_noche, na.rm=TRUE)), color="#E74C3C", linetype="dashed", linewidth=1) +
+  labs(title="Fig 3. Horas de sueño", x="Horas", y="Frecuencia") + theme_minimal()
+
+grid.arrange(p1, p2, p3, ncol=3)
+```
+
+## III.2 Medidas de resumen - Análisis bivariado
+
+```{r, fig.width=10, fig.height=4}
+OBJ1 <- CAFE_OFICIAL %>%
+  select(sexo, cafe_noche, estres_cambio, frec_diaria) %>%
+  filter(complete.cases(.))
+
+p4 <- OBJ1 %>%
+  count(frec_diaria, estres_cambio) %>% group_by(frec_diaria) %>%
+  mutate(porc = n/sum(n)*100) %>%
+  ggplot(aes(x=frec_diaria, y=porc, fill=estres_cambio)) +
+  geom_col(color="white") +
+  geom_text(aes(label=paste0(round(porc,1),"%")), position=position_stack(vjust=0.5), color="white", size=3) +
+  coord_flip() +
+  scale_fill_manual(values=c("Disminuye"="#27AE60","Neutro"="#95A5A6","Aumenta"="#E74C3C")) +
+  labs(title="Fig 4. Estrés según frecuencia diaria", x="Frec. diaria", y="(%)", fill="Estrés") +
+  theme_minimal() + theme(legend.position="bottom")
+
+OBJ2 <- CAFE_OFICIAL %>%
+  select(sueno_noche, pp_2024_1) %>%
+  filter(complete.cases(.)) %>%
+  mutate(grupo_pp = case_when(pp_2024_1 <= 12 ~ "Bajo", pp_2024_1 < 15 ~ "Medio", TRUE ~ "Alto"),
+         grupo_pp = factor(grupo_pp, levels=c("Bajo","Medio","Alto")))
+
+p5 <- ggplot(OBJ2, aes(x=grupo_pp, y=sueno_noche, fill=grupo_pp)) +
+  geom_boxplot(alpha=0.7) +
+  scale_fill_manual(values=c("#E74C3C","#F39C12","#27AE60")) +
+  labs(title="Fig 5. Sueño según rendimiento", x="Nivel PP", y="Horas sueño") +
+  theme_minimal() + theme(legend.position="none")
+
+grid.arrange(p4, p5, ncol=2)
+```
+
+**Interpretación:** A mayor frecuencia de consumo, más estudiantes reportan cambio en el estrés. El rendimiento académico no muestra variación marcada según horas de sueño (medianas similares).
+
+# IV. Análisis Probabilístico
+
+------------------------------------------------------------------------
+
+## IV.1 Probabilidad empírica
+
+### IV.1.1 Variable: Frecuencia diaria de consumo (`frec_diaria`)
+
+**Definición de rangos/categorías:**
+
+Para analizar la frecuencia de consumo, se emplean las categorías ordinales originales de la encuesta: Nunca, Rara vez, A veces, Frecuentemente, Siempre.
+
+**Experimento aleatorio:**
+
+$E:$ Seleccionar al azar a un estudiante de la muestra limpia y registrar su frecuencia diaria de consumo de café.
+
+**Espacio muestral:**
+
+$$\Omega = \{\text{Nunca, Rara vez, A veces, Frecuentemente, Siempre}\}$$
+
+**Eventos atómicos:**
+
+-   $E_1:$ Seleccionar un estudiante cuya frecuencia sea "Nunca"
+-   $E_2:$ Seleccionar un estudiante cuya frecuencia sea "Rara vez"
+-   $E_3:$ Seleccionar un estudiante cuya frecuencia sea "A veces"
+-   $E_4:$ Seleccionar un estudiante cuya frecuencia sea "Frecuentemente"
+-   $E_5:$ Seleccionar un estudiante cuya frecuencia sea "Siempre"
+
+**Cálculo de probabilidades empíricas:**
+
+Fórmula: $P(\omega_i) = \frac{\text{casos favorables}}{\text{casos totales}}$
+
+```{r}
+espacio_muestral <- nrow(CAFE_OFICIAL %>% filter(!is.na(frec_diaria)))
+
+frec_tabla <- CAFE_OFICIAL %>%
+  filter(!is.na(frec_diaria)) %>%
+  count(frec_diaria) %>%
+  mutate(Probabilidad = round(n / espacio_muestral, 4))
+
+kable(frec_tabla, caption = "Tabla 2. Probabilidades empíricas - Frecuencia diaria",
+      col.names = c("Categoría (ω)", "Frecuencia", "P(ω)"), align = c("l","r","r")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+**Validación de suma de probabilidades:**
+
+```{r}
+suma_prob <- sum(frec_tabla$Probabilidad)
+cat("Suma de probabilidades:", round(suma_prob, 4), "\n")
+if (round(suma_prob, 2) == 1.00) {
+  cat("✓ Verificación correcta: Σ P(ωi) = 1\n")
+} else {
+  cat("✗ ERROR: La suma no es igual a 1\n")
+}
+```
+
+**Visualización:**
+
+```{r, fig.width=7, fig.height=4}
+bp1 <- barplot(
+  frec_tabla$Probabilidad,
+  names.arg = frec_tabla$frec_diaria,
+  col = "steelblue",
+  xlab = "Categoría de frecuencia",
+  ylab = "Probabilidad empírica",
+  ylim = c(0, max(frec_tabla$Probabilidad) + 0.1),
+  main = "Distribución empírica: Frecuencia diaria de consumo",
+  cex.names = 0.8
+)
+text(x = bp1, y = frec_tabla$Probabilidad, labels = round(frec_tabla$Probabilidad, 3), 
+     pos = 3, cex = 0.9)
+```
+
+**Interpretación:**
+
+Aproximadamente el 40% de los estudiantes consume café "Frecuentemente", siendo la categoría más probable. La distribución se concentra en frecuencias medias-altas ("A veces" a "Siempre"), evidenciando que el consumo de café es habitual en la población de UTEC.
+
+### IV.1.2 Variable: Tazas de café por día (`tazas_dia`)
+
+**Definición de rangos/categorías:**
+
+Se agrupan las tazas consumidas en tres niveles de consumo basados en recomendaciones de salud:
+
+-   **Consumo bajo:** 0–2 tazas (dentro del rango saludable)
+-   **Consumo moderado:** 3–4 tazas (límite recomendado por OMS)
+-   **Consumo alto:** 5 o más tazas (por encima del límite saludable)
+
+```{r}
+CAFE_PROB <- CAFE_OFICIAL %>%
+  filter(!is.na(tazas_dia)) %>%
+  mutate(
+    categoria_consumo = case_when(
+      tazas_dia <= 2 ~ "Consumo bajo",
+      tazas_dia <= 4 ~ "Consumo moderado",
+      TRUE           ~ "Consumo alto"
+    ) %>% factor(levels = c("Consumo bajo", "Consumo moderado", "Consumo alto"))
+  )
+```
+
+**Experimento aleatorio:**
+
+$E:$ Seleccionar al azar a un estudiante de la muestra limpia y registrar su nivel de consumo diario de café.
+
+**Espacio muestral:**
+
+$$\Omega = \{\text{Consumo bajo, Consumo moderado, Consumo alto}\}$$
+
+**Eventos atómicos:**
+
+-   $E_1:$ Seleccionar un estudiante cuyo consumo sea bajo (0–2 tazas)
+-   $E_2:$ Seleccionar un estudiante cuyo consumo sea moderado (3–4 tazas)
+-   $E_3:$ Seleccionar un estudiante cuyo consumo sea alto (≥5 tazas)
+
+**Cálculo de probabilidades empíricas:**
+
+```{r}
+espacio_muestral2 <- nrow(CAFE_PROB)
+
+consumo_tabla <- CAFE_PROB %>%
+  count(categoria_consumo) %>%
+  mutate(Probabilidad = round(n / espacio_muestral2, 4))
+
+kable(consumo_tabla, caption = "Tabla 3. Probabilidades empíricas - Nivel de consumo",
+      col.names = c("Nivel de consumo (ω)", "Frecuencia", "P(ω)"), align = c("l","r","r")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+**Validación de suma de probabilidades:**
+
+```{r}
+suma_prob2 <- sum(consumo_tabla$Probabilidad)
+cat("Suma de probabilidades:", round(suma_prob2, 4), "\n")
+if (round(suma_prob2, 2) == 1.00) {
+  cat("✓ Verificación correcta: Σ P(ωi) = 1\n")
+} else {
+  cat("✗ ERROR: La suma no es igual a 1\n")
+}
+```
+
+**Visualización:**
+
+```{r, fig.width=7, fig.height=4}
+bp2 <- barplot(
+  consumo_tabla$Probabilidad,
+  names.arg = consumo_tabla$categoria_consumo,
+  col = "skyblue",
+  xlab = "Nivel de consumo",
+  ylab = "Probabilidad empírica",
+  ylim = c(0, max(consumo_tabla$Probabilidad) + 0.1),
+  main = "Distribución empírica: Nivel de consumo diario",
+  cex.names = 0.8
+)
+text(x = bp2, y = consumo_tabla$Probabilidad, labels = round(consumo_tabla$Probabilidad, 3), 
+     pos = 3, cex = 0.9)
+```
+
+**Interpretación:**
+
+Aproximadamente el 72% de los estudiantes presenta un nivel de consumo bajo (0–2 tazas diarias), manteniéndose dentro del rango saludable. Solo el 6.6% presenta consumo alto (≥5 tazas), lo que sugiere que la mayoría de estudiantes de UTEC gestiona su consumo de café de manera moderada.
+
+## IV.2 Probabilidad condicional
+
+**Contexto:**
+
+Se desea analizar la relación entre el aumento del consumo de café al ingresar a UTEC y la percepción de alta energía. Esto permitirá determinar si ambos eventos están asociados.
+
+**Definición de eventos:**
+
+**Evento A:** "El consumo de café del estudiante aumentó al ingresar a UTEC"
+
+-   Se considera que A ocurre si `cambio_utec` es "Aumentó" o "Aumentó mucho"
+
+**Evento B:** "El estudiante percibe alta energía después de consumir café"
+
+-   Se considera que B ocurre si `energia_1_a_5` es "4" o "5"
+
+```{r}
+df_cond <- CAFE_OFICIAL %>%
+  filter(!is.na(cambio_utec), !is.na(energia_1_a_5)) %>%
+  mutate(
+    A = cambio_utec %in% c("Aumentó", "Aumentó mucho"),
+    B = energia_1_a_5 %in% c("4", "5")
+  )
+```
+
+**Cálculo de probabilidades:**
+
+```{r}
+# Probabilidades individuales
+PA   <- mean(df_cond$A)
+PB   <- mean(df_cond$B)
+
+# Intersección
+PAB  <- mean(df_cond$A & df_cond$B)
+
+# Unión (aplicando fórmula)
+PAuB <- PA + PB - PAB
+
+# Complemento de A
+PAc  <- 1 - PA
+
+# Intersección con complemento
+PBinterAc <- mean(df_cond$B & !df_cond$A)
+
+# Condicionales
+PBdA  <- PAB / PA           # P(B|A)
+PBdAc <- PBinterAc / PAc    # P(B|Aᶜ)
+
+# Teorema de Bayes con probabilidad total
+PAdB_Bayes <- (PBdA * PA) / ((PBdA * PA) + (PBdAc * PAc))
+
+resultados <- data.frame(
+  Cantidad = c("P(A) – Consumo aumentó", 
+               "P(B) – Energía alta",
+               "P(A ∩ B)",
+               "P(A ∪ B)",
+               "P(A)·P(B) – Si fueran independientes",
+               "P(Aᶜ)",
+               "P(B ∩ Aᶜ)",
+               "P(B|A)",
+               "P(B|Aᶜ)",
+               "P(A|B) – por Teorema de Bayes"),
+  Valor = round(c(PA, PB, PAB, PAuB, PA*PB, PAc, PBinterAc, PBdA, PBdAc, PAdB_Bayes), 4)
+)
+
+kable(resultados, caption = "Tabla 4. Cálculos de probabilidades",
+      col.names = c("Cantidad", "Valor"), align = c("l","r")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+**Prueba de independencia:**
+
+```{r}
+cat("P(A ∩ B) =", round(PAB, 4), "\n")
+cat("P(A)·P(B) =", round(PA * PB, 4), "\n")
+cat("\n")
+if (abs(PAB - (PA * PB)) < 0.001) {
+  cat("Los eventos A y B son INDEPENDIENTES\n")
+} else {
+  cat("Los eventos A y B son DEPENDIENTES\n")
+  cat("Diferencia:", round(abs(PAB - (PA * PB)), 4), "\n")
+}
+```
+
+**Análisis de probabilidad condicional:**
+
+```{r}
+cat("P(B|A) =", round(PBdA, 4), "→", round(PBdA * 100, 2), "%\n")
+cat("P(B)   =", round(PB, 4), "  →", round(PB * 100, 2), "%\n")
+cat("\n")
+factor_cambio <- PBdA / PB
+cat("Factor de cambio: P(B|A) / P(B) =", round(factor_cambio, 3), "\n")
+if (factor_cambio > 1) {
+  cat("Interpretación: Dado que el consumo aumentó, la probabilidad de\n")
+  cat("percibir alta energía AUMENTA en", round((factor_cambio - 1) * 100, 1), "%\n")
+} else {
+  cat("Interpretación: Dado que el consumo aumentó, la probabilidad de\n")
+  cat("percibir alta energía DISMINUYE en", round((1 - factor_cambio) * 100, 1), "%\n")
+}
+```
+
+**Teorema de Bayes - Análisis inverso:**
+
+```{r}
+cat("P(A|B) por Bayes =", round(PAdB_Bayes, 4), "→", round(PAdB_Bayes * 100, 2), "%\n")
+cat("P(A)             =", round(PA, 4), "  →", round(PA * 100, 2), "%\n")
+cat("\n")
+factor_cambio2 <- PAdB_Bayes / PA
+cat("Factor de cambio: P(A|B) / P(A) =", round(factor_cambio2, 3), "\n")
+cat("\nInterpretación: Entre quienes perciben alta energía, la probabilidad\n")
+cat("de que su consumo haya aumentado al entrar a UTEC es del", round(PAdB_Bayes * 100, 1), "%\n")
+```
+
+**Visualización:**
+
+```{r, fig.width=9, fig.height=4}
+datos_comp <- data.frame(
+  Evento = c("P(A)", "P(A|B) por Bayes"),
+  Probabilidad = c(PA, PAdB_Bayes)
+)
+
+ggplot(datos_comp, aes(x = Evento, y = Probabilidad, fill = Evento)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = round(Probabilidad, 4)), vjust = -0.5, size = 5) +
+  ylim(0, 1) +
+  scale_fill_manual(values = c("P(A)" = "#3498DB", "P(A|B) por Bayes" = "#E74C3C")) +
+  labs(title = "Comparación: P(A) vs P(A|B) - Teorema de Bayes",
+       subtitle = "¿Cómo cambia la probabilidad al conocer que el estudiante percibe alta energía?",
+       y = "Probabilidad", x = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none",
+        plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+**Conclusión:**
+
+Como P(A ∩ B) ≠ P(A)·P(B), los eventos A y B son **dependientes**. El aumento del consumo de café al ingresar a UTEC se asocia con mayor probabilidad de percibir alta energía: P(B\|A) = 0.4944, mientras que P(B) = 0.4276, representando un incremento del 15.6%. Aplicando el Teorema de Bayes, entre los estudiantes que perciben alta energía, el 75% corresponde a quienes aumentaron su consumo al ingresar a la universidad.
+
+# V. Variables Aleatorias
+
+------------------------------------------------------------------------
+
+## V.1 Variables discretas
+
+### V.1.1 Tazas por día (`tazas_dia`)
+
+**Caso práctico:**
+
+Un investigador de la oficina de Bienestar Estudiantil de UTEC desea estimar la probabilidad de que un estudiante seleccionado al azar consuma exactamente 3 tazas de café en un día típico. También le interesa calcular la probabilidad de que el consumo no exceda las 4 tazas diarias (límite recomendado por la OMS).
+
+**Definición formal de la variable aleatoria:**
+
+Sea $X$ la variable aleatoria:
+
+$$X = \text{número de tazas de café consumidas por un estudiante de UTEC en un día}$$
+
+donde $X \in \{0, 1, 2, 3, ...\}$ (valores enteros no negativos).
+
+**Análisis de descriptores:**
+
+```{r}
+media_tazas <- mean(CAFE_OFICIAL$tazas_dia, na.rm = TRUE)
+var_tazas   <- var(CAFE_OFICIAL$tazas_dia, na.rm = TRUE)
+dif_mv      <- abs(media_tazas - var_tazas)
+
+cat("Media:                    ", round(media_tazas, 3), "\n")
+cat("Varianza:                 ", round(var_tazas, 3), "\n")
+cat("Diferencia (|μ - σ²|):   ", round(dif_mv, 3), "\n\n")
+
+if (dif_mv < 0.5) {
+  cat("✓ Media ≈ Varianza → La distribución Poisson es CANDIDATA\n")
+} else if (dif_mv < 1.0) {
+  cat("~ Media y varianza cercanas → Poisson puede ser razonable\n")
+} else {
+  cat("✗ Media y varianza muy diferentes → Poisson NO es apropiada\n")
+}
+```
+
+**Visualización inicial:**
+
+```{r, fig.width=7, fig.height=4}
+tabla_tazas <- table(CAFE_OFICIAL$tazas_dia)
+bp_tazas <- barplot(tabla_tazas,
+                    main = "Distribución del consumo diario de café",
+                    xlab = "Tazas por día",
+                    ylab = "Frecuencia",
+                    col = gray(0.6),
+                    border = "black",
+                    ylim = c(0, max(tabla_tazas) + 50))
+text(x = bp_tazas, y = tabla_tazas, labels = tabla_tazas, pos = 3, cex = 0.8)
+```
+
+**Propuesta de modelo:**
+
+Dado que:
+
+1.  La variable es un conteo de eventos (número de tazas)
+2.  Los valores son enteros no negativos
+3.  Media ≈ Varianza (2.20 ≈ 2.548 ≈ 2)
+4.  Los eventos (consumir cada taza) pueden considerarse independientes
+
+Se propone modelar $X$ mediante una **distribución de Poisson con parámetro** $\lambda \approx 2.20$.
+
+$$X \sim \text{Poisson}(\lambda = 2.20)$$
+
+**Ajuste y validación gráfica:**
+
+```{r, fig.width=8, fig.height=5}
+lambda_est   <- mean(CAFE_OFICIAL$tazas_dia, na.rm = TRUE)
+tabla_emp    <- table(CAFE_OFICIAL$tazas_dia)
+prop_emp     <- tabla_emp / sum(tabla_emp)
+valores      <- as.numeric(names(tabla_emp))
+prob_poisson <- dpois(valores, lambda_est)
+
+# Gráfico con zoom en región de mayor probabilidad (0–8 tazas)
+valores_zoom <- 0:8
+prob_poisson_zoom <- dpois(valores_zoom, lambda_est)
+
+# Probabilidades empíricas correspondientes
+prop_emp_zoom <- numeric(length(valores_zoom))
+for (i in seq_along(valores_zoom)) {
+  idx <- which(valores == valores_zoom[i])
+  if (length(idx) > 0) {
+    prop_emp_zoom[i] <- prop_emp[idx]
+  }
+}
+
+bpc <- barplot(prop_emp_zoom,
+               names.arg = valores_zoom,
+               col = "lightblue",
+               border = "black",
+               ylim = c(0, max(prop_emp_zoom, prob_poisson_zoom, na.rm = TRUE) + 0.05),
+               main = "Ajuste: Distribución empírica vs. Poisson(λ=2.20)",
+               xlab = "Tazas de café por día",
+               ylab = "Probabilidad",
+               cex.main = 1.1, font.main = 2)
+
+lines(bpc, prob_poisson_zoom, type = "h", lwd = 2.5, col = "#DC2626")
+points(bpc, prob_poisson_zoom, col = "#DC2626", pch = 19, cex = 1)
+
+legend("topright",
+       legend = c("Empírica", "Poisson teórica"),
+       col = c("lightblue", "#DC2626"),
+       lwd = c(5, 2.5),
+       pch = c(15, 19),
+       bty = "n")
+```
+
+**Cálculos de probabilidades:**
+
+```{r}
+# P(X = k) para k = 2 y k = 3
+prob_X_2 <- dpois(2, lambda_est)
+prob_X_3 <- dpois(3, lambda_est)
+
+cat("P(X = 2) =", round(prob_X_2, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante consuma\n")
+cat("exactamente 2 tazas de café en un día es del", round(prob_X_2 * 100, 2), "%\n\n")
+
+cat("P(X = 3) =", round(prob_X_3, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante consuma\n")
+cat("exactamente 3 tazas de café en un día es del", round(prob_X_3 * 100, 2), "%\n\n")
+
+# P(X ≤ 4) - No exceder el límite recomendado
+prob_X_leq_4 <- ppois(4, lambda_est)
+cat("P(X ≤ 4) =", round(prob_X_leq_4, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante consuma\n")
+cat("4 tazas o menos (dentro del límite saludable) es del", round(prob_X_leq_4 * 100, 2), "%\n\n")
+
+# P(X ≥ 5) - Exceder el límite recomendado
+prob_X_geq_5 <- 1 - ppois(4, lambda_est)
+cat("P(X ≥ 5) =", round(prob_X_geq_5, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante consuma\n")
+cat("5 o más tazas (excediendo el límite saludable) es del", round(prob_X_geq_5 * 100, 2), "%\n")
+```
+
+**Análisis final:**
+
+El modelo Poisson(λ=2.20) proporciona un ajuste razonable para la mayoría de los valores observados, especialmente en el rango de 1–4 tazas donde se concentra \~87% de los datos. Sin embargo, presenta algunas limitaciones:
+
+-   **Sobreestima** la probabilidad en X=0 (no consumo)
+-   **Subestima ligeramente** la concentración en X=2 (valor modal empírico)
+-   Para valores altos (X≥6), las frecuencias empíricas son muy bajas y el modelo se ajusta aceptablemente
+
+**Implicaciones prácticas:**
+
+-   El 95.2% de los estudiantes consume 4 tazas o menos, manteniéndose dentro del límite saludable
+-   Solo el 4.8% excede las 5 tazas diarias, un grupo que podría requerir orientación sobre consumo responsable
+-   El modelo permite a la oficina de Bienestar estimar demanda de café en eventos y servicios universitarios
+
+### V.1.2 Horas de sueño (`sueno_noche`)
+
+**Caso práctico:**
+
+La dirección académica de UTEC desea identificar la proporción de estudiantes que duerme al menos 7 horas (mínimo recomendado para adultos jóvenes) y aquellos en riesgo por dormir 5 horas o menos.
+
+**Pregunta motivadora:**
+
+¿Qué modelo probabilístico describe las horas de sueño nocturno de los estudiantes consumidores de café en UTEC?
+
+**Definición formal:**
+
+Sea $Y$ la variable aleatoria:
+
+$$Y = \text{número de horas que duerme un estudiante de UTEC en una noche}$$
+
+donde $Y \in \{1, 2, 3, ..., 12\}$ (valores enteros positivos acotados).
+
+**Análisis de descriptores:**
+
+```{r}
+media_sueno <- mean(CAFE_OFICIAL$sueno_noche, na.rm = TRUE)
+var_sueno   <- var(CAFE_OFICIAL$sueno_noche, na.rm = TRUE)
+dif_mv_sueno <- media_sueno - var_sueno
+
+cat("Media:                    ", round(media_sueno, 3), "\n")
+cat("Varianza:                 ", round(var_sueno, 3), "\n")
+cat("Diferencia (μ - σ²):     ", round(dif_mv_sueno, 3), "\n\n")
+
+if (abs(dif_mv_sueno) < 0.5) {
+  cat("Media ≈ Varianza → Poisson candidata\n")
+} else if (dif_mv_sueno > 3) {
+  cat("Media >> Varianza → Datos subdispersos, Poisson NO apropiada\n")
+  cat("Considerar distribución empírica directa o modelos alternativos\n")
+} else {
+  cat("Media y varianza diferentes → Evaluar otros modelos\n")
+}
+```
+
+**Visualización inicial:**
+
+```{r, fig.width=7, fig.height=4}
+tabla_sueno <- table(CAFE_OFICIAL$sueno_noche)
+bp_sueno <- barplot(tabla_sueno,
+                    main = "Distribución de horas de sueño nocturno",
+                    xlab = "Horas de sueño",
+                    ylab = "Frecuencia",
+                    col = "#6EE7B7",
+                    border = "gray50",
+                    ylim = c(0, max(tabla_sueno) + 50))
+text(x = bp_sueno, y = tabla_sueno, labels = tabla_sueno, pos = 3, cex = 0.85)
+abline(v = bp_sueno[which.min(abs(as.numeric(names(tabla_sueno)) - media_sueno))],
+       col = "#DC2626", lwd = 2, lty = 2)
+legend("topright",
+       legend = paste0("Media = ", round(media_sueno, 2), "h"),
+       col = "#DC2626", lty = 2, lwd = 2, bty = "n")
+```
+
+**Descarte de modelos discretos:**
+
+::: callout-note
+**¿Por qué los modelos discretos comunes no son apropiados?**
+
+-   **Poisson:** Requiere media ≈ varianza. Aquí μ = 5.677 y σ² = 2.445, con diferencia de 3.232 → **descartada**
+-   **Binomial:** Requiere n fijo y p constante. Las horas de sueño no son "éxitos" en n intentos → **descartada**
+-   **Geométrica:** Distribución decreciente desde inicio. El histograma muestra pico central en 6h → **descartada**
+-   **Hipergeométrica:** Muestreo sin reemplazo. No aplica a horas de sueño → **descartada**
+
+**Conclusión:** Ningún modelo discreto estándar se ajusta adecuadamente. Se usará la **distribución empírica directa**.
+:::
+
+**Cálculos con distribución empírica:**
+
+```{r}
+n_total <- sum(!is.na(CAFE_OFICIAL$sueno_noche))
+sueno_freq <- as.data.frame(table(CAFE_OFICIAL$sueno_noche))
+names(sueno_freq) <- c("horas", "freq")
+sueno_freq$horas <- as.numeric(as.character(sueno_freq$horas))
+sueno_freq$prob <- sueno_freq$freq / n_total
+
+# P(Y = 6) - valor modal
+prob_Y_6 <- sueno_freq$prob[sueno_freq$horas == 6]
+cat("P(Y = 6) =", round(prob_Y_6, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante duerma\n")
+cat("exactamente 6 horas es del", round(prob_Y_6 * 100, 2), "% (categoría modal)\n\n")
+
+# P(Y ≤ 5) - En riesgo por sueño insuficiente
+prob_Y_leq_5 <- sum(sueno_freq$prob[sueno_freq$horas <= 5])
+cat("P(Y ≤ 5) =", round(prob_Y_leq_5, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante duerma\n")
+cat("5 horas o menos (sueño insuficiente) es del", round(prob_Y_leq_5 * 100, 2), "%\n\n")
+
+# P(Y ≥ 7) - Cumple recomendación mínima
+prob_Y_geq_7 <- sum(sueno_freq$prob[sueno_freq$horas >= 7])
+cat("P(Y ≥ 7) =", round(prob_Y_geq_7, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante duerma\n")
+cat("7 horas o más (cumple recomendación) es del", round(prob_Y_geq_7 * 100, 2), "%\n")
+```
+
+**Análisis final:**
+
+La distribución de horas de sueño es **unimodal** con pico en 6 horas y presenta **subdispersión** (varianza menor que la media), lo cual explica por qué los modelos discretos estándar no se ajustan. Características principales:
+
+-   **23.7%** duerme ≤5 horas (población en riesgo)
+-   **39.4%** duerme 6 horas (grupo modal, aún por debajo del mínimo)
+-   **36.9%** duerme ≥7 horas (cumple recomendación)
+
+**Implicaciones prácticas:**
+
+-   El **63.1%** de estudiantes duerme menos de 7 horas, evidenciando un problema generalizado de sueño insuficiente en la población universitaria
+-   Existe asociación entre consumo de café y patrones de sueño reducidos
+-   Se recomienda a la dirección académica implementar programas de higiene del sueño y gestión del tiempo
+
+## V.2 Variables continuas
+
+### V.2.1 Promedio ponderado (`pp_2024_1`)
+
+**Caso práctico:**
+
+El departamento de Bienestar Académico desea estimar cuántos estudiantes consumidores de café tendrán un promedio ponderado en el rango de 13 a 16 puntos (categoría "aprobado satisfactoriamente") para diseñar programas de apoyo focalizados.
+
+**Pregunta motivadora:**
+
+¿Qué distribución continua modela el rendimiento académico (PP) de los estudiantes consumidores de café en UTEC?
+
+**Definición formal:**
+
+Sea $Z$ la variable aleatoria continua:
+
+$$Z = \text{promedio ponderado del ciclo 2024-1 de un estudiante de UTEC}, \quad Z \in [0, 20]$$
+
+**Análisis visual inicial:**
+
+```{r, fig.width=8, fig.height=4}
+pp_data <- CAFE_OFICIAL$pp_2024_1[!is.na(CAFE_OFICIAL$pp_2024_1)]
+
+ggplot(data.frame(x = pp_data), aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25,
+                 fill = "#BFDBFE", color = "white", alpha = 0.85) +
+  geom_density(color = "#DC2626", linewidth = 1.2) +
+  labs(title = "Distribución del promedio ponderado (PP 2024-1)",
+       subtitle = "Histograma de densidad + curva empírica",
+       x = "Promedio ponderado (0–20)", y = "Densidad") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+**Descriptores numéricos:**
+
+```{r}
+n_pp     <- length(pp_data)
+media_pp <- mean(pp_data)
+mediana_pp <- median(pp_data)
+sd_pp    <- sd(pp_data)
+var_pp   <- var(pp_data)
+cv_pp    <- sd_pp / media_pp
+asim_pp  <- (sum((pp_data - media_pp)^3) / n_pp) / (sd_pp^3)
+
+cat("n:                        ", n_pp, "\n")
+cat("Media:                    ", round(media_pp, 3), "\n")
+cat("Mediana:                  ", round(mediana_pp, 3), "\n")
+cat("Desviación estándar:      ", round(sd_pp, 3), "\n")
+cat("Varianza:                 ", round(var_pp, 3), "\n")
+cat("Coeficiente de variación: ", round(cv_pp, 4), "\n")
+cat("Asimetría:                ", round(asim_pp, 4), "\n")
+```
+
+**Comparación de distribuciones candidatas:**
+
+Se evalúan tres distribuciones candidatas mediante log-verosimilitud antes de seleccionar el modelo final.
+
+```{r}
+library(MASS)
+pp_data_pos <- pp_data[pp_data > 0]
+fit_gamma_pp <- fitdistr(pp_data_pos, "gamma")
+alpha_gam_pp <- fit_gamma_pp$estimate["shape"]
+rate_gam_pp  <- fit_gamma_pp$estimate["rate"]
+theta_gam_pp <- 1 / rate_gam_pp
+loglik_normal <- sum(dnorm(pp_data, mean(pp_data), sd(pp_data), log = TRUE))
+loglik_gamma  <- sum(dgamma(pp_data_pos, shape = alpha_gam_pp, rate = rate_gam_pp, log = TRUE))
+loglik_unif   <- sum(dunif(pp_data, 0, 20, log = TRUE))
+tabla_cand_pp <- data.frame(
+  Distribucion    = c("Normal(mu, sigma)", "Gamma(alpha, theta)", "Uniforme(0, 20)"),
+  Parametros      = c(
+    paste0("mu=", round(mean(pp_data), 2), ", sigma=", round(sd(pp_data), 2)),
+    paste0("alpha=", round(alpha_gam_pp, 2), ", theta=", round(theta_gam_pp, 2)),
+    "a=0, b=20"
+  ),
+  LogVerosimilitud = round(c(loglik_normal, loglik_gamma, loglik_unif), 2),
+  Veredicto = c("SELECCIONADA", "Descartada: asimetria opuesta", "Descartada: densidad no constante")
+)
+kable(tabla_cand_pp, caption = "Tabla 5a. Comparacion de distribuciones candidatas - PP 2024-1",
+      align = c("l","l","r","l")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+::: callout-note
+**Justificacion de seleccion:**
+
+-   **Normal:** Asimetria = -0.1648 (proximo a 0), forma campana simetrica, mayor log-verosimilitud → **SELECCIONADA**
+-   **Gamma:** Requiere asimetria positiva marcada; la asimetria negativa observada la descarta como candidata optima
+-   **Uniforme:** La densidad no es constante (histograma muestra pico en 14-16) → **descartada**
+
+**Modelo propuesto:** Distribucion Normal
+:::
+
+**Ajuste del modelo Normal:**
+
+Parámetros estimados:
+
+$$Z \sim N(\mu = 14.69, \sigma = 2.17)$$
+
+```{r}
+mu_pp <- media_pp
+sigma_pp <- sd_pp
+
+cat("Parámetros del modelo Normal:\n")
+cat("μ (media) =", round(mu_pp, 3), "\n")
+cat("σ (DE)    =", round(sigma_pp, 3), "\n")
+```
+
+**Validación gráfica:**
+
+```{r, fig.width=8, fig.height=5}
+ggplot(data.frame(x = pp_data), aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25,
+                 fill = "#27AE60", color = "white", alpha = 0.8) +
+  stat_function(fun = dnorm, args = list(mean = mu_pp, sd = sigma_pp),
+                color = "#E74C3C", linewidth = 1.5) +
+  labs(title = paste0("Ajuste: PP 2024-1 vs Normal(μ=", round(mu_pp,2), ", σ=", round(sigma_pp,2), ")"),
+       x = "Promedio ponderado", y = "Densidad") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+**Q-Q Plot para validar normalidad:**
+
+```{r, fig.width=6, fig.height=6}
+qqnorm(pp_data, main = "Q-Q Plot: PP 2024-1 vs Normal teórica",
+       col = "#3498DB", pch = 19, cex = 0.8)
+qqline(pp_data, col = "#E74C3C", lwd = 2)
+```
+
+**Cálculos de probabilidades:**
+
+```{r}
+# P(13 ≤ Z ≤ 16) - Rango "aprobado satisfactoriamente"
+prob_13_16 <- pnorm(16, mu_pp, sigma_pp) - pnorm(13, mu_pp, sigma_pp)
+cat("P(13 ≤ Z ≤ 16) =", round(prob_13_16, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante tenga un PP\n")
+cat("entre 13 y 16 puntos es del", round(prob_13_16 * 100, 2), "%\n\n")
+
+# P(Z < 11) - En riesgo académico
+prob_Z_menor_11 <- pnorm(11, mu_pp, sigma_pp)
+cat("P(Z < 11) =", round(prob_Z_menor_11, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante esté\n")
+cat("en riesgo académico (PP < 11) es del", round(prob_Z_menor_11 * 100, 2), "%\n\n")
+
+# P(Z ≥ 17) - Rendimiento destacado
+prob_Z_mayor_17 <- 1 - pnorm(17, mu_pp, sigma_pp)
+cat("P(Z ≥ 17) =", round(prob_Z_mayor_17, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante tenga\n")
+cat("rendimiento destacado (PP ≥ 17) es del", round(prob_Z_mayor_17 * 100, 2), "%\n\n")
+
+# Percentil 25 y 75
+p25 <- qnorm(0.25, mu_pp, sigma_pp)
+p75 <- qnorm(0.75, mu_pp, sigma_pp)
+cat("Percentil 25: P₂₅ =", round(p25, 2), "\n")
+cat("Percentil 75: P₇₅ =", round(p75, 2), "\n")
+cat("Interpretación: El 50% central de estudiantes tiene PP entre",
+    round(p25, 2), "y", round(p75, 2), "\n")
+```
+
+**Análisis final:**
+
+El modelo Normal(14.69, 2.17) proporciona un excelente ajuste para el promedio ponderado:
+
+-   El Q-Q plot muestra que los puntos se alinean bien con la recta teórica
+-   La asimetría es cercana a cero (-0.16), validando la simetría del modelo
+-   El CV = 0.174 indica dispersión moderada
+
+**Supuestos y limitaciones:**
+
+-   **Supuesto de independencia:** Se asume que el PP de un estudiante no afecta al de otro
+-   **Limitación del rango:** El modelo Normal permite valores negativos y \>20, pero en la práctica el PP está acotado en \[0,20\]. Sin embargo, P(Z\<0) y P(Z\>20) son prácticamente 0 con estos parámetros
+-   **Aplicabilidad:** Válido solo para la población de estudiantes consumidores de café en 2024-2
+
+**Implicaciones prácticas:**
+
+-   El 54.3% de estudiantes tiene PP en rango 13–16 (aprobado satisfactoriamente)
+-   Solo el 8.5% está en riesgo académico (PP\<11)
+-   El 15.2% tiene rendimiento destacado (PP≥17)
+
+### V.2.2 Límite de horas antes de dormir (`limite_dormir`)
+
+**Caso práctico:**
+
+La oficina de Salud Estudiantil desea estimar qué proporción de estudiantes consumiría café dentro de las 4 horas previas a dormir (conducta que afecta la calidad del sueño) para diseñar campañas de educación sobre higiene del sueño.
+
+**Pregunta motivadora:**
+
+¿Qué distribución continua modela la tolerancia temporal de los estudiantes al consumo de café antes de dormir?
+
+**Definición formal:**
+
+Sea $W$ la variable aleatoria continua:
+
+$$W = \text{horas máximas antes de dormir en que un estudiante consumiría café}, \quad W > 0$$
+
+Se excluyen valores W = 0 para analizar solo estudiantes que sí tienen algún límite temporal.
+
+```{r}
+w_data <- CAFE_OFICIAL$limite_dormir[CAFE_OFICIAL$limite_dormir > 0 & !is.na(CAFE_OFICIAL$limite_dormir)]
+n_w <- length(w_data)
+cat("Muestra efectiva (W > 0):", n_w, "estudiantes\n")
+```
+
+**Análisis visual inicial:**
+
+```{r, fig.width=8, fig.height=4}
+ggplot(data.frame(x = w_data), aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 20,
+                 fill = "#BFDBFE", color = "white", alpha = 0.85) +
+  geom_density(color = "#DC2626", linewidth = 1.2) +
+  labs(title = "Distribución: Límite de horas antes de dormir (W > 0)",
+       subtitle = "Histograma de densidad + curva empírica",
+       x = "Horas antes de dormir", y = "Densidad") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+**Descriptores numéricos:**
+
+```{r}
+media_w   <- mean(w_data)
+mediana_w <- median(w_data)
+sd_w      <- sd(w_data)
+var_w     <- var(w_data)
+cv_w      <- sd_w / media_w
+asim_w    <- (sum((w_data - media_w)^3) / n_w) / (sd_w^3)
+
+cat("Media:                    ", round(media_w, 3), "\n")
+cat("Mediana:                  ", round(mediana_w, 3), "\n")
+cat("Desviación estándar:      ", round(sd_w, 3), "\n")
+cat("Varianza:                 ", round(var_w, 3), "\n")
+cat("Coeficiente de variación: ", round(cv_w, 4), "\n")
+cat("Asimetría:                ", round(asim_w, 4), "\n")
+```
+
+**Comparación de distribuciones candidatas:**
+
+Se evaluan tres distribuciones de soporte positivo y se comparan mediante log-verosimilitud antes de seleccionar el modelo final.
+
+```{r}
+# Ajuste Gamma por MLE
+fit_gamma_w <- fitdistr(w_data, "gamma")
+
+alpha_mle_w <- fit_gamma_w$estimate["shape"]
+rate_mle_w  <- fit_gamma_w$estimate["rate"]
+theta_mle_w <- 1 / rate_mle_w  # parametrización en escala
+
+# Ajustes alternativos
+fit_weibull_w <- fitdistr(w_data, "weibull")
+fit_lognorm_w <- fitdistr(w_data, "lognormal")
+
+# Log-verosimilitudes
+loglik_gamma_w <- sum(dgamma(w_data,
+                             shape = alpha_mle_w,
+                             rate  = rate_mle_w,
+                             log   = TRUE))
+
+loglik_weibull_w <- sum(dweibull(w_data,
+                                 shape = fit_weibull_w$estimate["shape"],
+                                 scale = fit_weibull_w$estimate["scale"],
+                                 log   = TRUE))
+
+loglik_lognorm_w <- sum(dlnorm(w_data,
+                               meanlog = fit_lognorm_w$estimate["meanlog"],
+                               sdlog   = fit_lognorm_w$estimate["sdlog"],
+                               log     = TRUE))
+
+tabla_cand_w <- data.frame(
+  Distribucion = c("Gamma(alpha, theta)",
+                   "Weibull(shape, scale)",
+                   "Lognormal(meanlog, sdlog)"),
+  Parametros = c(
+    paste0("alpha=", round(alpha_mle_w, 3),
+           ", theta=", round(theta_mle_w, 3)),
+    paste0("shape=", round(fit_weibull_w$estimate["shape"], 3),
+           ", scale=", round(fit_weibull_w$estimate["scale"], 3)),
+    paste0("meanlog=", round(fit_lognorm_w$estimate["meanlog"], 3),
+           ", sdlog=", round(fit_lognorm_w$estimate["sdlog"], 3))
+  ),
+  LogVerosimilitud = round(c(loglik_gamma_w,
+                             loglik_weibull_w,
+                             loglik_lognorm_w), 2),
+  Veredicto = c("SELECCIONADA",
+                "Candidata alternativa",
+                "Descartada: cola excesiva")
+)
+
+kable(tabla_cand_w,
+      caption = "Tabla 6a. Comparacion de distribuciones candidatas - limite_dormir",
+      align = c("l","l","r","l")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"),
+                full_width = FALSE)
+```
+
+::: callout-note
+**Justificacion de seleccion:**
+
+-   **Gamma:** Mayor log-verosimilitud entre las tres candidatas; parametros interpretables (forma y escala); captura adecuadamente la cola derecha observada → **SELECCIONADA**
+-   **Weibull:** Log-verosimilitud comparable pero la moda teorica se ajusta peor al histograma empirico
+-   **Lognormal:** Sobrestima la densidad en valores extremos altos; log-verosimilitud inferior
+
+**Candidata final:** Gamma(MLE)
+:::
+
+**Método 1: Método de Momentos (MM)**
+
+Fórmulas:
+
+$$\alpha_{MM} = \frac{\bar{x}^2}{s^2}, \quad \theta_{MM} = \frac{s^2}{\bar{x}}$$
+
+```{r}
+alpha_mm_w <- (media_w^2) / var_w
+theta_mm_w <- var_w / media_w
+
+cat("Método de Momentos (MM):\n")
+cat("α (shape) =", round(alpha_mm_w, 4), "\n")
+cat("θ (scale) =", round(theta_mm_w, 4), "\n")
+cat("Media teórica    = α·θ =", round(alpha_mm_w * theta_mm_w, 3), "\n")
+cat("Varianza teórica = α·θ² =", round(alpha_mm_w * theta_mm_w^2, 3), "\n")
+cat("Moda teórica     = (α-1)·θ =", round((alpha_mm_w - 1) * theta_mm_w, 3), "\n")
+```
+
+**Método 2: Máxima Verosimilitud (MLE)**
+
+```{r}
+library(MASS)
+fit_gamma_w <- fitdistr(w_data, "gamma")
+alpha_mle_w <- fit_gamma_w$estimate["shape"]
+rate_mle_w  <- fit_gamma_w$estimate["rate"]
+theta_mle_w <- 1 / rate_mle_w
+
+cat("Máxima Verosimilitud (MLE):\n")
+cat("α (shape) =", round(alpha_mle_w, 4), "\n")
+cat("θ (scale) =", round(theta_mle_w, 4), "\n")
+cat("Media teórica    = α·θ =", round(alpha_mle_w * theta_mle_w, 3), "\n")
+cat("Varianza teórica = α·θ² =", round(alpha_mle_w * theta_mle_w^2, 3), "\n")
+cat("Moda teórica     = (α-1)·θ =", round((alpha_mle_w - 1) * theta_mle_w, 3), "\n")
+```
+
+**Comparación de ajustes:**
+
+```{r}
+comp_tabla <- data.frame(
+  Característica = c("α (shape)", "θ (scale)", "Media teórica", "Varianza teórica", "Moda teórica"),
+  MM  = c(round(alpha_mm_w, 4), round(theta_mm_w, 4),
+          round(alpha_mm_w * theta_mm_w, 3),
+          round(alpha_mm_w * theta_mm_w^2, 3),
+          round((alpha_mm_w - 1) * theta_mm_w, 3)),
+  MLE = c(round(alpha_mle_w, 4), round(theta_mle_w, 4),
+          round(alpha_mle_w * theta_mle_w, 3),
+          round(alpha_mle_w * theta_mle_w^2, 3),
+          round((alpha_mle_w - 1) * theta_mle_w, 3))
+)
+
+kable(comp_tabla, caption = "Tabla 5. Comparación MM vs MLE",
+      align = c("l","c","c")) %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = FALSE)
+```
+
+**Selección del modelo:**
+
+Aunque el método de momentos MM reproduce exactamente la varianza muestral, el estimador por máxima verosimilitud se selecciona como modelo final, ya que este método determina los parámetros que hacen más probable la muestra observada bajo la distribución Gamma. El MLE proporciona un ajuste global más consistente con los datos, al considerar simultáneamente toda la información contenida en la muestra. **Se selecciona el modelo MLE.**
+
+**Modelo final:**
+
+$$\boxed{W \sim \text{Gamma}(\alpha = 2.4274, \theta = 1.6492)}$$
+
+**Validación gráfica:**
+
+```{r, fig.width=9, fig.height=5}
+hist(w_data, prob = TRUE, breaks = 20,
+     col = "#DBEAFE", border = "white",
+     main = "Ajuste: Histograma vs Gamma MLE",
+     xlab = "Horas antes de dormir", ylab = "Densidad",
+     ylim = c(0, max(density(w_data)$y) * 1.1))
+
+curve(dgamma(x, shape = alpha_mle_w, rate = rate_mle_w),
+      from = 0, to = max(w_data), col = "#DC2626", lwd = 2.5, add = TRUE)
+
+legend("topright",
+       legend = c("Empírica", paste0("Gamma MLE (α=", round(alpha_mle_w,2), ", θ=", round(theta_mle_w,2), ")")),
+       col = c("#DBEAFE", "#DC2626"),
+       lwd = c(10, 2.5),
+       bty = "n")
+```
+
+**CDF empírica vs teórica:**
+
+```{r, fig.width=8, fig.height=5}
+plot(ecdf(w_data),
+     main = "CDF empírica vs Gamma MLE",
+     xlab = "Horas antes de dormir", ylab = "Probabilidad acumulada",
+     col = "#64748B", lwd = 2, pch = NA)
+
+curve(pgamma(x, shape = alpha_mle_w, rate = rate_mle_w),
+      from = 0, to = max(w_data), col = "#DC2626", lwd = 2.5, add = TRUE)
+
+legend("bottomright",
+       legend = c("CDF empírica", "CDF Gamma MLE"),
+       col = c("#64748B", "#DC2626"),
+       lwd = c(2, 2.5),
+       bty = "n")
+```
+
+**Cálculos de probabilidades:**
+
+```{r}
+# P(W ≤ 4) - Consumiría café dentro de 4h antes de dormir (afecta sueño)
+prob_W_leq_4 <- pgamma(4, shape = alpha_mle_w, rate = rate_mle_w)
+cat("P(W ≤ 4) =", round(prob_W_leq_4, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante consumiría\n")
+cat("café dentro de las 4 horas previas a dormir es del", round(prob_W_leq_4 * 100, 2), "%\n")
+cat("(conducta que afecta negativamente la calidad del sueño)\n\n")
+
+# P(W > 6) - Límite saludable (>6h de separación)
+prob_W_mayor_6 <- 1 - pgamma(6, shape = alpha_mle_w, rate = rate_mle_w)
+cat("P(W > 6) =", round(prob_W_mayor_6, 4), "\n")
+cat("Interpretación: La probabilidad de que un estudiante tenga un\n")
+cat("límite saludable (>6h de separación) es del", round(prob_W_mayor_6 * 100, 2), "%\n\n")
+
+# P(2 ≤ W ≤ 5) - Rango de tolerancia moderada
+prob_2_a_5 <- pgamma(5, shape = alpha_mle_w, rate = rate_mle_w) - 
+              pgamma(2, shape = alpha_mle_w, rate = rate_mle_w)
+cat("P(2 ≤ W ≤ 5) =", round(prob_2_a_5, 4), "\n")
+cat("Interpretación: La probabilidad de que el límite esté entre\n")
+cat("2 y 5 horas es del", round(prob_2_a_5 * 100, 2), "%\n\n")
+
+# Percentil 75
+p75_w <- qgamma(0.75, shape = alpha_mle_w, rate = rate_mle_w)
+cat("Percentil 75: P₇₅ =", round(p75_w, 2), "horas\n")
+cat("Interpretación: El 75% de estudiantes tiene un límite de",
+    round(p75_w, 2), "horas o menos\n")
+```
+
+**Análisis final:**
+
+El modelo Gamma(2.4274, 1.6492) proporciona un buen ajuste para la variable límite de horas antes de dormir:
+
+-   La CDF teórica sigue de cerca la CDF empírica
+-   La forma unimodal con cola derecha se captura adecuadamente
+-   Los parámetros estimados por MLE maximizan la verosimilitud de los datos observados
+
+**Supuestos del modelo:**
+
+1.  **Valores positivos continuos:** Válido, W \> 0 por construcción
+2.  **Independencia:** Se asume que el límite de un estudiante no afecta al de otro
+3.  **Distribución estable:** Se asume que el patrón no cambia dentro del periodo 2024-2
+
+**Limitaciones:**
+
+-   El modelo sobrestima ligeramente la densidad en valores muy bajos (W \< 1h)
+-   Para valores extremos (W \> 15h), las frecuencias empíricas son escasas y el ajuste es menos preciso
+
+**Implicaciones prácticas:**
+
+-   El **53.9%** de estudiantes consumiría café dentro de las 4 horas previas a dormir, conducta que la literatura asocia con peor calidad de sueño
+-   Solo el **28.7%** tiene un límite saludable (\>6 horas de separación)
+-   El 75% de estudiantes tiene un límite ≤7.16 horas
+-   **Recomendación:** Implementar campañas educativas sobre el impacto del café nocturno en el sueño
+
+# VI. Conclusiones
+
+------------------------------------------------------------------------
+
+El análisis de los hábitos de consumo de café en estudiantes de UTEC durante el periodo 2024-2 reveló hallazgos relevantes tanto descriptivos como probabilísticos:
+
+**Descriptivo:**
+
+-   El consumo típico es de **2 tazas/día** (dentro del rango saludable), con el 72% en nivel bajo (0–2 tazas)
+-   Las horas de sueño promedian **5.68 h** (por debajo del mínimo recomendado), con 63% durmiendo \<7 horas
+-   El rendimiento académico promedio es **14.69/20**, sin correlación significativa con horas de sueño (r≈0)
+-   El **64.8%** reportó aumento del consumo al ingresar a UTEC, asociado con mayor energía percibida
+-   Mayor frecuencia de consumo se relaciona con mayor percepción de cambio en el estrés (ambas direcciones)
+
+**Probabilístico:**
+
+-   **Probabilidad empírica:** La frecuencia "Frecuentemente" tiene P=0.40; el consumo bajo tiene P=0.72
+-   **Dependencia entre eventos:** Aumentar consumo y percibir alta energía son dependientes (P(B\|A)=0.494 vs P(B)=0.428)
+-   **Variables discretas:** `tazas_dia` se modela con Poisson(λ=2.20); `sueno_noche` requiere distribución empírica (subdispersión, sin modelo discreto estándar apropiado)
+-   **Variables continuas:** `pp_2024_1` \~ Normal(14.69, 2.17) con excelente ajuste; `limite_dormir` \~ Gamma(2.4274, 1.6492) con el 53.9% consumiendo café ≤4h antes de dormir (conducta que afecta sueño)
+
+**Recomendaciones:**
+
+1.  Programas de higiene del sueño (63% duerme insuficiente)
+2.  Educación sobre consumo de café nocturno (54% lo consume cerca de dormir)
+3.  Monitoreo del 4.8% con consumo alto (≥5 tazas/día)
+4.  Intervenciones para el 23.7% en riesgo por sueño ≤5 horas

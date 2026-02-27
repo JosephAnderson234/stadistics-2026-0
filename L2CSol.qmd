@@ -1,0 +1,335 @@
+---
+title: "L2C"
+format: html
+editor: visual
+---
+
+```{r}
+library(readr)
+library(dplyr)
+```
+
+```{r}
+r <- function(x){
+  round(x, digits = 2)
+}
+```
+
+```{r}
+DF <- read_csv("L2C.csv")
+DF
+```
+
+```{r}
+DF$Servicio <- factor(DF$Servicio, levels = c("Malo", "Regular", "Bueno"), ordered = TRUE)
+#Convierte la columna Servicio en una variable (cualitatiuva) categórica ordenada, dejando explícito un orden, malo es peor que regular y regular con bueno y etc, etc.
+```
+
+# 1 Probabilidad básica
+
+Suponiendo que la muestra es representativa considere los siguientes eventos:
+
+-   $X$: una persona usa un ascensor de la torre 1.
+-   $Y$: una persona usa el ascensor A.
+-   $U$: una persona usa un ascensor partiendo del piso 1.
+-   $O$: una persona usa un ascensor para llegar al piso 8.
+
+Determine las siguientes probabilidades empíricas:
+
+-   $\mathbb{P}(X)\approx$ `r r(peX)`.
+-   $\mathbb{P}(Y)\approx$ `r r(peY)`.
+-   $\mathbb{P}(U)\approx$ `r r(peU)`.
+-   $\mathbb{P}(O)\approx$ `r r(peO)`.
+-   La probabilidad de que una persona suba del piso 1 al 8 en el ascensor T1-A es aproximadamente `r r(peXyYyUyO)`.
+
+```{r}
+table(DF$Ascensor, DF$Partida, DF$Llegada) # se obtienen x tablas tal como el tamaño de DF$Llegada (último parámetro de la función)
+
+```
+
+-   La probabilidad de que una persona use la torre dos para ir al piso 8 es aproximadamente `r r(penXyO)`.
+
+```{r}
+table(DF$Ascensor, DF$Llegada, useNA = "always")
+```
+
+-   La probabilidad de que una persona no salga del piso 1 y no vaya al piso 8 es aproximadamente `r r(penUynO)`.
+
+```{r}
+table(DF$Partida, DF$Llegada, useNA = "always")
+```
+
+-   $\mathbb{P}\left(\overline{X \cap Y} \cup \overline{U \cap O}\right)\approx$ `r r(penXYonUO)`
+
+Al final este ejercio es = $X\cap Y \cap U \cap O$
+
+```{r}
+X <- DF$Ascensor %in% c("T1-A", "T1-B", "T1-C", "T1-D")
+Y <- DF$Ascensor %in% c("T1-A", "T2-A")
+U <- DF$Partida == 1
+O <- DF$Llegada == 8
+
+table(DF$Ascensor)
+table(DF$Partida)
+table(DF$Llegada)
+
+
+
+
+```
+
+```{r}
+sum(X)
+sum(Y)
+sum(U)
+sum(O)
+nrow(DF)
+peX <- sum(X)/nrow(DF)
+peY <- sum(Y)/nrow(DF)
+peU <- sum(U)/nrow(DF)
+peO <- sum(O)/nrow(DF)
+sum(X&Y&U&O)
+peXyYyUyO <- sum(X & Y & U & O)/nrow(DF)
+sum((!X) & O)
+penXyO <- sum((!X) & O)/nrow(DF)
+sum((!U) & (!O))
+penUynO <- sum((!U) & (!O))/nrow(DF)
+sum((!(X & Y) | !(U & O)))
+penXYonUO <- sum((!(X & Y) | !(U & O)))/nrow(DF)
+
+table(DF$Ascensor, DF$Partida, DF$Llegada)
+table(DF$Partida, DF$Llegada)
+#Partida en filas, Llegada en columnas
+```
+
+# 2 Probabilidad condicional
+
+Suponiendo que la muestra es representativa considere los siguientes eventos:
+
+-   $X$: una persona usa un ascensor de la torre 1.
+-   $Y$: una persona usa el ascensor A.
+-   $E$: entran más de cinco personas al ascensor.
+-   $M$: el servicio del ascensor se califica como Malo.
+
+La probabilidad condicional de que una persona use el ascensor A dado que usa un ascensor de la torre 2 es aproximadamente `r r(peYdnX)`, por lo que podríamos pensar que los eventos *usa un ascensor de la torre 2* y *usa el ascensor A* son `r tXY`.
+
+```{r}
+table(DF$Ascensor)
+```
+
+La probabilidad condicional de que al ascensor entren más de 5 personas dado que el servicio se califica como "Malo" es aproximadamente `r r(peEdM)`, por lo que podríamos pensar que los eventos *entran más de cinco personas* y *el servicio se califica como Malo* son `r tEM`.
+
+```{r}
+table(DF$Entraron, DF$Servicio)
+```
+
+Para efectos de comparación de probabilidades, deben asumir que si las probabilidades redondeadas correctamente a dos decimales son iguales entonces las probabilidades originales son suficientemente parecidas para decir que son iguales.
+
+```{r}
+E <- (DF$Entraron > 5)
+M <- (DF$Servicio == "Malo")
+
+peE <- sum(E, na.rm = TRUE)/sum(!is.na(E))
+peM <- sum(M, na.rm = TRUE)/sum(!is.na(M))
+
+peEdM <- (sum(E & M, na.rm = TRUE)/sum(!is.na(E & M)))/peM
+
+peYdnX <- sum(Y & (!X))/sum(!X)
+peY
+peYdnX
+
+tXY <- ifelse(r(peYdnX) == r(peY), "independientes", "dependientes")
+tEM <- ifelse(r(peEdM) == r(peE), "independientes", "dependientes")
+
+```
+
+```{r}
+boxplot(DF$Entraron ~ DF$Servicio, varwidth = TRUE)
+```
+
+# 3 Bayes
+
+Considere los siguientes eventos:
+
+$E$: entran más de cinco personas al ascensor. $M$: servicio del ascensor se califica como malo. $R$: servicio del ascensor se califica como regular. $B$: servicio del ascensor se califica como bueno.
+
+Un experto en ergonomía nos dice que:
+
+```{r}
+ptMdE <- 0.35
+ptRdE <- 0.37
+ptBdE <- 0.28
+ptMdnE <- 0.01
+ptRdnE <- 0.35
+ptBdnE <- 0.64
+```
+
+```{r}
+ptE <- 0.02
+ptnE <- 1 - ptE
+```
+
+```{r}
+ptM <- (ptMdE*ptE + ptMdnE*ptnE)
+ptM
+```
+
+```{r}
+ptEdM <- ptMdE*ptE/ptM
+ptEdM
+tExperto <- "ha planteado un escenario más pesimista que el que observamos"
+#"ha planteado un escenario más optimista que el que observamos"
+#"no sabe lo que dice"
+#"sabe algo que nosotros no sabemos"
+```
+
+De acuerdo al experto, la probabilidad de que un viaje sea calificado como malo es aproximadamente `r r(ptM)` y la probabilidad de que un viaje haya tenido más de cinco personas dado que fue calificado como malo es de aproximadamente `r r(ptEdM)`.
+
+Las probabilidades empíricas correspondientes son `r r(peM)` y `r r(peEdM)` por lo que podemos pensar que el experto `r tExperto`.
+
+# 4 Teórica, encontrar c para que sea una densidad.
+
+El tiempo de viaje en el ascensor es una variable aleatoria continua.
+
+Un estudiante de estadística propone la siguiente densidad teórica para el tiempo de viaje en el ascensor.
+
+$$
+f(x)= k*
+\begin{cases}
+0 & \text{si} & -\infty < x \leq 5\\
+\frac{x - 5}{20} & \text{si} & 5 < x \leq 25\\
+\frac{65 - x}{40} & \text{si} & 25 < x \leq 65\\
+0 & \text{si} & 65 < x <\infty\\
+\end{cases}
+$$
+
+```{r}
+g <- function(x){
+  ifelse(x <= 25, (x - 5)/20, (65 - x)/40)
+}
+```
+
+```{r}
+k <- 1/integrate(g, 5, 65)$value
+```
+
+```{r}
+f <- function(x){
+  ifelse(x <= 5 | x > 65, 0, k*g(x))
+}
+```
+
+```{r}
+Xs <- seq(5, 65, by = 0.1)
+hist(DF$Viaje, prob = TRUE, breaks = 20)
+lines(Xs, f(Xs), col = "red")
+```
+
+```{r}
+#ptViaje30 <- integrate(function(x){f(x)}, 0, 30)$value
+#ptViaje30
+peViaje30 <- sum(DF$Viaje <= 30, na.rm = TRUE)/sum(!is.na(DF$Viaje))
+peViaje30
+EtViaje <- integrate(function(x){x*f(x)}, 5, 65)$value
+EtViaje
+EeViaje <- mean(DF$Viaje)
+EeViaje
+tdens <- "la densidad propuesta no es apropiada"
+#"la densidad propuesta es apropiada"
+#"la densidad propuesta es la mejor y la más óptima"
+#"la densidad propuesta es normal"
+```
+
+El tiempo de viaje en el ascensor es una variable aleatoria continua.
+
+Un estudiante de estadística propone la siguiente densidad teórica para el tiempo de viaje en el ascensor.
+
+$$
+f(x)= k*
+\begin{cases}
+0 & \text{si} & -\infty < x \leq 5\\
+\frac{x - 5}{20} & \text{si} & 5 < x \leq 25\\
+\frac{65 - x}{40} & \text{si} & 25 < x \leq 65\\
+0 & \text{si} & 65 < x <\infty\\
+\end{cases}
+$$
+
+Para la función de densidad propuesta, el valor de $k$ es aproximadamente `r r(k)`.
+
+La probabilidad teórica de que el tiempo de viaje sea a lo mucho 30 segundos es aproximadamente `r r(ptViaje30)` mientras que la probabilidad empírica correspondiente es aproximadamente `r r(peViaje30)`.
+
+```{r}
+viaje_menos30<-filter(DF, Viaje <=30)
+viaje_menos30
+nrow(viaje_menos30)
+sum(!is.na(DF$Viaje))
+Prob<- nrow(viaje_menos30) /sum(!is.na(DF$Viaje))
+Prob
+  
+```
+
+El valor esperado teórico del modelo propuesto para la variable Viaje es aproximadamente `r r(EtViaje)` mientras que el promedio muestral correspondiente es aproximadamente `r r(EeViaje)`.
+
+```{r}
+mean(DF$Viaje)
+```
+
+# 5 Modelo
+
+```{r}
+Bs <- (0:21) - 0.5 
+pegeom <- 1/mean(DF$Salieron, na.rm = TRUE)
+sd(DF$Salieron, na.rm = TRUE)
+sqrt((1-pegeom)/pegeom^2)
+hist(DF$Salieron, breaks = Bs, prob = TRUE)
+lines(1:21, dgeom(0:20, pegeom), type = "h", col = "red", lwd = 2)
+tajuste <- "el ajuste es bueno"
+#"el ajuste es malo"
+tapesar <- "a pesar que no podemos describir el ensayo bernoulli"
+#"gracias a que conocemos los ensayos bernoulli"
+#"debido a que la desviación estándar da bien"
+#"debido al número de personas que salieron"
+```
+
+Un estudiante de estadística propone que la variable aleatoria *Salieron* debe ser geométrica con parámetro `r r(pegeom)` al mirar el histograma y calcular su promedio.
+
+Al superponer el diagrama de palos de la geométrica propuesta observa que `r tajuste` `r tapesar`.
+
+# 6 Gráfica
+
+Considere la gráfica generada por el siguiente fragmento de código:
+
+```{r}
+DF$Pisos <- DF$Llegada - DF$Partida
+DF$Tasa <- DF$Viaje/abs(DF$Pisos)
+hist(DF$Tasa
+     , prob = TRUE
+     , ylim = c(-0.03, 0.30)
+     , main = "Tasa de movimiento del ascensor"
+     , xlab = "Tasa (s/piso)"
+     , ylab = "densidad"
+     )
+boxplot(DF$Tasa
+        , horizontal = TRUE
+        , add = TRUE
+        , at = -0.02
+        , boxwex = 0.05
+        )
+Xs <- seq(min(floor(DF$Tasa)), max(ceiling(DF$Tasa)), by = 0.1)
+lines(Xs
+      , dnorm(Xs, mean(DF$Tasa), sd(DF$Tasa))
+      , lwd = 2
+      , col = "red"
+      )
+legend("topright"
+       , legend = "densidad normal"
+       , lwd = 2
+       , col = "red"
+       , bty = "n"
+       )
+```
+
+```{r}
+r(sum(DF$Tasa < 5.5)/nrow(DF))
+r((1 - (pnorm(9, mean(DF$Tasa), sd(DF$Tasa)) - pnorm(2, mean(DF$Tasa), sd(DF$Tasa))))*nrow(DF))
+```
